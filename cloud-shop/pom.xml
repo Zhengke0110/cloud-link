@@ -7,6 +7,5 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>cloud-shop</artifactId>
-    <name>Archetype - cloud-shop</name>
-    <url>http://maven.apache.org</url>
+    <name>cloud-shop</name>
 </project>

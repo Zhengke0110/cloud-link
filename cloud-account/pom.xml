@@ -7,6 +7,5 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>cloud-account</artifactId>
-    <name>Archetype - cloud-account</name>
-    <url>http://maven.apache.org</url>
+    <name>cloud-account</name>
 </project>
