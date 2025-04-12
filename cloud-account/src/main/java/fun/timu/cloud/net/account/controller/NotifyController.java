@@ -2,16 +2,17 @@ package fun.timu.cloud.net.account.controller;
 
 
 import com.google.code.kaptcha.Producer;
+import fun.timu.cloud.net.account.controller.request.SendCodeRequest;
 import fun.timu.cloud.net.account.service.NotifyService;
+import fun.timu.cloud.net.enums.BizCodeEnum;
+import fun.timu.cloud.net.enums.SendCodeEnum;
 import fun.timu.cloud.net.util.CommonUtil;
 import fun.timu.cloud.net.util.JsonData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -85,4 +86,37 @@ public class NotifyController {
             logger.error("获取流出错:{}", e.getMessage());
         }
     }
+
+    /**
+     * 处理发送验证码请求
+     * 该方法用于验证用户提交的验证码，并在验证成功后发送新的验证码
+     *
+     * @param sendCodeRequest 包含用户提交的验证码和接收新验证码的目标地址
+     * @param request         HTTP请求对象，用于获取会话信息
+     * @return 返回一个JsonData对象，包含发送结果
+     */
+    @PostMapping("send_code")
+    public JsonData sendCode(@RequestBody SendCodeRequest sendCodeRequest, HttpServletRequest request) {
+        //获取验证码的缓存键
+        String key = getCaptchaKey(request);
+
+        //从缓存中获取存储的验证码
+        String cacheCaptcha = redisTemplate.opsForValue().get(key);
+
+        //获取用户提交的验证码
+        String captcha = sendCodeRequest.getCaptcha();
+
+        //比较用户提交的验证码和缓存中的验证码
+        if (captcha != null && cacheCaptcha != null && cacheCaptcha.equalsIgnoreCase(captcha)) {
+            //验证码匹配，删除缓存中的验证码
+            redisTemplate.delete(key);
+            //调用服务发送新的验证码，并返回发送结果
+            JsonData jsonData = notifyService.sendCode(SendCodeEnum.USER_REGISTER, sendCodeRequest.getTo());
+            return jsonData;
+        } else {
+            //验证码不匹配，返回错误信息
+            return JsonData.buildResult(BizCodeEnum.CODE_CAPTCHA_ERROR);
+        }
+    }
+
 }
