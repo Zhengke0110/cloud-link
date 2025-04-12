@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/api/account/v1")
+@RequestMapping("/api/notify/v1")
 public class NotifyController {
     private static Logger logger = LoggerFactory.getLogger(NotifyController.class);
 

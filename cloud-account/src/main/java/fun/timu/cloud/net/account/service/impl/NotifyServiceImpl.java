@@ -78,4 +78,37 @@ public class NotifyServiceImpl implements NotifyService {
         //返回成功信息
         return JsonData.buildSuccess("验证码发送成功:" + code);
     }
+
+    /**
+     * 检查验证码是否有效
+     *
+     * @param sendCodeEnum 发送验证码的枚举类型，用于区分不同的验证码发送场景
+     * @param to 接收验证码的目标地址，如邮箱或手机号
+     * @param code 用户输入的验证码
+     * @return 如果验证码有效则返回true，否则返回false
+     */
+    @Override
+    public boolean checkCode(SendCodeEnum sendCodeEnum, String to, String code) {
+        // 根据验证码类型和目标地址生成缓存键
+        String cacheKey = String.format(RedisKey.CHECK_CODE_KEY,sendCodeEnum.name(),to);
+
+        // 从Redis中获取缓存的验证码
+        String cacheValue = redisTemplate.opsForValue().get(cacheKey);
+        // 如果缓存中存在验证码
+        if(StringUtils.isNotBlank(cacheValue)){
+
+            // 提取缓存中的验证码部分
+            String cacheCode = cacheValue.split("_")[0];
+            // 比较缓存中的验证码与用户输入的验证码是否一致，不区分大小写
+            if(cacheCode.equalsIgnoreCase(code)){
+                // 验证码匹配，删除Redis中的验证码
+                redisTemplate.delete(code);
+                return true;
+            }
+
+        }
+
+        // 验证码不匹配或已过期，返回false
+        return false;
+    }
 }
