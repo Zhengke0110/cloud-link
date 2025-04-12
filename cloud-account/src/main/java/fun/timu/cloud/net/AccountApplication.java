@@ -1,5 +1,9 @@
 package fun.timu.cloud.net;
 
+import com.alibaba.nacos.api.NacosFactory;
+import com.alibaba.nacos.api.naming.NamingService;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,16 +13,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.websocket.ClientEndpoint;
 
-//@MapperScan("net.xdclass.mapper")
+@MapperScan("fun.timu.cloud.net.account.mapper")
 @EnableTransactionManagement
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
 public class AccountApplication {
+
     public static void main(String[] args) {
-        SpringApplication springApplication = new SpringApplication(AccountApplication.class);
-        springApplication.setWebApplicationType(WebApplicationType.NONE);
-        springApplication.run(args);
+        SpringApplication.run(AccountApplication.class, args);
     }
+
 
 }
