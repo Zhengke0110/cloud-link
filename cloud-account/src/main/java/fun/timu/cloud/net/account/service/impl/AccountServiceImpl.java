@@ -1,10 +1,11 @@
-package fun.timu.cloud.net.service.impl;
+package fun.timu.cloud.net.account.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import fun.timu.cloud.net.mapper.AccountMapper;
-import fun.timu.cloud.net.model.Account;
-import fun.timu.cloud.net.service.AccountService;
+
+import fun.timu.cloud.net.account.mapper.AccountMapper;
+import fun.timu.cloud.net.account.model.DO.Account;
+import fun.timu.cloud.net.account.service.AccountService;
 import org.springframework.stereotype.Service;
 
 /**

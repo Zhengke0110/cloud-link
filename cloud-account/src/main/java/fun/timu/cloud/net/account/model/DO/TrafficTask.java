@@ -1,4 +1,4 @@
-package fun.timu.cloud.net.model;
+package fun.timu.cloud.net.account.model.DO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

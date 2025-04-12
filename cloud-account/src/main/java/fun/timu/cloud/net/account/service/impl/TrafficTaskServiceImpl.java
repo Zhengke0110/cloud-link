@@ -1,10 +1,11 @@
-package fun.timu.cloud.net.service.impl;
+package fun.timu.cloud.net.account.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import fun.timu.cloud.net.mapper.TrafficTaskMapper;
-import fun.timu.cloud.net.model.TrafficTask;
-import fun.timu.cloud.net.service.TrafficTaskService;
+
+import fun.timu.cloud.net.account.mapper.TrafficTaskMapper;
+import fun.timu.cloud.net.account.model.DO.TrafficTask;
+import fun.timu.cloud.net.account.service.TrafficTaskService;
 import org.springframework.stereotype.Service;
 
 /**

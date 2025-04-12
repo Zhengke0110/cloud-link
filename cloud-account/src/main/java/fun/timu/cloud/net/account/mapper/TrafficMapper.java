@@ -1,7 +1,7 @@
-package fun.timu.cloud.net.mapper;
+package fun.timu.cloud.net.account.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import fun.timu.cloud.net.model.Traffic;
+import fun.timu.cloud.net.account.model.DO.Traffic;
 
 /**
 * @author zhengke

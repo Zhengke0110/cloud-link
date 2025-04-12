@@ -1,7 +1,7 @@
-package fun.timu.cloud.net.service;
+package fun.timu.cloud.net.account.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import fun.timu.cloud.net.model.TrafficTask;
+import fun.timu.cloud.net.account.model.DO.TrafficTask;
 
 /**
  * @author zhengke
