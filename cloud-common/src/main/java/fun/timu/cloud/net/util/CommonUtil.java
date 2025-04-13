@@ -1,6 +1,7 @@
 package fun.timu.cloud.net.util;
 
 
+import com.google.common.hash.Hashing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -213,6 +214,20 @@ public class CommonUtil {
         }
 
 
+    }
+
+    /**
+     * 计算字符串的MurmurHash32值
+     * MurmurHash是一个非密码学的哈希函数，适用于一般的数据结构和算法中
+     * 它以其良好的分布性、高性能和低碰撞率而著称
+     *
+     * @param param 需要计算哈希值的字符串
+     * @return 计算得到的哈希值
+     */
+    public static long murmurHash32(String param) {
+        // 使用Guava库中的Hashing类来计算MurmurHash32值
+        long murmurHash32 = Hashing.murmur3_32().hashUnencodedChars(param).padToLong();
+        return murmurHash32;
     }
 
 }
