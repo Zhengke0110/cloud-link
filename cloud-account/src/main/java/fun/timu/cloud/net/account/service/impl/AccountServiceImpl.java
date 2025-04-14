@@ -15,6 +15,7 @@ import fun.timu.cloud.net.common.enums.BizCodeEnum;
 import fun.timu.cloud.net.common.enums.SendCodeEnum;
 import fun.timu.cloud.net.common.model.LoginUser;
 import fun.timu.cloud.net.common.util.CommonUtil;
+import fun.timu.cloud.net.common.util.IDUtil;
 import fun.timu.cloud.net.common.util.JWTUtil;
 import fun.timu.cloud.net.common.util.JsonData;
 import org.apache.commons.codec.digest.Md5Crypt;
@@ -73,8 +74,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         // 设置默认的认证级别
         accountDO.setAuth(AuthTypeEnum.DEFAULT.name());
 
-        // 生成唯一的账号  TODO
-        accountDO.setAccountNo(CommonUtil.getCurrentTimestamp());
+        // 生成唯一的账号
+        accountDO.setAccountNo(Long.valueOf(IDUtil.geneSnowFlakeID().toString()));
 
         // 设置密码加密所需的秘钥和盐
         accountDO.setSecret("$1$" + CommonUtil.getStringNumRandom(8));
