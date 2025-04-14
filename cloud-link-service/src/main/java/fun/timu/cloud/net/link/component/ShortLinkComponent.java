@@ -1,6 +1,6 @@
 package fun.timu.cloud.net.link.component;
 
-import fun.timu.cloud.net.util.CommonUtil;
+import fun.timu.cloud.net.common.util.CommonUtil;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -19,6 +19,8 @@ public enum BizCodeEnum {
 
     GROUP_NOT_EXIST(23404, "分组不存在"),
 
+    GROUP_ADD_FAIL(23405, "分组添加失败"),
+
 
     /**
      * 验证码
