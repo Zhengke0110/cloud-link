@@ -13,12 +13,12 @@ spring:
   shardingsphere:
     datasource:
       #数据源名称
-      names: ds0
+      names: ds0,ds1,dsa
       ds0:
         connectionTimeoutMilliseconds: 30000
         driver-class-name: com.mysql.cj.jdbc.Driver
         idleTimeoutMilliseconds: 60000
-        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link_0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
         maintenanceIntervalMilliseconds: 30000
         maxLifetimeMilliseconds: 1800000
         maxPoolSize: 50
@@ -26,7 +26,30 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         username: root
         password: 123456
-
+      ds1:
+        connectionTimeoutMilliseconds: 30000
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        idleTimeoutMilliseconds: 60000
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link_1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+        maintenanceIntervalMilliseconds: 30000
+        maxLifetimeMilliseconds: 1800000
+        maxPoolSize: 50
+        minPoolSize: 50
+        type: com.zaxxer.hikari.HikariDataSource
+        username: root
+        password: 123456
+      dsa:
+        connectionTimeoutMilliseconds: 30000
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        idleTimeoutMilliseconds: 60000
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link_a?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+        maintenanceIntervalMilliseconds: 30000
+        maxLifetimeMilliseconds: 1800000
+        maxPoolSize: 50
+        minPoolSize: 50
+        type: com.zaxxer.hikari.HikariDataSource
+        username: root
+        password: 123456
     props:
       # 打印执行的数据库以及语句
       sql:
@@ -42,3 +65,20 @@ spring:
                 id: ${workId}
             #id生成策略
             type: SNOWFLAKE
+        short_link:
+          actual-data-nodes: ds0.short_link,ds1.short_link,dsa.short_link
+          database-strategy:
+            standard:
+              precise-algorithm-class-name: fun.timu.cloud.net.link.strategy.CustomDBPreciseShardingAlgorithm
+              sharding-column: code
+          key-generator:
+            column: id
+            props:
+              worker:
+                id: ${workId}
+              #id生成策略
+            type: SNOWFLAKE
+          table-strategy:
+            standard:
+              precise-algorithm-class-name: fun.timu.cloud.net.link.strategy.CustomTablePreciseShardingAlgorithm
+              sharding-column: code

@@ -45,6 +45,10 @@ public enum BizCodeEnum {
 
     ACCOUNT_UNLOGIN(250004, "账号未登录"),
 
+    /**
+     * 数据库路由信息
+     */
+    DB_ROUTE_NOT_FOUND(800101, "数据库找不到"),
 
     /**
      * 短链
