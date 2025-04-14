@@ -1,4 +1,4 @@
-package fun.timu.cloud.net.enums;
+package fun.timu.cloud.net.common.enums;
 
 import lombok.Getter;
 

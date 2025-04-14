@@ -1,4 +1,4 @@
-package fun.timu.cloud.net.config;
+package fun.timu.cloud.net.common.config;
 
 
 import lombok.extern.slf4j.Slf4j;

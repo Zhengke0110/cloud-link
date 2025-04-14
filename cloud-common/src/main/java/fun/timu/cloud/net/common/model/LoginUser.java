@@ -1,4 +1,4 @@
-package fun.timu.cloud.net.model;
+package fun.timu.cloud.net.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

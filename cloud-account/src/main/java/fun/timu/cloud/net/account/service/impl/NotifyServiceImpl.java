@@ -1,12 +1,12 @@
 package fun.timu.cloud.net.account.service.impl;
 
 import fun.timu.cloud.net.account.service.NotifyService;
-import fun.timu.cloud.net.constant.RedisKey;
-import fun.timu.cloud.net.enums.BizCodeEnum;
-import fun.timu.cloud.net.enums.SendCodeEnum;
-import fun.timu.cloud.net.util.CheckUtil;
-import fun.timu.cloud.net.util.CommonUtil;
-import fun.timu.cloud.net.util.JsonData;
+import fun.timu.cloud.net.common.constant.RedisKey;
+import fun.timu.cloud.net.common.enums.BizCodeEnum;
+import fun.timu.cloud.net.common.enums.SendCodeEnum;
+import fun.timu.cloud.net.common.util.CheckUtil;
+import fun.timu.cloud.net.common.util.CommonUtil;
+import fun.timu.cloud.net.common.util.JsonData;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 @Service

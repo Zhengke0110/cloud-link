@@ -1,4 +1,4 @@
-package fun.timu.cloud.net.util;
+package fun.timu.cloud.net.common.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;

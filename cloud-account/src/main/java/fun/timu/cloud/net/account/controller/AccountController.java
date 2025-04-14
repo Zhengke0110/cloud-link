@@ -4,8 +4,8 @@ import fun.timu.cloud.net.account.controller.request.AccountLoginRequest;
 import fun.timu.cloud.net.account.controller.request.AccountRegisterRequest;
 import fun.timu.cloud.net.account.service.AccountService;
 import fun.timu.cloud.net.account.service.FileService;
-import fun.timu.cloud.net.enums.BizCodeEnum;
-import fun.timu.cloud.net.util.JsonData;
+import fun.timu.cloud.net.common.enums.BizCodeEnum;
+import fun.timu.cloud.net.common.util.JsonData;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

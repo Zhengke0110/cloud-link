@@ -1,7 +1,7 @@
-package fun.timu.cloud.net.util;
+package fun.timu.cloud.net.common.util;
 
 
-import fun.timu.cloud.net.enums.BizCodeEnum;
+import fun.timu.cloud.net.common.enums.BizCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

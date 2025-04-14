@@ -1,4 +1,4 @@
-package fun.timu.cloud.net.util;
+package fun.timu.cloud.net.common.util;
 
 import org.apache.shardingsphere.core.strategy.keygen.SnowflakeShardingKeyGenerator;
 

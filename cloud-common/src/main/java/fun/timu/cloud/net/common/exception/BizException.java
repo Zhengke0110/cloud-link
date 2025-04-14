@@ -1,6 +1,6 @@
-package fun.timu.cloud.net.exception;
+package fun.timu.cloud.net.common.exception;
 
-import fun.timu.cloud.net.enums.BizCodeEnum;
+import fun.timu.cloud.net.common.enums.BizCodeEnum;
 import lombok.Data;
 
 @Data

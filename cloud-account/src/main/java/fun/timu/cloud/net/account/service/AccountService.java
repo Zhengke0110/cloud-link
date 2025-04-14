@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import fun.timu.cloud.net.account.controller.request.AccountLoginRequest;
 import fun.timu.cloud.net.account.controller.request.AccountRegisterRequest;
 import fun.timu.cloud.net.account.model.DO.Account;
-import fun.timu.cloud.net.util.JsonData;
+import fun.timu.cloud.net.common.util.JsonData;
 
 /**
  * @author zhengke

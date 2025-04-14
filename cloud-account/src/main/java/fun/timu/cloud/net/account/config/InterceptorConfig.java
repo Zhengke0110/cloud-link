@@ -1,6 +1,6 @@
 package fun.timu.cloud.net.account.config;
 
-import fun.timu.cloud.net.interceptor.LoginInterceptor;
+import fun.timu.cloud.net.common.interceptor.LoginInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

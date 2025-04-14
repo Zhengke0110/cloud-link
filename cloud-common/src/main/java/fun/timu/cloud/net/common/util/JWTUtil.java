@@ -1,6 +1,6 @@
-package fun.timu.cloud.net.util;
+package fun.timu.cloud.net.common.util;
 
-import fun.timu.cloud.net.model.LoginUser;
+import fun.timu.cloud.net.common.model.LoginUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

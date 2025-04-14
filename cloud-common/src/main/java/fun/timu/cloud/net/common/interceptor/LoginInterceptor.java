@@ -1,11 +1,11 @@
-package fun.timu.cloud.net.interceptor;
+package fun.timu.cloud.net.common.interceptor;
 
-import fun.timu.cloud.net.enums.BizCodeEnum;
-import fun.timu.cloud.net.model.LoginUser;
+import fun.timu.cloud.net.common.enums.BizCodeEnum;
+import fun.timu.cloud.net.common.model.LoginUser;
 
-import fun.timu.cloud.net.util.CommonUtil;
-import fun.timu.cloud.net.util.JWTUtil;
-import fun.timu.cloud.net.util.JsonData;
+import fun.timu.cloud.net.common.util.CommonUtil;
+import fun.timu.cloud.net.common.util.JWTUtil;
+import fun.timu.cloud.net.common.util.JsonData;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

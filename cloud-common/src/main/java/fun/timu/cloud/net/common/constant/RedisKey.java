@@ -1,4 +1,4 @@
-package fun.timu.cloud.net.constant;
+package fun.timu.cloud.net.common.constant;
 
 public class RedisKey {
 

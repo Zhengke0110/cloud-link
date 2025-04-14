@@ -1,7 +1,7 @@
 package fun.timu.cloud.net.account.service;
 
-import fun.timu.cloud.net.enums.SendCodeEnum;
-import fun.timu.cloud.net.util.JsonData;
+import fun.timu.cloud.net.common.enums.SendCodeEnum;
+import fun.timu.cloud.net.common.util.JsonData;
 
 public interface NotifyService {
     /**

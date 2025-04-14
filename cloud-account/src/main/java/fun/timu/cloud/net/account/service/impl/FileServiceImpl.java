@@ -5,7 +5,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectResult;
 import fun.timu.cloud.net.account.config.OSSConfig;
 import fun.timu.cloud.net.account.service.FileService;
-import fun.timu.cloud.net.util.CommonUtil;
+import fun.timu.cloud.net.common.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

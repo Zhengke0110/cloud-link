@@ -1,7 +1,7 @@
-package fun.timu.cloud.net.exception;
+package fun.timu.cloud.net.common.exception;
 
 
-import fun.timu.cloud.net.util.JsonData;
+import fun.timu.cloud.net.common.util.JsonData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
