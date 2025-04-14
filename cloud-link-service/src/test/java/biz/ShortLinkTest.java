@@ -3,7 +3,7 @@ package biz;
 import com.google.common.hash.Hashing;
 import fun.timu.cloud.net.LinkApplication;
 import fun.timu.cloud.net.link.component.ShortLinkComponent;
-import fun.timu.cloud.net.util.CommonUtil;
+import fun.timu.cloud.net.common.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
