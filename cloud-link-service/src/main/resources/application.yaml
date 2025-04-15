@@ -54,31 +54,51 @@ spring:
       # 打印执行的数据库以及语句
       sql:
         show: true
-
+    # 分片配置
     sharding:
+      # 表配置
       tables:
+        # link_group表配置
         link_group:
+          # 主键生成器配置
           key-generator:
+            # 主键列名
             column: id
+            # 主键生成器属性配置
             props:
               worker:
                 id: ${workId}
-            #id生成策略
+            # 主键生成策略类型
             type: SNOWFLAKE
+        # short_link表配置
         short_link:
+          # 实际数据节点，即真实表的位置
           actual-data-nodes: ds0.short_link,ds1.short_link,dsa.short_link
+          # 数据库分片策略配置
           database-strategy:
             standard:
+              # 精确分片算法类名
               precise-algorithm-class-name: fun.timu.cloud.net.link.strategy.CustomDBPreciseShardingAlgorithm
+              # 分片列名
               sharding-column: code
+          # 主键生成器配置
           key-generator:
             column: id
             props:
               worker:
                 id: ${workId}
-              #id生成策略
             type: SNOWFLAKE
+          # 表分片策略配置
           table-strategy:
             standard:
               precise-algorithm-class-name: fun.timu.cloud.net.link.strategy.CustomTablePreciseShardingAlgorithm
               sharding-column: code
+      # 默认数据源名称
+      default-data-source-name: ds0
+      # 默认主键生成器配置
+      default-key-generator:
+        column: id
+        props:
+          worker:
+            id: ${workerId}
+        type: SNOWFLAKE
