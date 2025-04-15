@@ -34,9 +34,6 @@ public class ShortLinkAddMappingMQListener {
         // 记录接收到的消息内容
         logger.info("监听到消息ShortLinkAddMappingMQListener message消息内容:{}", message);
 
-        // 获取消息的交付标签
-        long tag = message.getMessageProperties().getDeliveryTag();
-
         try {
             //TODO 处理业务逻辑
 
@@ -48,8 +45,5 @@ public class ShortLinkAddMappingMQListener {
 
         // 记录消息消费成功
         logger.info("消费成功:{}", eventMessage);
-
-        // 确认消息消费成功
-        channel.basicAck(tag, false);
     }
 }
