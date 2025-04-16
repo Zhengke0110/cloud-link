@@ -48,7 +48,6 @@ spring:
         # 连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: 60000
 
-
   # 数据源 ds0 第一个数据库
   shardingsphere:
     datasource:
@@ -96,20 +95,23 @@ spring:
         show: true
     # 分片配置
     sharding:
+      # 默认数据源名称
+      default-data-source-name: ds0
+      # 默认主键生成器配置
+      default-key-generator:
+        column: id
+        type: SNOWFLAKE
+        props:
+          worker:
+            id: ${workerId}
       # 表配置
       tables:
         # link_group表配置
         link_group:
-          # 主键生成器配置
-          key-generator:
-            # 主键列名
-            column: id
-            # 主键生成器属性配置
-            props:
-              worker:
-                id: ${workId}
-            # 主键生成策略类型
-            type: SNOWFLAKE
+          database-strategy:
+            inline:
+              sharding-column: account_no
+              algorithm-expression: ds$->{account_no % 2}
         # short_link表配置
         short_link:
           # 实际数据节点，即真实表的位置
@@ -121,24 +123,18 @@ spring:
               precise-algorithm-class-name: fun.timu.cloud.net.link.strategy.CustomDBPreciseShardingAlgorithm
               # 分片列名
               sharding-column: code
-          # 主键生成器配置
-          key-generator:
-            column: id
-            props:
-              worker:
-                id: ${workId}
-            type: SNOWFLAKE
           # 表分片策略配置
           table-strategy:
             standard:
               precise-algorithm-class-name: fun.timu.cloud.net.link.strategy.CustomTablePreciseShardingAlgorithm
               sharding-column: code
-      # 默认数据源名称
-      default-data-source-name: ds0
-      # 默认主键生成器配置
-      default-key-generator:
-        column: id
-        props:
-          worker:
-            id: ${workerId}
-        type: SNOWFLAKE
+        group_code_mapping:
+          actual-data-nodes: ds$->{0..1}.group_code_mapping_$->{0..1}
+          database-strategy:
+            inline:
+              algorithm-expression: ds$->{account_no % 2}
+              sharding-column: account_no
+          table-strategy:
+            inline:
+              algorithm-expression: group_code_mapping_$->{group_id % 2}
+              sharding-column: group_id
