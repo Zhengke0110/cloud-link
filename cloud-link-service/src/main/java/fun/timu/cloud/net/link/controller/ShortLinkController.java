@@ -2,7 +2,9 @@ package fun.timu.cloud.net.link.controller;
 
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.link.controller.request.ShortLinkAddRequest;
+import fun.timu.cloud.net.link.controller.request.ShortLinkDelRequest;
 import fun.timu.cloud.net.link.controller.request.ShortLinkPageRequest;
+import fun.timu.cloud.net.link.controller.request.ShortLinkUpdateRequest;
 import fun.timu.cloud.net.link.service.ShortLinkService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,6 +56,37 @@ public class ShortLinkController {
         // 构建并返回包含查询结果的JsonData对象
         return JsonData.buildSuccess(result);
     }
+
+
+    /**
+     * 删除短链
+     * @param request
+     * @return
+     */
+    @PostMapping("del")
+    public JsonData del(@RequestBody ShortLinkDelRequest request){
+        // 调用shortLinkService的del方法删除短链
+        JsonData jsonData = shortLinkService.del(request);
+
+        // 返回删除结果
+        return jsonData;
+    }
+
+
+
+    /**
+     * 更新短链
+     * @param request
+     * @return
+     */
+    @PostMapping("update")
+    public JsonData update(@RequestBody ShortLinkUpdateRequest request){
+
+        JsonData jsonData = shortLinkService.update(request);
+
+        return jsonData;
+    }
+
 
 
 }

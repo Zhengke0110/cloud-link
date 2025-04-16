@@ -13,7 +13,9 @@ import fun.timu.cloud.net.common.util.JsonUtil;
 import fun.timu.cloud.net.link.component.ShortLinkComponent;
 import fun.timu.cloud.net.link.config.RabbitMQConfig;
 import fun.timu.cloud.net.link.controller.request.ShortLinkAddRequest;
+import fun.timu.cloud.net.link.controller.request.ShortLinkDelRequest;
 import fun.timu.cloud.net.link.controller.request.ShortLinkPageRequest;
+import fun.timu.cloud.net.link.controller.request.ShortLinkUpdateRequest;
 import fun.timu.cloud.net.link.manager.DomainManager;
 import fun.timu.cloud.net.link.manager.GroupCodeMappingManager;
 import fun.timu.cloud.net.link.manager.LinkGroupManager;
@@ -254,6 +256,62 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         return result;
     }
 
+    /**
+     * 删除短链接功能的方法
+     * <p>
+     * 该方法接收一个ShortLinkDelRequest对象作为请求参数，其中包含了删除短链接所需的信息
+     * 它首先从ThreadLocal中获取当前登录用户的账户编号，然后构造一个EventMessage对象，
+     * 包含了账户编号、请求内容、消息ID和事件类型等信息通过RabbitMQ发送消息到指定的交换机，
+     * 以异步方式处理短链接的删除操作最后，它返回一个表示操作成功的JsonData对象
+     *
+     * @param request 包含了删除短链接所需信息的请求对象
+     * @return 返回一个表示操作成功的JsonData对象
+     */
+    @Override
+    public JsonData del(ShortLinkDelRequest request) {
+        // 获取当前登录用户的账户编号
+        Long accountNo = LoginInterceptor.threadLocal.get().getAccountNo();
+
+        // 构造EventMessage对象，用于发送到RabbitMQ
+        EventMessage eventMessage = EventMessage.builder()
+                .accountNo(accountNo)
+                .content(JsonUtil.obj2Json(request))
+                .messageId(IDUtil.geneSnowFlakeID().toString())
+                .eventMessageType(EventMessageType.SHORT_LINK_DEL.name())
+                .build();
+
+        // 发送消息到RabbitMQ，异步处理短链接删除操作
+        rabbitTemplate.convertAndSend(rabbitMQConfig.getShortLinkEventExchange(), rabbitMQConfig.getShortLinkDelRoutingKey(), eventMessage);
+
+        // 返回操作成功信息
+        return JsonData.buildSuccess();
+    }
+
+    @Override
+    /**
+     * 更新短链接信息
+     *
+     * @param request 包含短链接更新信息的请求对象
+     * @return 返回一个包含更新结果的JsonData对象
+     */
+    public JsonData update(ShortLinkUpdateRequest request) {
+        // 获取当前登录用户的账号编号
+        Long accountNo = LoginInterceptor.threadLocal.get().getAccountNo();
+
+        // 构建事件消息对象，用于后续发送到消息队列
+        EventMessage eventMessage = EventMessage.builder().accountNo(accountNo)
+                .content(JsonUtil.obj2Json(request))
+                .messageId(IDUtil.geneSnowFlakeID().toString())
+                .eventMessageType(EventMessageType.SHORT_LINK_UPDATE.name())
+                .build();
+
+        // 将事件消息转换并发送到指定的交换机和路由键
+        rabbitTemplate.convertAndSend(rabbitMQConfig.getShortLinkEventExchange(), rabbitMQConfig.getShortLinkUpdateRoutingKey(), eventMessage);
+
+        // 返回成功响应，表示更新操作已被接受并处理
+        return JsonData.buildSuccess();
+    }
+
 
     /**
      * 校验域名
@@ -274,7 +332,6 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         if (DomainTypeEnum.CUSTOM.name().equalsIgnoreCase(domainType)) {
             // 自定义域名，根据域名ID和账户编号查询域名信息
             domainDO = domainManager.findById(domainId, accountNo);
-
         } else {
             // 官方域名，仅根据域名ID查询域名信息
             domainDO = domainManager.findByDomainTypeAndID(domainId, DomainTypeEnum.OFFICIAL);

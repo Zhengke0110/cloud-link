@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import fun.timu.cloud.net.common.model.EventMessage;
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.link.controller.request.ShortLinkAddRequest;
+import fun.timu.cloud.net.link.controller.request.ShortLinkDelRequest;
 import fun.timu.cloud.net.link.controller.request.ShortLinkPageRequest;
+import fun.timu.cloud.net.link.controller.request.ShortLinkUpdateRequest;
 import fun.timu.cloud.net.link.model.DO.ShortLink;
 import fun.timu.cloud.net.link.model.VO.ShortLinkVO;
 
@@ -48,4 +50,18 @@ public interface ShortLinkService extends IService<ShortLink> {
      */
     Map<String,Object> pageByGroupId(ShortLinkPageRequest request);
 
+
+    /**
+     * 删除短链
+     * @param request
+     * @return
+     */
+    JsonData del(ShortLinkDelRequest request);
+
+    /**
+     * 更新
+     * @param request
+     * @return
+     */
+    JsonData update(ShortLinkUpdateRequest request);
 }

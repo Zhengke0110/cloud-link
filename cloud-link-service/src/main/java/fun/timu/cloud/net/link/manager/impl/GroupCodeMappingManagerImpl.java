@@ -120,9 +120,14 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     @Override
     public int updateGroupCodeMappingState(Long accountNo, Long groupId, String shortLinkCode, ShortLinkStateEnum shortLinkStateEnum) {
         // 执行更新操作，使用MyBatis-Plus的UpdateWrapper构建更新条件
+
         int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
-                .eq("code", shortLinkCode).eq("account_no", accountNo)
-                .eq("group_id", groupId).set("state", shortLinkStateEnum.name()));
+                .eq("code", shortLinkCode)
+                .eq("account_no", accountNo)
+                .eq("group_id", groupId)
+                .eq("del", 0)
+                .set("state", shortLinkStateEnum.name())
+        );
 
         return rows;
     }
@@ -142,8 +147,8 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     public GroupCodeMapping findByCodeAndGroupId(String shortLinkCode, Long groupId, Long accountNo) {
         // 使用MyBatis-Plus的QueryWrapper构建查询条件
         GroupCodeMapping groupCodeMappingDO = groupCodeMappingMapper.selectOne(new QueryWrapper<GroupCodeMapping>()
-                .eq("code", shortLinkCode)
-                .eq("account_no", accountNo)
+                .eq("code", shortLinkCode).eq("account_no", accountNo)
+                .eq("del", 0)
                 .eq("group_id", groupId));
 
         // 返回查询结果
