@@ -128,6 +128,30 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     }
 
     /**
+     * 根据代码、组ID和账户号查找组代码映射
+     *
+     * @param shortLinkCode 短链接代码，用于标识特定的链接
+     * @param groupId       组ID，用于标识特定的组
+     * @param accountNo     账户号，用于标识特定的用户账户
+     * @return 返回找到的GroupCodeMapping对象，如果未找到则返回null
+     * <p>
+     * 此方法通过组合查询条件来定位特定的组代码映射，旨在确保返回的结果是唯一的
+     * 它主要用于处理与组相关的链接操作，确保链接与正确的组和账户相关联
+     */
+    @Override
+    public GroupCodeMapping findByCodeAndGroupId(String shortLinkCode, Long groupId, Long accountNo) {
+        // 使用MyBatis-Plus的QueryWrapper构建查询条件
+        GroupCodeMapping groupCodeMappingDO = groupCodeMappingMapper.selectOne(new QueryWrapper<GroupCodeMapping>()
+                .eq("code", shortLinkCode)
+                .eq("account_no", accountNo)
+                .eq("group_id", groupId));
+
+        // 返回查询结果
+        return groupCodeMappingDO;
+    }
+
+
+    /**
      * 将GroupCodeMapping实体类转换为VO类
      * 该方法主要用于将数据库实体类转换为视图对象（VO），以便在不同层次之间传递数据
      * 使用Spring框架提供的BeanUtils.copyProperties方法来复制属性，减少手动设置属性的繁琐
