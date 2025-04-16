@@ -24,11 +24,18 @@ public interface ShortLinkManager {
     ShortLink findByShortLinCode(String shortLinkCode);
 
     /**
-     * 删除指定的短链接
+     * 删除短链接信息
      *
-     * @param shortLinkCode 短链接码，用于标识要删除的短链接
-     * @param accountNo 执行删除操作的账户编号，用于权限验证
+     * @param shortLinkDO 短链接对象，包含需要删除的短链接信息
      * @return 删除成功的短链接数量，通常为1，失败则为0
      */
-    int del(String shortLinkCode,Long accountNo);
+    int del(ShortLink shortLinkDO);
+
+    /**
+     * 更新短链接信息
+     *
+     * @param shortLinkDO 短链接对象，包含需要更新的短链接信息
+     * @return 更新成功的短链接数量，通常为1，失败则为0
+     */
+    int update(ShortLink shortLinkDO);
 }

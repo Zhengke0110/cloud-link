@@ -1,6 +1,7 @@
 package fun.timu.cloud.net.link.manager.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import fun.timu.cloud.net.link.manager.ShortLinkManager;
 import fun.timu.cloud.net.link.mapper.ShortLinkMapper;
 import fun.timu.cloud.net.link.model.DO.ShortLink;
@@ -22,7 +23,7 @@ public class ShortLinkManagerImpl implements ShortLinkManager {
 
     /**
      * 添加短链接信息到数据库
-     *
+     * <p>
      * 此方法通过调用ShortLinkMapper接口的insert方法，将ShortLink对象中的信息插入到数据库中
      * 由于此方法简单明了，且只涉及一个操作，因此在此不做过多的代码逻辑解释
      *
@@ -48,25 +49,41 @@ public class ShortLinkManagerImpl implements ShortLinkManager {
     }
 
     /**
-     * 删除短链接
-     * 通过短链接代码和账户编号来删除短链接信息
+     * 删除短链接信息
+     * 通过设置del标志为1来软删除记录
      *
-     * @param shortLinkCode 短链接代码，用于定位要删除的短链接
-     * @param accountNo 账户编号，用于确认短链接的拥有者
-     * @return 返回受影响的行数，表示删除操作影响的记录数
+     * @param shortLinkDO 包含短链接信息的数据对象，包括code和accountNo
+     * @return 返回受影响的行数，表示删除操作成功更新的记录数
      */
     @Override
-    public int del(String shortLinkCode, Long accountNo) {
-
-        // 创建ShortLink对象，并设置删除标志为1，表示该短链接已被删除
-        ShortLink shortLinkDO = new ShortLink();
-        shortLinkDO.setDel(1);
-
-        // 执行更新操作，将匹配指定短链接代码和账户编号的短链接的删除标志设置为1
-        // 这里使用了MyBatis-Plus的QueryWrapper来构建查询条件
-        int rows = shortLinkMapper.update(shortLinkDO, new QueryWrapper<ShortLink>().eq("code", shortLinkCode).eq("account_no", accountNo));
-
-        // 返回受影响的行数
+    public int del(ShortLink shortLinkDO) {
+        // 构建更新条件，根据code和accountNo查找记录，并设置del标志为1，实现软删除
+        int rows = shortLinkMapper.update(null, new UpdateWrapper<ShortLink>()
+            .eq("code", shortLinkDO.getCode())
+            .eq("account_no", shortLinkDO.getAccountNo())
+            .set("del", 1));
         return rows;
     }
+
+    /**
+     * 更新短链接信息
+     *
+     * @param shortLinkDO 包含更新信息的短链接数据对象
+     * @return 返回受影响的行数，表示更新操作是否成功
+     */
+    @Override
+    public int update(ShortLink shortLinkDO) {
+        // 更新短链接信息，只更新标题和域名，其他信息保持不变
+        int rows = shortLinkMapper.update(null, new UpdateWrapper<ShortLink>()
+                .eq("code", shortLinkDO.getCode()) // 根据短链接代码进行匹配
+                .eq("del", 0) // 确保短链接未被删除
+                .eq("account_no", shortLinkDO.getAccountNo()) // 根据账户编号进行匹配
+
+                .set("title", shortLinkDO.getTitle()) // 更新标题
+                .set("domain", shortLinkDO.getDomain())); // 更新域名
+
+
+        return rows;
+    }
+
 }

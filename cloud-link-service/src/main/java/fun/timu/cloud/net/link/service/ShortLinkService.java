@@ -18,12 +18,11 @@ import java.util.Map;
  * @createDate 2025-04-15 11:23:41
  */
 public interface ShortLinkService extends IService<ShortLink> {
-
     /**
      * 解析短链
      *
-     * @param shortLinkCode 短链码
-     * @return 短链信息
+     * @param shortLinkCode
+     * @return
      */
     ShortLinkVO parseShortLinkCode(String shortLinkCode);
 
@@ -35,24 +34,18 @@ public interface ShortLinkService extends IService<ShortLink> {
      */
     JsonData createShortLink(ShortLinkAddRequest request);
 
-    /**
-     * 处理新增短链消息
-     * @param eventMessage
-     * @return
-     */
-    boolean handleAddShortLink(EventMessage eventMessage);
-
 
     /**
      * 分页查找短链
+     *
      * @param request
      * @return
      */
-    Map<String,Object> pageByGroupId(ShortLinkPageRequest request);
-
+    Map<String, Object> pageByGroupId(ShortLinkPageRequest request);
 
     /**
      * 删除短链
+     *
      * @param request
      * @return
      */
@@ -60,8 +53,35 @@ public interface ShortLinkService extends IService<ShortLink> {
 
     /**
      * 更新
+     *
      * @param request
      * @return
      */
     JsonData update(ShortLinkUpdateRequest request);
+
+    /**
+     * 处理新增短链消息
+     *
+     * @param eventMessage
+     * @return
+     */
+    boolean handleAddShortLink(EventMessage eventMessage);
+
+
+    /**
+     * 更新短链
+     *
+     * @param eventMessage
+     * @return
+     */
+    boolean handleUpdateShortLink(EventMessage eventMessage);
+
+
+    /**
+     * 删除短链
+     *
+     * @param eventMessage
+     * @return
+     */
+    boolean handleDelShortLink(EventMessage eventMessage);
 }

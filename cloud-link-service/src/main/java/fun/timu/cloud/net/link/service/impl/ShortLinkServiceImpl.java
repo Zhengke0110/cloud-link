@@ -134,6 +134,107 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     }
 
     /**
+     * 处理更新短链的请求
+     * <p>
+     * 此方法根据事件消息中的不同类型，解析请求内容，校验域名，并调用相应的服务更新短链信息
+     * 支持更新C端短链和B端短链映射信息
+     *
+     * @param eventMessage 事件消息，包含账户编号、事件消息类型和请求内容
+     * @return 如果更新操作成功，返回true；否则返回false
+     */
+    @Override
+    public boolean handleUpdateShortLink(EventMessage eventMessage) {
+        // 获取账户编号和消息类型
+        Long accountNo = eventMessage.getAccountNo();
+        String messageType = eventMessage.getEventMessageType();
+
+        // 解析请求内容为ShortLinkUpdateRequest对象
+        ShortLinkUpdateRequest request = JsonUtil.json2Obj(eventMessage.getContent(), ShortLinkUpdateRequest.class);
+
+        // 校验短链域名
+        Domain domainDO = checkDomain(request.getDomainType(), request.getDomainId(), accountNo);
+
+        // C端处理
+        if (EventMessageType.SHORT_LINK_UPDATE_LINK.name().equalsIgnoreCase(messageType)) {
+
+            // 构建ShortLink对象并更新C端短链信息
+            ShortLink shortLinkDO = ShortLink.builder().code(request.getCode()).title(request.getTitle())
+                    .domain(domainDO.getValue())
+                    .accountNo(accountNo).build();
+
+            // 执行更新操作并记录受影响的行数
+            int rows = shortLinkManager.update(shortLinkDO);
+            logger.debug("更新C端短链，rows={}", rows);
+            return true;
+
+        } else if (EventMessageType.SHORT_LINK_UPDATE_MAPPING.name().equalsIgnoreCase(messageType)) {
+            // B端处理
+            // 构建GroupCodeMapping对象并更新B端短链映射信息
+            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().id(request.getMappingId()).groupId(request.getGroupId())
+                    .accountNo(accountNo)
+                    .title(request.getTitle())
+                    .domain(domainDO.getValue())
+                    .build();
+
+            // 执行更新操作并记录受影响的行数
+            int rows = groupCodeMappingManager.update(groupCodeMappingDO);
+            logger.debug("更新B端短链，rows={}", rows);
+            return true;
+        }
+
+        // 如果消息类型不匹配，返回false
+        return false;
+    }
+
+    /**
+     * 处理删除短链的请求
+     * <p>
+     * 此方法根据事件消息的类型，决定是删除C端（用户端）还是B端（商家端）的短链信息
+     * 它首先解析事件消息的内容，然后根据消息类型调用相应的删除方法
+     *
+     * @param eventMessage 包含账户编号、事件消息类型和内容的事件消息对象
+     * @return 如果删除成功或处理了已知的消息类型，则返回true；否则返回false
+     */
+    @Override
+    public boolean handleDelShortLink(EventMessage eventMessage) {
+        // 获取账户编号和消息类型
+        Long accountNo = eventMessage.getAccountNo();
+        String messageType = eventMessage.getEventMessageType();
+
+        // 将事件消息内容解析为短链删除请求对象
+        ShortLinkDelRequest request = JsonUtil.json2Obj(eventMessage.getContent(), ShortLinkDelRequest.class);
+
+        // 处理C端短链删除请求
+        if (EventMessageType.SHORT_LINK_DEL_LINK.name().equalsIgnoreCase(messageType)) {
+
+            // 构建短链对象，准备删除
+            ShortLink shortLinkDO = ShortLink.builder().code(request.getCode()).accountNo(accountNo).build();
+
+            // 执行删除操作并记录删除的行数
+            int rows = shortLinkManager.del(shortLinkDO);
+            logger.debug("删除C端短链:{}", rows);
+            return true;
+
+            // 处理B端短链映射删除请求
+        } else if (EventMessageType.SHORT_LINK_DEL_MAPPING.name().equalsIgnoreCase(messageType)) {
+
+            // 构建组代码映射对象，准备删除
+            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder()
+                    .id(request.getMappingId()).accountNo(accountNo)
+                    .groupId(request.getGroupId()).build();
+
+            // 执行删除操作并记录删除的行数
+            int rows = groupCodeMappingManager.del(groupCodeMappingDO);
+            logger.debug("删除B端短链:{}", rows);
+            return true;
+
+        }
+
+        // 如果消息类型不匹配已知类型，返回false
+        return false;
+    }
+
+    /**
      * 处理短链新增逻辑
      * <p>
      * 本方法负责处理短链的新增请求，包括验证域名和组名的合法性，生成长链的摘要和短链码，

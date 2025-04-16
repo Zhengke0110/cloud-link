@@ -56,23 +56,25 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     }
 
     /**
-     * 删除群组代码映射
-     * 通过设置del标志为1来软删除记录
+     * 删除组代码映射
+     * 通过将记录的删除标志设置为1来实现逻辑删除
      *
-     * @param shortLinkCode 短链接代码，用于定位要删除的记录
-     * @param accountNo     账户编号，用于定位要删除的记录
-     * @param groupId       群组ID，用于定位要删除的记录
-     * @return 返回受影响的行数，表示删除操作影响的记录数
+     * @param groupCodeMappingDO 包含要删除的组代码映射信息的对象
+     * @return 返回受影响的行数，表示删除操作成功与否
      */
     @Override
-    public int del(String shortLinkCode, Long accountNo, Long groupId) {
-        // 更新群组代码映射表中匹配指定条件的记录，将del字段设置为1，表示已删除
+    public int del(GroupCodeMapping groupCodeMappingDO) {
+        // 更新数据库中的记录，将删除标志设置为1，表示该记录已被删除
         int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
-                .eq("code", shortLinkCode).eq("account_no", accountNo)
-                .eq("group_id", groupId).set("del", 1));
+                .eq("id", groupCodeMappingDO.getId())
+                .eq("account_no", groupCodeMappingDO.getAccountNo())
+                .eq("group_id", groupCodeMappingDO.getGroupId())
+                .set("del", 1)
+        );
 
         return rows;
     }
+
 
     /**
      * 根据组ID分页查询短链接信息
@@ -153,6 +155,30 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
 
         // 返回查询结果
         return groupCodeMappingDO;
+    }
+
+    /**
+     * 更新集团代码映射信息
+     * 此方法用于更新数据库中特定集团代码映射记录的部分字段
+     * 它只更新传入对象中的title和domain字段，其他字段保持不变
+     *
+     * @param groupCodeMappingDO 包含要更新的集团代码映射信息的对象
+     * @return 返回受影响的行数，表示更新操作是否成功
+     */
+    @Override
+    public int update(GroupCodeMapping groupCodeMappingDO) {
+        // 更新操作，只更新匹配特定条件的记录的title和domain字段
+        int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
+                .eq("id", groupCodeMappingDO.getId())
+                .eq("account_no", groupCodeMappingDO.getAccountNo())
+                .eq("group_id", groupCodeMappingDO.getGroupId())
+                .eq("del", 0)
+
+                .set("title", groupCodeMappingDO.getTitle())
+                .set("domain", groupCodeMappingDO.getDomain())
+        );
+
+        return rows;
     }
 
 
