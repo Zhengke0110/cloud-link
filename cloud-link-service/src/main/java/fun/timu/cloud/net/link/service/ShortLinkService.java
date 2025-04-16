@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import fun.timu.cloud.net.common.model.EventMessage;
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.link.controller.request.ShortLinkAddRequest;
+import fun.timu.cloud.net.link.controller.request.ShortLinkPageRequest;
 import fun.timu.cloud.net.link.model.DO.ShortLink;
 import fun.timu.cloud.net.link.model.VO.ShortLinkVO;
+
+import java.util.Map;
 
 /**
  * @author zhengke
@@ -36,5 +39,13 @@ public interface ShortLinkService extends IService<ShortLink> {
      * @return
      */
     boolean handlerAddShortLink(EventMessage eventMessage);
+
+
+    /**
+     * 分页查找短链
+     * @param request
+     * @return
+     */
+    Map<String,Object> pageByGroupId(ShortLinkPageRequest request);
 
 }

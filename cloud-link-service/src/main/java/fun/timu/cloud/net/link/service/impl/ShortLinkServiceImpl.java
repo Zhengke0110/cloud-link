@@ -13,6 +13,7 @@ import fun.timu.cloud.net.common.util.JsonUtil;
 import fun.timu.cloud.net.link.component.ShortLinkComponent;
 import fun.timu.cloud.net.link.config.RabbitMQConfig;
 import fun.timu.cloud.net.link.controller.request.ShortLinkAddRequest;
+import fun.timu.cloud.net.link.controller.request.ShortLinkPageRequest;
 import fun.timu.cloud.net.link.manager.DomainManager;
 import fun.timu.cloud.net.link.manager.GroupCodeMappingManager;
 import fun.timu.cloud.net.link.manager.LinkGroupManager;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -229,6 +231,27 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         }
         return false;
 
+    }
+
+    /**
+     * 从B端查找，group_code_mapping表
+     * 根据 groupId 分页查询短链接信息
+     * 此方法主要用于处理来自B端的请求，根据 groupId 和分页参数获取相应的短链接信息
+     * 它利用了登录拦截器中的线程局部变量来获取当前用户的账户编号，并将其作为查询条件之一
+     *
+     * @param request 包含分页信息和 groupId 的请求对象，用于指定查询条件
+     * @return 返回一个包含短链接信息的Map对象，其中具体结构取决于查询结果
+     */
+    @Override
+    public Map<String, Object> pageByGroupId(ShortLinkPageRequest request) {
+        // 获取当前登录用户的账户编号，用于后续查询条件
+        Long accountNo = LoginInterceptor.threadLocal.get().getAccountNo();
+
+        // 调用groupCodeMappingManager的分页查询方法，传入请求的页码、每页大小、用户账户编号和groupId，获取查询结果
+        Map<String, Object> result = groupCodeMappingManager.pageShortLinkByGroupId(request.getPage(), request.getSize(), accountNo, request.getGroupId());
+
+        // 返回查询结果
+        return result;
     }
 
 

@@ -2,11 +2,14 @@ package fun.timu.cloud.net.link.controller;
 
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.link.controller.request.ShortLinkAddRequest;
+import fun.timu.cloud.net.link.controller.request.ShortLinkPageRequest;
 import fun.timu.cloud.net.link.service.ShortLinkService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/link/v1")
@@ -34,6 +37,22 @@ public class ShortLinkController {
 
         // 返回处理结果
         return jsonData;
+    }
+    /**
+     * 根据组ID分页查询短链接信息
+     * 此方法使用@RequestMapping注解来映射HTTP请求到此方法
+     * 请求体应包含ShortLinkPageRequest对象，其中包含分页查询所需的信息
+     *
+     * @param request ShortLinkPageRequest对象，包含分页查询参数
+     * @return 返回一个JsonData对象，其中包含分页查询结果
+     */
+    @RequestMapping("page")
+    public JsonData pageByGroupId(@RequestBody ShortLinkPageRequest request){
+        // 调用shortLinkService的pageByGroupId方法执行分页查询
+        Map<String,Object> result = shortLinkService.pageByGroupId(request);
+
+        // 构建并返回包含查询结果的JsonData对象
+        return JsonData.buildSuccess(result);
     }
 
 
