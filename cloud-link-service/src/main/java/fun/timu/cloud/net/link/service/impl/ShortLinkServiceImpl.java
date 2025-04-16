@@ -101,16 +101,20 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
      */
     @Override
     public JsonData createShortLink(ShortLinkAddRequest request) {
-        // 获取当前登录用户的账号编号
+        // 获取当前登录用户的账户编号
         Long accountNo = LoginInterceptor.threadLocal.get().getAccountNo();
+
+        // 确保原始URL具有正确的格式，如果缺少http或https前缀，则添加之
+        String newOriginalUrl = CommonUtil.addUrlPrefix(request.getOriginalUrl());
+        request.setOriginalUrl(newOriginalUrl);
 
         // 构建事件消息对象，用于发送到RabbitMQ
         EventMessage eventMessage = EventMessage.builder().accountNo(accountNo).content(JsonUtil.obj2Json(request)).messageId(IDUtil.geneSnowFlakeID().toString()).eventMessageType(EventMessageType.SHORT_LINK_ADD.name()).build();
 
-        // 将事件消息发送到指定的RabbitMQ交换机 和路由键
+        // 将事件消息发送到指定的RabbitMQ交换机和路由键
         rabbitTemplate.convertAndSend(rabbitMQConfig.getShortLinkEventExchange(), rabbitMQConfig.getShortLinkAddRoutingKey(), eventMessage);
 
-        // 返回成功响应数据
+        // 返回成功响应，表示短链接创建请求已成功发送
         return JsonData.buildSuccess();
     }
 
@@ -155,18 +159,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             // C端处理
             if (EventMessageType.SHORT_LINK_ADD_LINK.name().equalsIgnoreCase(messageType)) {
                 // 构建ShortLink对象并保存到数据库
-                ShortLink shortLinkDO = ShortLink.builder()
-                        .accountNo(accountNo)
-                        .code(shortLinkCode)
-                        .title(addRequest.getTitle())
-                        .originalUrl(addRequest.getOriginalUrl())
-                        .domain(domainDO.getValue())
-                        .groupId(linkGroupDO.getId())
-                        .expired(addRequest.getExpired())
-                        .sign(originalUrlDigest)
-                        .state(ShortLinkStateEnum.ACTIVE.name())
-                        .del(0)
-                        .build();
+                ShortLink shortLinkDO = ShortLink.builder().accountNo(accountNo).code(shortLinkCode).title(addRequest.getTitle()).originalUrl(addRequest.getOriginalUrl()).domain(domainDO.getValue()).groupId(linkGroupDO.getId()).expired(addRequest.getExpired()).sign(originalUrlDigest).state(ShortLinkStateEnum.ACTIVE.name()).del(0).build();
                 shortLinkManager.addShortLink(shortLinkDO);
                 return true;
 
@@ -174,18 +167,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
 
                 // B端处理
                 // 构建GroupCodeMapping对象并保存到数据库
-                GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder()
-                        .accountNo(accountNo)
-                        .code(shortLinkCode)
-                        .title(addRequest.getTitle())
-                        .originalUrl(addRequest.getOriginalUrl())
-                        .domain(domainDO.getValue())
-                        .groupId(linkGroupDO.getId())
-                        .expired(addRequest.getExpired())
-                        .sign(originalUrlDigest)
-                        .state(ShortLinkStateEnum.ACTIVE.name())
-                        .del(0)
-                        .build();
+                GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().accountNo(accountNo).code(shortLinkCode).title(addRequest.getTitle()).originalUrl(addRequest.getOriginalUrl()).domain(domainDO.getValue()).groupId(linkGroupDO.getId()).expired(addRequest.getExpired()).sign(originalUrlDigest).state(ShortLinkStateEnum.ACTIVE.name()).del(0).build();
 
                 groupCodeMappingManager.add(groupCodeMappingDO);
                 return true;

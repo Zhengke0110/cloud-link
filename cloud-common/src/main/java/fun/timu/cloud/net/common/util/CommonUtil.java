@@ -230,4 +230,68 @@ public class CommonUtil {
         return murmurHash32;
     }
 
+    /**
+     * URL增加前缀
+     * 该方法用于给输入的URL字符串添加一个唯一的前缀
+     * 主要目的是为了生成具有唯一标识的URL，以便于后续的处理和识别
+     *
+     * @param url 待处理的URL字符串
+     * @return 返回添加前缀后的URL字符串
+     */
+    public static String addUrlPrefix(String url) {
+        // 使用IDUtil工具类生成一个唯一的Snowflake ID作为前缀，并与原始URL使用 '&' 符号连接
+        return IDUtil.geneSnowFlakeID() + "&" + url;
+    }
+
+    /**
+     * 移除URL前缀
+     * 该方法用于从给定的URL中移除特定的前缀部分
+     * 前缀部分被定义为URL中第一个 '&' 字符之前的所有内容
+     * 这在解析或处理查询参数时特别有用，其中 '&' 通常用于分隔不同的参数
+     *
+     * @param url 完整的URL字符串，包含需要被移除的前缀
+     * @return 返回移除前缀后的URL字符串
+     * 如果输入的URL不包含 '&' 字符，则返回的字符串将为空
+     */
+    public static String removeUrlPrefix(String url) {
+        // 从第一个 '&' 字符后面开始截取字符串
+        // 这里假设URL的格式是正确的，且至少包含一个 '&'
+        String originalUrl = url.substring(url.indexOf("&") + 1);
+        return originalUrl;
+    }
+
+
+    /**
+     * 当短链码出现重复情况时，调用此方法来更新URL
+     * 该方法通过将URL前缀的版本号递增1，以确保URL的唯一性
+     * 鉴于使用雪花算法可能导致客户端和服务器端不一致的问题，此处采用简单的递增方式
+     * <p>
+     * 示例：
+     * 输入：123132432212&https://timu.fun/download.html
+     * 处理过程：
+     * 1. 提取版本号：123132432212
+     * 2. 提取原始URL：https://timu.fun/download.html
+     * 3. 生成新版本号：123132432213
+     * 输出：123132432213&https://timu.fun/download.html
+     *
+     * @param url 需要更新的URL，包含版本号和原始URL地址
+     * @return 更新后的URL，版本号递增1
+     */
+    public static String addUrlPrefixVersion(String url) {
+
+        // 提取版本号
+        String version = url.substring(0, url.indexOf("&"));
+
+        // 提取原始URL地址
+        String originalUrl = url.substring(url.indexOf("&") + 1);
+
+        // 生成新的版本号
+        Long newVersion = Long.parseLong(version) + 1;
+
+        // 构建并返回新的URL
+        String newUrl = newVersion + "&" + originalUrl;
+        return newUrl;
+    }
+
+
 }
