@@ -46,7 +46,7 @@ public class ShortLinkAddMappingMQListener {
             // 设置消息类型
             eventMessage.setEventMessageType(EventMessageType.SHORT_LINK_ADD_MAPPING.name());
             // 调用服务处理添加短链接的请求
-            shortLinkService.handlerAddShortLink(eventMessage);
+            shortLinkService.handleAddShortLink(eventMessage);
 
         } catch (Exception e) {
             // 处理业务异常，还有进行其他操作，比如记录失败原因

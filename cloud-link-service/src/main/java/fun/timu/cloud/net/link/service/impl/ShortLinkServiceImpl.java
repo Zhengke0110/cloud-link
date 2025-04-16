@@ -143,7 +143,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
      * @return 返回短链新增是否成功的布尔值，成功为true，失败为false
      */
     @Override
-    public boolean handlerAddShortLink(EventMessage eventMessage) {
+    public boolean handleAddShortLink(EventMessage eventMessage) {
 
         // 获取事件消息中的账户编号和消息类型
         Long accountNo = eventMessage.getAccountNo();
@@ -229,7 +229,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             addRequest.setOriginalUrl(newOriginalUrl);
             eventMessage.setContent(JsonUtil.obj2Json(addRequest));
             logger.warn("短链码报错失败，重新生成:{}", eventMessage);
-            handlerAddShortLink(eventMessage);
+            handleAddShortLink(eventMessage);
         }
         return false;
 
@@ -273,12 +273,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         Long accountNo = LoginInterceptor.threadLocal.get().getAccountNo();
 
         // 构造EventMessage对象，用于发送到RabbitMQ
-        EventMessage eventMessage = EventMessage.builder()
-                .accountNo(accountNo)
-                .content(JsonUtil.obj2Json(request))
-                .messageId(IDUtil.geneSnowFlakeID().toString())
-                .eventMessageType(EventMessageType.SHORT_LINK_DEL.name())
-                .build();
+        EventMessage eventMessage = EventMessage.builder().accountNo(accountNo).content(JsonUtil.obj2Json(request)).messageId(IDUtil.geneSnowFlakeID().toString()).eventMessageType(EventMessageType.SHORT_LINK_DEL.name()).build();
 
         // 发送消息到RabbitMQ，异步处理短链接删除操作
         rabbitTemplate.convertAndSend(rabbitMQConfig.getShortLinkEventExchange(), rabbitMQConfig.getShortLinkDelRoutingKey(), eventMessage);
@@ -293,17 +288,12 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
      *
      * @param request 包含短链接更新信息的请求对象
      * @return 返回一个包含更新结果的JsonData对象
-     */
-    public JsonData update(ShortLinkUpdateRequest request) {
+     */ public JsonData update(ShortLinkUpdateRequest request) {
         // 获取当前登录用户的账号编号
         Long accountNo = LoginInterceptor.threadLocal.get().getAccountNo();
 
         // 构建事件消息对象，用于后续发送到消息队列
-        EventMessage eventMessage = EventMessage.builder().accountNo(accountNo)
-                .content(JsonUtil.obj2Json(request))
-                .messageId(IDUtil.geneSnowFlakeID().toString())
-                .eventMessageType(EventMessageType.SHORT_LINK_UPDATE.name())
-                .build();
+        EventMessage eventMessage = EventMessage.builder().accountNo(accountNo).content(JsonUtil.obj2Json(request)).messageId(IDUtil.geneSnowFlakeID().toString()).eventMessageType(EventMessageType.SHORT_LINK_UPDATE.name()).build();
 
         // 将事件消息转换并发送到指定的交换机和路由键
         rabbitTemplate.convertAndSend(rabbitMQConfig.getShortLinkEventExchange(), rabbitMQConfig.getShortLinkUpdateRoutingKey(), eventMessage);

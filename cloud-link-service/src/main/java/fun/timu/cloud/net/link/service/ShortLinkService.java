@@ -40,7 +40,7 @@ public interface ShortLinkService extends IService<ShortLink> {
      * @param eventMessage
      * @return
      */
-    boolean handlerAddShortLink(EventMessage eventMessage);
+    boolean handleAddShortLink(EventMessage eventMessage);
 
 
     /**
