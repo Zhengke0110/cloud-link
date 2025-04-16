@@ -3,8 +3,10 @@ package fun.timu.cloud.net.link.listener;
 import com.rabbitmq.client.Channel;
 
 import fun.timu.cloud.net.common.enums.BizCodeEnum;
+import fun.timu.cloud.net.common.enums.EventMessageType;
 import fun.timu.cloud.net.common.exception.BizException;
 import fun.timu.cloud.net.common.model.EventMessage;
+import fun.timu.cloud.net.link.service.ShortLinkService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -19,6 +21,11 @@ import java.io.IOException;
 public class ShortLinkAddMappingMQListener {
     private static Logger logger = LoggerFactory.getLogger(ShortLinkAddMappingMQListener.class);
 
+    private final ShortLinkService shortLinkService;
+
+    public ShortLinkAddMappingMQListener(ShortLinkService shortLinkService) {
+        this.shortLinkService = shortLinkService;
+    }
 
     /**
      * 处理短链接添加映射的MQ消息
@@ -35,7 +42,11 @@ public class ShortLinkAddMappingMQListener {
         logger.info("监听到消息ShortLinkAddMappingMQListener message消息内容:{}", message);
 
         try {
-            //TODO 处理业务逻辑
+
+            // 设置消息类型
+            eventMessage.setEventMessageType(EventMessageType.SHORT_LINK_ADD_MAPPING.name());
+            // 调用服务处理添加短链接的请求
+            shortLinkService.handlerAddShortLink(eventMessage);
 
         } catch (Exception e) {
             // 处理业务异常，还有进行其他操作，比如记录失败原因

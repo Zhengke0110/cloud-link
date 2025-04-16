@@ -8,13 +8,19 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @TableName short_link
  */
 @TableName(value = "short_link")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ShortLink implements Serializable {
     private Long id;
 

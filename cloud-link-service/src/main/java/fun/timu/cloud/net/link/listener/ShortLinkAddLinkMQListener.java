@@ -1,10 +1,12 @@
 package fun.timu.cloud.net.link.listener;
 
+import fun.timu.cloud.net.common.enums.EventMessageType;
 import fun.timu.cloud.net.common.exception.BizException;
 import fun.timu.cloud.net.common.model.EventMessage;
 import fun.timu.cloud.net.common.enums.BizCodeEnum;
 import com.rabbitmq.client.Channel;
 
+import fun.timu.cloud.net.link.service.ShortLinkService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -19,6 +21,11 @@ import java.io.IOException;
 @RabbitListener(queues = "short_link.add.link.queue")
 public class ShortLinkAddLinkMQListener {
     private static Logger logger = LoggerFactory.getLogger(ShortLinkAddLinkMQListener.class);
+    private final ShortLinkService shortLinkService;
+
+    public ShortLinkAddLinkMQListener(ShortLinkService shortLinkService) {
+        this.shortLinkService = shortLinkService;
+    }
 
     /**
      * 处理短链接添加事件的消息处理器
@@ -35,7 +42,11 @@ public class ShortLinkAddLinkMQListener {
         // 获取消息的确认标签
         long tag = message.getMessageProperties().getDeliveryTag();
         try {
-            // TODO 处理业务逻辑
+            // 设置事件消息类型
+            eventMessage.setEventMessageType(EventMessageType.SHORT_LINK_ADD_LINK.name());
+            // 调用服务处理添加短链接
+            shortLinkService.handlerAddShortLink(eventMessage);
+
         } catch (Exception e) {
             // 处理业务异常，还有进行其他操作，比如记录失败原因
             logger.error("消费失败:{}", eventMessage);
@@ -43,6 +54,8 @@ public class ShortLinkAddLinkMQListener {
         }
         // 记录消息消费成功
         logger.info("消费成功:{}", eventMessage);
+        // 确认消息消费成功
+        channel.basicAck(tag, false);
     }
 
 }

@@ -1,6 +1,7 @@
 package fun.timu.cloud.net.link.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import fun.timu.cloud.net.common.model.EventMessage;
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.link.controller.request.ShortLinkAddRequest;
 import fun.timu.cloud.net.link.model.DO.ShortLink;
@@ -28,4 +29,12 @@ public interface ShortLinkService extends IService<ShortLink> {
      * @return
      */
     JsonData createShortLink(ShortLinkAddRequest request);
+
+    /**
+     * 处理新增短链消息
+     * @param eventMessage
+     * @return
+     */
+    boolean handlerAddShortLink(EventMessage eventMessage);
+
 }

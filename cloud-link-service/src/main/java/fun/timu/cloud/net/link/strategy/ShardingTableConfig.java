@@ -25,13 +25,15 @@ public class ShardingTableConfig {
      * 获取随机的后缀
      * @return 随机选择的后缀字符串
      */
-    public static String getRandomTableSuffix(){
-        // 随机生成一个索引，用于从后缀列表中选择一个后缀
-        int index = random.nextInt(tableSuffixList.size());
-        // 根据生成的索引，从后缀列表中获取对应的后缀并返回
+    public static String getRandomTableSuffix(String code ){
+        // 根据输入的code生成一个哈希值
+        int hashCode = code.hashCode();
+        // 使用取绝对值的方法确保哈希值为非负数
+        // 使用取模运算根据哈希值选择一个后缀索引，以实现基本的负载均衡
+        int index = Math.abs(hashCode) % tableSuffixList.size();
+        // 返回根据索引选择的后缀
         return tableSuffixList.get(index);
     }
-
 
 
 }

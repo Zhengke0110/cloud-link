@@ -1,6 +1,8 @@
 package fun.timu.cloud.net.link.component;
 
 import fun.timu.cloud.net.common.util.CommonUtil;
+import fun.timu.cloud.net.link.strategy.ShardingDBConfig;
+import fun.timu.cloud.net.link.strategy.ShardingTableConfig;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,12 +26,14 @@ public class ShortLinkComponent {
      */
     public String createShortLinkCode(String param) {
 
-        // 使用MurmurHash32算法对参数进行哈希计算
         long murmurhash = CommonUtil.murmurHash32(param);
-        // 进制转换：将哈希值转换为62进制的字符串
+
+        //进制转换
         String code = encodeToBase62(murmurhash);
 
-        return code;
+        String shortLinkCode = ShardingDBConfig.getRandomDBPrefix(code) + code + ShardingTableConfig.getRandomTableSuffix(code);
+
+        return shortLinkCode;
     }
 
     /**
