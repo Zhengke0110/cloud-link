@@ -41,20 +41,17 @@ public class ShortLinkDelLinkMQListener {
     public void shortLinkHandler(EventMessage eventMessage, Message message, Channel channel) throws IOException {
         // 记录接收到的消息内容
         logger.info("监听到消息ShortLinkDelLinkMQListener message消息内容:{}", message);
-
         try {
-            // 设置事件消息类型为短链接删除
+            // 设置事件消息类型
             eventMessage.setEventMessageType(EventMessageType.SHORT_LINK_DEL_LINK.name());
-
-            // 执行其他业务逻辑，这里省略具体实现
-
+            // 调用服务处理删除短链接的业务逻辑
+            shortLinkService.handleDelShortLink(eventMessage);
         } catch (Exception e) {
             // 处理业务异常，还有进行其他操作，比如记录失败原因
             logger.error("消费失败:{}", eventMessage);
             throw new BizException(BizCodeEnum.MQ_CONSUME_EXCEPTION);
         }
-
-        // 记录成功处理的消息
+        // 记录消息消费成功日志
         logger.info("消费成功:{}", eventMessage);
     }
 

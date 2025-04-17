@@ -21,7 +21,7 @@ import java.io.IOException;
 @RabbitListener(queuesToDeclare = {@Queue("short_link.del.mapping.queue")})
 public class ShortLinkDelMappingMQListener {
 
-    private static Logger logger = LoggerFactory.getLogger(ShortLinkDelLinkMQListener.class);
+    private static Logger logger = LoggerFactory.getLogger(ShortLinkDelMappingMQListener.class);
 
     private final ShortLinkService shortLinkService;
 
@@ -45,8 +45,7 @@ public class ShortLinkDelMappingMQListener {
         try {
             // 设置事件消息类型为短链接删除映射
             eventMessage.setEventMessageType(EventMessageType.SHORT_LINK_DEL_MAPPING.name());
-
-            // 处理业务逻辑，这里省略具体实现
+            shortLinkService.handleDelShortLink(eventMessage);
         } catch (Exception e) {
             // 处理业务异常，还有进行其他操作，比如记录失败原因
             logger.error("消费失败:{}", eventMessage);

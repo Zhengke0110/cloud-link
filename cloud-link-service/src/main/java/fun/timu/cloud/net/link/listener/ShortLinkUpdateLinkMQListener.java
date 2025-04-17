@@ -19,7 +19,7 @@ import java.io.IOException;
 @Component
 @RabbitListener(queuesToDeclare = {@Queue("short_link.update.link.queue")})
 public class ShortLinkUpdateLinkMQListener {
-    private static Logger logger = LoggerFactory.getLogger(ShortLinkDelLinkMQListener.class);
+    private static Logger logger = LoggerFactory.getLogger(ShortLinkUpdateLinkMQListener.class);
 
     private final ShortLinkService shortLinkService;
 
@@ -48,6 +48,7 @@ public class ShortLinkUpdateLinkMQListener {
         try {
             // 设置事件消息类型为短链接更新链接
             eventMessage.setEventMessageType(EventMessageType.SHORT_LINK_UPDATE_LINK.name());
+            shortLinkService.handleUpdateShortLink(eventMessage);
         } catch (Exception e) {
             // 处理业务异常，还有进行其他操作，比如记录失败原因
             logger.error("消费失败:{}", eventMessage);
