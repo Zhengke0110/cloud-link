@@ -2,6 +2,9 @@ package fun.timu.cloud.net.shop.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import fun.timu.cloud.net.shop.model.DO.Product;
+import fun.timu.cloud.net.shop.model.VO.ProductVO;
+
+import java.util.List;
 
 /**
  * @author zhengke
@@ -10,4 +13,7 @@ import fun.timu.cloud.net.shop.model.DO.Product;
  */
 public interface ProductService extends IService<Product> {
 
+    List<ProductVO> getList();
+
+    ProductVO findDetailById(long productId);
 }
