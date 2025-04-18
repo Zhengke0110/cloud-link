@@ -293,5 +293,18 @@ public class CommonUtil {
         return newUrl;
     }
 
+    public static void sendHtmlMessage(HttpServletResponse response, JsonData jsonData) {
+
+        response.setContentType("text/html; charset=utf-8");
+
+        try (PrintWriter writer = response.getWriter()) {
+            writer.write(jsonData.getData().toString());
+            writer.flush();
+        } catch (IOException e) {
+            logger.warn("响应json数据给前端异常:{}", e);
+        }
+
+
+    }
 
 }

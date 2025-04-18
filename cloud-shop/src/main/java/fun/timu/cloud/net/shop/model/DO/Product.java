@@ -4,21 +4,19 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
- * 
  * @TableName product
  */
-@TableName(value ="product")
+@TableName(value = "product")
 @Data
 public class Product implements Serializable {
-    /**
-     * 
-     */
-    @TableId
     private Long id;
 
     /**
@@ -44,12 +42,12 @@ public class Product implements Serializable {
     /**
      * 原价
      */
-    private Long oldAmount;
+    private BigDecimal oldAmount;
 
     /**
      * 现价
      */
-    private Long amount;
+    private BigDecimal amount;
 
     /**
      * 工具类型 short_link、qrcode
@@ -71,14 +69,8 @@ public class Product implements Serializable {
      */
     private Integer validDay;
 
-    /**
-     * 
-     */
     private Date gmtModified;
 
-    /**
-     * 
-     */
     private Date gmtCreate;
 
     @TableField(exist = false)
