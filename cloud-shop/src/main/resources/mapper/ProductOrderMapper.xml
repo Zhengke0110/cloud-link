@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fun.timu.cloud.net.shop.mapper.ProductOrderMapper">
+
+    <resultMap id="BaseResultMap" type="fun.timu.cloud.net.shop.model.DO.ProductOrder">
+        <id property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productTitle" column="product_title"/>
+        <result property="productAmount" column="product_amount"/>
+        <result property="productSnapshot" column="product_snapshot"/>
+        <result property="buyNum" column="buy_num"/>
+        <result property="outTradeNo" column="out_trade_no"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="payAmount" column="pay_amount"/>
+        <result property="payType" column="pay_type"/>
+        <result property="nickname" column="nickname"/>
+        <result property="accountNo" column="account_no"/>
+        <result property="del" column="del"/>
+        <result property="gmtModified" column="gmt_modified"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="billType" column="bill_type"/>
+        <result property="billHeader" column="bill_header"/>
+        <result property="billContent" column="bill_content"/>
+        <result property="billReceiverPhone" column="bill_receiver_phone"/>
+        <result property="billReceiverEmail" column="bill_receiver_email"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,product_id,product_title,product_amount,product_snapshot,buy_num,
+        out_trade_no,state,create_time,total_amount,pay_amount,
+        pay_type,nickname,account_no,del,gmt_modified,
+        gmt_create,bill_type,bill_header,bill_content,bill_receiver_phone,
+        bill_receiver_email
+    </sql>
+</mapper>
