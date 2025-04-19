@@ -14,6 +14,7 @@ import fun.timu.cloud.net.common.util.CommonUtil;
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.common.util.JsonUtil;
 import fun.timu.cloud.net.shop.controller.request.ConfirmOrderRequest;
+import fun.timu.cloud.net.shop.controller.request.ProductOrderPageRequest;
 import fun.timu.cloud.net.shop.manager.ProductManager;
 import fun.timu.cloud.net.shop.manager.ProductOrderManager;
 import fun.timu.cloud.net.shop.mapper.ProductOrderMapper;
@@ -47,24 +48,23 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
         this.productManager = productManager;
     }
 
+
     /**
-     * 根据页面编号、页面大小和订单状态分页查询订单
-     * 此方法利用拦截器中的登录信息来获取账户编号，并根据给定的页面参数和订单状态，
-     * 调用产品订单管理器的分页方法来获取相应的订单信息
+     * 根据订单分页请求获取订单列表
+     * 此方法主要用于处理订单的分页查询逻辑，根据当前登录用户和请求参数返回相应的订单信息
      *
-     * @param page  页面编号，表示请求的页面位置
-     * @param size  页面大小，表示每页包含的订单数量
-     * @param state 订单状态，用于过滤特定状态的订单，如果为null则不进行状态过滤
-     * @return 返回一个包含分页订单信息的映射对象，其中包含了订单列表和分页细节
+     * @param orderPageRequest 订单分页请求对象，包含页码、每页大小、用户状态等信息
+     * @return 返回一个包含订单信息的Map对象
      */
     @Override
-    public Map<String, Object> page(int page, int size, String state) {
-        // 从登录拦截器的线程局部变量中获取当前登录账户的账户编号
+
+    public Map<String, Object> page(ProductOrderPageRequest orderPageRequest) {
+        // 获取当前登录用户的账号编号
         Long accountNo = LoginInterceptor.threadLocal.get().getAccountNo();
 
-        // 调用产品订单管理器的分页方法，传入页面编号、页面大小、账户编号和订单状态，
-        // 获取分页后的订单信息映射对象
-        Map<String, Object> pageResult = productOrderManager.page(page, size, accountNo, state);
+        // 调用产品订单管理器的分页方法，传入页码、每页大小、用户账号编号和订单状态，获取分页结果
+        Map<String, Object> pageResult  = productOrderManager.page(orderPageRequest.getPage(), orderPageRequest.getSize(), accountNo, orderPageRequest.getState());
+        // 返回分页结果
         return pageResult;
     }
 

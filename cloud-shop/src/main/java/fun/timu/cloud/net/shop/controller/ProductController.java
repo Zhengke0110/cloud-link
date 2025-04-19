@@ -31,11 +31,8 @@ public class ProductController {
      */
     @GetMapping("list")
     public JsonData list() {
-
         List<ProductVO> list = productService.getList();
-
         return JsonData.buildSuccess(list);
-
     }
 
 
