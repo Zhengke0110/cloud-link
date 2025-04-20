@@ -4,6 +4,8 @@ import com.google.common.hash.Hashing;
 import fun.timu.cloud.net.LinkApplication;
 import fun.timu.cloud.net.link.component.ShortLinkComponent;
 import fun.timu.cloud.net.common.util.CommonUtil;
+import fun.timu.cloud.net.link.manager.ShortLinkManager;
+import fun.timu.cloud.net.link.model.DO.ShortLink;
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
@@ -51,6 +53,50 @@ public class ShortLinkTest {
             String shortLinkCode = shortLinkComponent.createShortLinkCode(originalUrl);
             log.info("originalUrl:" + originalUrl + ", shortLinkCode=" + shortLinkCode);
         }
+    }
+
+
+    @Autowired
+    private ShortLinkManager shortLinkManager;
+
+    @Test
+    public void testSaveShortLink() {
+        Random random = new Random();
+//        for (int i = 0; i < 10; i++) {
+        int num1 = random.nextInt(10);
+        int num2 = random.nextInt(100000000);
+        int num3 = random.nextInt(100000000);
+        String originalUrl = num1 + "timu" + num2 + ".fun" + num3;
+        String shortLinkCode = shortLinkComponent.createShortLinkCode(originalUrl);
+
+        ShortLink shortLinkDO = new ShortLink();
+        shortLinkDO.setCode(shortLinkCode);
+        shortLinkDO.setAccountNo(Long.valueOf(num3));
+        shortLinkDO.setSign(CommonUtil.MD5(originalUrl));
+        shortLinkDO.setDel(0);
+
+        shortLinkManager.addShortLink(shortLinkDO);
+//        }
+    }
+
+
+    @Test
+    public void testFind() {
+        ShortLink shortLinCode = shortLinkManager.findByShortLinCode("04DzCFLa");
+        log.info(shortLinCode.toString());
+
+    }
+
+    @Test
+    public void testGeneCode(){
+
+        for(int i=0; i<10;i++){
+            String url = "https://timu.fun/download.html";
+            String shortLinkCode = shortLinkComponent.createShortLinkCode(url);
+            System.out.println(shortLinkCode);
+        }
+
+
     }
 
 
