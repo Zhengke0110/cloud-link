@@ -140,7 +140,7 @@ public class ProductOrderController {
 
             }
             // 如果是微信支付，发送JSON消息
-            else if (payType.equalsIgnoreCase(ProductOrderPayTypeEnum.WECHAT_APY.name())) {
+            else if (payType.equalsIgnoreCase(ProductOrderPayTypeEnum.WECHAT_PAY.name())) {
                 CommonUtil.sendJsonMessage(response, jsonData);
             }
 

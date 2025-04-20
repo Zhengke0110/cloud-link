@@ -1,6 +1,7 @@
 package fun.timu.cloud.net.shop.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import fun.timu.cloud.net.common.model.EventMessage;
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.shop.controller.request.ConfirmOrderRequest;
 import fun.timu.cloud.net.shop.controller.request.ProductOrderPageRequest;
@@ -42,4 +43,15 @@ public interface ProductOrderService extends IService<ProductOrder> {
      * @return 包含操作结果信息的JsonData对象
      */
     JsonData confirmOrder(ConfirmOrderRequest orderRequest);
+
+    /**
+     * 关闭产品订单
+     * 此方法接收一个EventMessage对象，该对象包含了订单关闭的信息
+     * 返回一个布尔值，表示订单是否关闭成功
+     *
+     * @param eventMessage 包含订单关闭信息的事件消息对象
+     * @return 订单是否关闭成功的布尔值
+     */
+    boolean closeProductOrder(EventMessage eventMessage);
+
 }

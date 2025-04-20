@@ -22,6 +22,31 @@ spring:
         min-idle: 100
         # 连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: 60000
+  # RabbitMQ服务配置
+  rabbitmq:
+    # RabbitMQ服务器地址
+    host: 127.0.0.1
+    # 消息监听器配置
+    listener:
+      simple:
+        # 确认模式，自动确认消息处理
+        acknowledge-mode: auto
+        # 重试机制配置
+        retry:
+          # 启用重试功能
+          enabled: true
+          # 初始重试间隔时间，单位为毫秒
+          initial-interval: 5000
+          # 最大重试次数
+          max-attempts: 4
+    # RabbitMQ登录密码
+    password: admin
+    # RabbitMQ服务端口
+    port: 5672
+    # RabbitMQ登录用户名
+    username: admin
+    # 虚拟主机名称，用于隔离不同的环境
+    virtual-host: dev
 
   # 数据源 ds0 第一个数据库
   shardingsphere:

@@ -3,16 +3,15 @@ package fun.timu.cloud.net.shop.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import fun.timu.cloud.net.common.constant.TimeConstant;
-import fun.timu.cloud.net.common.enums.BillTypeEnum;
-import fun.timu.cloud.net.common.enums.BizCodeEnum;
-import fun.timu.cloud.net.common.enums.ProductOrderPayTypeEnum;
-import fun.timu.cloud.net.common.enums.ProductOrderStateEnum;
+import fun.timu.cloud.net.common.enums.*;
 import fun.timu.cloud.net.common.exception.BizException;
 import fun.timu.cloud.net.common.interceptor.LoginInterceptor;
+import fun.timu.cloud.net.common.model.EventMessage;
 import fun.timu.cloud.net.common.model.LoginUser;
 import fun.timu.cloud.net.common.util.CommonUtil;
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.common.util.JsonUtil;
+import fun.timu.cloud.net.shop.config.RabbitMQConfig;
 import fun.timu.cloud.net.shop.controller.request.ConfirmOrderRequest;
 import fun.timu.cloud.net.shop.controller.request.ProductOrderPageRequest;
 import fun.timu.cloud.net.shop.manager.ProductManager;
@@ -22,8 +21,10 @@ import fun.timu.cloud.net.shop.model.DO.Product;
 import fun.timu.cloud.net.shop.model.DO.ProductOrder;
 import fun.timu.cloud.net.shop.model.VO.PayInfoVO;
 import fun.timu.cloud.net.shop.service.ProductOrderService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,10 +43,14 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
 
     private final ProductOrderManager productOrderManager;
     private final ProductManager productManager;
+    private final RabbitTemplate rabbitTemplate;
+    private final RabbitMQConfig rabbitMQConfig;
 
-    public ProductOrderServiceImpl(ProductOrderManager productOrderManager, ProductManager productManager) {
+    public ProductOrderServiceImpl(ProductOrderManager productOrderManager, ProductManager productManager, RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig) {
         this.productOrderManager = productOrderManager;
         this.productManager = productManager;
+        this.rabbitTemplate = rabbitTemplate;
+        this.rabbitMQConfig = rabbitMQConfig;
     }
 
 
@@ -63,7 +68,7 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
         Long accountNo = LoginInterceptor.threadLocal.get().getAccountNo();
 
         // 调用产品订单管理器的分页方法，传入页码、每页大小、用户账号编号和订单状态，获取分页结果
-        Map<String, Object> pageResult  = productOrderManager.page(orderPageRequest.getPage(), orderPageRequest.getSize(), accountNo, orderPageRequest.getState());
+        Map<String, Object> pageResult = productOrderManager.page(orderPageRequest.getPage(), orderPageRequest.getSize(), accountNo, orderPageRequest.getState());
         // 返回分页结果
         return pageResult;
     }
@@ -92,7 +97,7 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
 
     /**
      * 确认订单并创建支付信息
-     *
+     * <p>
      * 本方法主要用于处理订单确认逻辑，包括生成订单号、验证产品价格、创建订单记录、
      * 以及构建支付信息对象，以供后续支付流程使用
      *
@@ -102,34 +107,93 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
     @Override
     @Transactional
     public JsonData confirmOrder(ConfirmOrderRequest orderRequest) {
-        // 获取当前登录用户信息
         LoginUser loginUser = LoginInterceptor.threadLocal.get();
 
-        // 生成订单号
         String orderOutTradeNo = CommonUtil.getStringNumRandom(32);
 
-        // 根据产品ID查询产品详细信息
         Product productDO = productManager.findDetailById(orderRequest.getProductId());
 
-        // 验证产品价格是否与请求中的支付金额一致
+        //验证价格
         this.checkPrice(productDO, orderRequest);
 
-        // 创建订单记录并保存到数据库
+        //创建订单
         ProductOrder productOrderDO = this.saveProductOrder(orderRequest, loginUser, orderOutTradeNo, productDO);
 
-        // 创建支付信息对象，用于后续的支付流程
-        PayInfoVO payInfoVO = PayInfoVO.builder().accountNo(loginUser.getAccountNo())
-                .outTradeNo(orderOutTradeNo).clientType(orderRequest.getClientType())
-                .payType(orderRequest.getPayType()).title(productDO.getTitle()).description("")
-                .payFee(orderRequest.getPayAmount()).orderPayTimeoutMills(TimeConstant.ORDER_PAY_TIMEOUT_MILLS)
-                .build();
 
-        // 发送延迟消息，用于订单支付超时未支付的处理 TODO
+        //创建支付对象
+        PayInfoVO payInfoVO = PayInfoVO.builder().accountNo(loginUser.getAccountNo()).outTradeNo(orderOutTradeNo).clientType(orderRequest.getClientType()).payType(orderRequest.getPayType()).title(productDO.getTitle()).description("").payFee(orderRequest.getPayAmount()).orderPayTimeoutMills(TimeConstant.ORDER_PAY_TIMEOUT_MILLS).build();
 
-        // 调用支付接口，进行实际的支付流程 TODO
+        //发送延迟消息
+        EventMessage eventMessage = EventMessage.builder().eventMessageType(EventMessageType.PRODUCT_ORDER_NEW.name()).accountNo(loginUser.getAccountNo()).bizId(orderOutTradeNo).build();
 
-        // 返回处理结果
-        return null;
+        rabbitTemplate.convertAndSend(rabbitMQConfig.getOrderEventExchange(), rabbitMQConfig.getOrderCloseDelayRoutingKey(), eventMessage);
+
+
+        //调用支付信息 TODO
+
+        return JsonData.buildSuccess();
+    }
+
+    /**
+     * 关闭产品订单
+     * <p>
+     * 此方法处理订单关闭请求，主要步骤如下：
+     * 1. 根据事件消息中的业务ID和账户号查询订单。
+     * 2. 如果订单不存在，则记录警告日志并返回成功。
+     * 3. 如果订单已支付，则记录信息日志并返回成功。
+     * 4. 如果订单未支付，尝试向第三方支付平台查询支付状态（实际查询逻辑未实现）。
+     * 5. 根据查询结果更新订单状态为取消或支付，并执行相应日志记录。
+     *
+     * @param eventMessage 事件消息，包含业务ID和账户号等信息
+     * @return 总是返回true，表示处理成功
+     */
+    @Override
+    public boolean closeProductOrder(EventMessage eventMessage) {
+
+        // 获取事件消息中的业务ID和账户号
+        String outTradeNo = eventMessage.getBizId();
+        Long accountNo = eventMessage.getAccountNo();
+
+        // 根据业务ID和账户号查询订单
+        ProductOrder productOrderDO = productOrderManager.findByOutTradeNoAndAccountNo(outTradeNo, accountNo);
+
+        // 如果订单不存在
+        if (productOrderDO == null) {
+            log.warn("订单不存在");
+            return true;
+        }
+
+        // 如果订单已经支付
+        if (productOrderDO.getState().equalsIgnoreCase(ProductOrderStateEnum.PAY.name())) {
+            logger.info("直接确认消息，订单已经支付:{}", eventMessage);
+            return true;
+        }
+
+        // 未支付，需要向第三方支付平台查询状态
+        if (productOrderDO.getState().equalsIgnoreCase(ProductOrderStateEnum.NEW.name())) {
+            // 向第三方查询状态
+            PayInfoVO payInfoVO = new PayInfoVO();
+            payInfoVO.setPayType(productOrderDO.getPayType());
+            payInfoVO.setOutTradeNo(outTradeNo);
+            payInfoVO.setAccountNo(accountNo);
+
+            // TODO 需要向第三方支付平台查询状态
+            String payResult = "";
+
+            // 根据查询结果处理订单状态
+            if (StringUtils.isBlank(payResult)) {
+                // 如果为空，则未支付成功，本地取消订单
+                productOrderManager.updateOrderPayState(outTradeNo, accountNo, ProductOrderStateEnum.CANCEL.name(), ProductOrderStateEnum.NEW.name());
+                logger.info("未支付成功，本地取消订单:{}", eventMessage);
+            } else {
+                // 支付成功，主动把订单状态更新成支付
+                logger.warn("支付成功，但是微信回调通知失败，需要排查问题:{}", eventMessage);
+                productOrderManager.updateOrderPayState(outTradeNo, accountNo, ProductOrderStateEnum.PAY.name(), ProductOrderStateEnum.NEW.name());
+                // TODO 触发支付成功后的逻辑
+            }
+        }
+
+        return true;
     }
 
     /**
