@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RabbitListener(queuesToDeclare = {@Queue("order.close.queue")})
+@RabbitListener(queuesToDeclare = {@Queue("order.close.queue"), @Queue("order.update.queue")})
 public class ProductOrderMQListener {
     private static Logger logger = LoggerFactory.getLogger(ProductOrderController.class);
 
@@ -32,8 +32,8 @@ public class ProductOrderMQListener {
      * 该方法主要用于监听和处理产品订单相关事件消息
      *
      * @param eventMessage 事件消息对象，包含订单事件的具体信息
-     * @param message RabbitMQ消息对象，用于获取消息的详细信息
-     * @param channel RabbitMQ通道对象，用于消息的确认或拒绝
+     * @param message      RabbitMQ消息对象，用于获取消息的详细信息
+     * @param channel      RabbitMQ通道对象，用于消息的确认或拒绝
      */
     @RabbitHandler
     public void productOrderHandler(EventMessage eventMessage, Message message, Channel channel) {
@@ -41,9 +41,7 @@ public class ProductOrderMQListener {
         logger.info("监听到消息ProductOrderMQListener messsage消息内容:{}", message);
 
         try {
-            // 关闭订单
-            // 此处调用服务层方法来处理订单关闭逻辑
-            productOrderService.closeProductOrder(eventMessage);
+            productOrderService.handleProductOrderMessage(eventMessage);
         } catch (Exception e) {
             // 记录消费者失败日志
             logger.error("消费者失败:{}", eventMessage);
