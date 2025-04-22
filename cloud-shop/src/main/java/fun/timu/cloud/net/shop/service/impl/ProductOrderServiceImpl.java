@@ -11,6 +11,7 @@ import fun.timu.cloud.net.common.model.LoginUser;
 import fun.timu.cloud.net.common.util.CommonUtil;
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.common.util.JsonUtil;
+import fun.timu.cloud.net.shop.component.PayFactory;
 import fun.timu.cloud.net.shop.config.RabbitMQConfig;
 import fun.timu.cloud.net.shop.controller.request.ConfirmOrderRequest;
 import fun.timu.cloud.net.shop.controller.request.ProductOrderPageRequest;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -45,12 +47,15 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
     private final ProductManager productManager;
     private final RabbitTemplate rabbitTemplate;
     private final RabbitMQConfig rabbitMQConfig;
+    private final PayFactory payFactory;
 
-    public ProductOrderServiceImpl(ProductOrderManager productOrderManager, ProductManager productManager, RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig) {
+
+    public ProductOrderServiceImpl(ProductOrderManager productOrderManager, ProductManager productManager, RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig, PayFactory payFactory) {
         this.productOrderManager = productOrderManager;
         this.productManager = productManager;
         this.rabbitTemplate = rabbitTemplate;
         this.rabbitMQConfig = rabbitMQConfig;
+        this.payFactory = payFactory;
     }
 
 
@@ -129,9 +134,20 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
         rabbitTemplate.convertAndSend(rabbitMQConfig.getOrderEventExchange(), rabbitMQConfig.getOrderCloseDelayRoutingKey(), eventMessage);
 
 
-        //调用支付信息 TODO
-
-        return JsonData.buildSuccess();
+        // TODO 调用支付信息
+        String codeUrl = payFactory.pay(payInfoVO);
+        // 检查支付码URL是否非空
+        if (StringUtils.isNotBlank(codeUrl)) {
+            // 初始化结果映射，用于存储支付相关的关键信息
+            Map<String, String> resultMap = new HashMap<>(2);
+            // 将支付码URL放入结果映射中
+            resultMap.put("code_url", codeUrl);
+            // 将商户订单号放入结果映射中
+            resultMap.put("out_trade_no", payInfoVO.getOutTradeNo());
+            // 返回成功构建的JSON数据，包含支付码URL和商户订单号
+            return JsonData.buildSuccess(resultMap);
+        }
+        return JsonData.buildResult(BizCodeEnum.PAY_ORDER_FAIL);
     }
 
     /**
