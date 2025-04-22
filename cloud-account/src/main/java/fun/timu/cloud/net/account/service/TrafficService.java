@@ -1,8 +1,12 @@
 package fun.timu.cloud.net.account.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import fun.timu.cloud.net.account.controller.request.TrafficPageRequest;
 import fun.timu.cloud.net.account.model.DO.Traffic;
+import fun.timu.cloud.net.account.model.VO.TrafficVO;
 import fun.timu.cloud.net.common.model.EventMessage;
+
+import java.util.Map;
 
 /**
  * @author zhengke
@@ -11,4 +15,7 @@ import fun.timu.cloud.net.common.model.EventMessage;
  */
 public interface TrafficService extends IService<Traffic> {
     void handleTrafficMessage(EventMessage eventMessage);
+    Map<String,Object> pageAvailable(TrafficPageRequest request);
+
+    TrafficVO detail(long trafficId);
 }

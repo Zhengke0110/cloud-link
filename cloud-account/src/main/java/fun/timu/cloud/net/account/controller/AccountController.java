@@ -9,6 +9,9 @@ import fun.timu.cloud.net.common.util.JsonData;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 用户控制器相关接口
+ */
 @RestController
 @RequestMapping("/api/account/v1")
 public class AccountController {
@@ -44,7 +47,7 @@ public class AccountController {
 
     /**
      * 用户注册
-     *
+     * <p>
      * 此方法处理用户注册请求，接收注册信息并返回注册结果
      * 使用PostMapping注解限定HTTP请求方法为POST，路径为"register"
      * 使用RequestBody注解将HTTP请求的JSON格式请求体转换为AccountRegisterRequest对象
@@ -61,7 +64,7 @@ public class AccountController {
 
     /**
      * 用户登录
-     *
+     * <p>
      * 此方法处理用户的登录请求它期望接收一个AccountLoginRequest对象作为参数，
      * 该对象中包含了登录所需的信息，例如用户名和密码这些信息用于验证用户身份
      * 登录成功后，将返回一个包含成功信息的JsonData对象；如果登录失败，则返回一个包含错误信息的JsonData对象
