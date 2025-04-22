@@ -1,6 +1,7 @@
 package fun.timu.cloud.net.shop.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import fun.timu.cloud.net.common.enums.ProductOrderPayTypeEnum;
 import fun.timu.cloud.net.common.model.EventMessage;
 import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.shop.controller.request.ConfirmOrderRequest;
@@ -54,4 +55,21 @@ public interface ProductOrderService extends IService<ProductOrder> {
      */
     boolean closeProductOrder(EventMessage eventMessage);
 
+    /**
+     * 处理订单回调消息
+     * 该方法用于处理不同支付类型的订单回调通知，根据支付类型和回调参数进行相应的业务处理
+     *
+     * @param payType 支付类型枚举，表示订单的支付方式
+     * @param paramsMap 包含回调通知的各种参数键值对
+     * @return 返回一个JsonData对象，包含处理结果信息
+     */
+    JsonData processOrderCallbackMsg(ProductOrderPayTypeEnum payType, Map<String, String> paramsMap);
+
+    /**
+     * 处理产品订单消息
+     * 该方法用于处理产品订单相关的消息，根据消息内容触发后续的业务流程
+     *
+     * @param message 一个EventMessage对象，包含需要处理的消息信息
+     */
+    void handleProductOrderMessage(EventMessage message);
 }

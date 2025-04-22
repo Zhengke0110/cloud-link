@@ -26,6 +26,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zhengke
@@ -48,14 +51,16 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
     private final RabbitTemplate rabbitTemplate;
     private final RabbitMQConfig rabbitMQConfig;
     private final PayFactory payFactory;
+    private final RedisTemplate<Object, Object> redisTemplate;
 
 
-    public ProductOrderServiceImpl(ProductOrderManager productOrderManager, ProductManager productManager, RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig, PayFactory payFactory) {
+    public ProductOrderServiceImpl(ProductOrderManager productOrderManager, ProductManager productManager, RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig, PayFactory payFactory, RedisTemplate<Object, Object> redisTemplate) {
         this.productOrderManager = productOrderManager;
         this.productManager = productManager;
         this.rabbitTemplate = rabbitTemplate;
         this.rabbitMQConfig = rabbitMQConfig;
         this.payFactory = payFactory;
+        this.redisTemplate = redisTemplate;
     }
 
 
@@ -124,7 +129,6 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
         //创建订单
         ProductOrder productOrderDO = this.saveProductOrder(orderRequest, loginUser, orderOutTradeNo, productDO);
 
-
         //创建支付对象
         PayInfoVO payInfoVO = PayInfoVO.builder().accountNo(loginUser.getAccountNo()).outTradeNo(orderOutTradeNo).clientType(orderRequest.getClientType()).payType(orderRequest.getPayType()).title(productDO.getTitle()).description("").payFee(orderRequest.getPayAmount()).orderPayTimeoutMills(TimeConstant.ORDER_PAY_TIMEOUT_MILLS).build();
 
@@ -144,6 +148,8 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
             resultMap.put("code_url", codeUrl);
             // 将商户订单号放入结果映射中
             resultMap.put("out_trade_no", payInfoVO.getOutTradeNo());
+            resultMap.put("pay_type", payInfoVO.getPayType());
+            resultMap.put("account_no", payInfoVO.getAccountNo().toString());
             // 返回成功构建的JSON数据，包含支付码URL和商户订单号
             return JsonData.buildSuccess(resultMap);
         }
@@ -210,6 +216,103 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
         }
 
         return true;
+    }
+
+    /**
+     * 处理订单回调消息
+     *
+     * @param payType   支付类型枚举，表示支付方式
+     * @param paramsMap 包含回调参数的映射，由支付平台提供
+     * @return 返回一个包含处理结果的JsonData对象
+     */
+    @Override
+    public JsonData processOrderCallbackMsg(ProductOrderPayTypeEnum payType, Map<String, String> paramsMap) {
+        //获取商户订单号
+        String outTradeNo = paramsMap.get("out_trade_no");
+        //交易状态
+        String tradeState = paramsMap.get("trade_state");
+
+        //账户编号
+        Long accountNo = Long.valueOf(paramsMap.get("account_no"));
+
+        //根据商户订单号和账户编号查询订单信息
+        ProductOrder productOrderDO = productOrderManager.findByOutTradeNoAndAccountNo(outTradeNo, accountNo);
+
+        //创建一个映射用于存储消息内容
+        Map<String, Object> content = new HashMap<>(4);
+        content.put("outTradeNo", outTradeNo);
+        content.put("buyNum", productOrderDO.getBuyNum());
+        content.put("accountNo", accountNo);
+        content.put("product", productOrderDO.getProductSnapshot());
+
+        //构建消息
+        EventMessage eventMessage = EventMessage.builder()
+                .bizId(outTradeNo)
+                .accountNo(accountNo)
+                .messageId(outTradeNo)
+                .content(JsonUtil.obj2Json(content))
+                .eventMessageType(EventMessageType.PRODUCT_ORDER_PAY.name())
+                .build();
+
+        //根据支付类型处理回调消息
+        if (payType.name().equalsIgnoreCase(ProductOrderPayTypeEnum.ALI_PAY.name())) {
+            //支付宝支付 TODO
+
+        } else if (payType.name().equalsIgnoreCase(ProductOrderPayTypeEnum.WECHAT_PAY.name())) {
+            //处理微信支付回调
+            if ("SUCCESS".equalsIgnoreCase(tradeState)) {
+                //如果交易状态为成功
+
+                //设置过期时间
+                Boolean flag = redisTemplate.opsForValue().setIfAbsent(outTradeNo, "OK", 3, TimeUnit.DAYS);
+
+                if (flag) {
+                    //发送消息到 RabbitMQ
+                    rabbitTemplate.convertAndSend(rabbitMQConfig.getOrderEventExchange(), rabbitMQConfig.getOrderUpdateTrafficRoutingKey(), eventMessage);
+
+                    return JsonData.buildSuccess();
+                }
+            }
+        }
+
+        //如果回调处理不成功，返回相应的错误码
+        return JsonData.buildResult(BizCodeEnum.PAY_ORDER_CALLBACK_NOT_SUCCESS);
+    }
+
+    /**
+     * 处理产品订单消息
+     * 根据消息类型处理相应的订单事件
+     *
+     * @param eventMessage 事件消息，包含订单相关信息
+     */
+    @Override
+    public void handleProductOrderMessage(EventMessage eventMessage) {
+        // 获取消息类型
+        String messageType = eventMessage.getEventMessageType();
+
+        try {
+            // 根据消息类型处理订单
+            if (EventMessageType.PRODUCT_ORDER_NEW.name().equalsIgnoreCase(messageType)) {
+                // 关闭订单
+                this.closeProductOrder(eventMessage);
+
+            } else if (EventMessageType.PRODUCT_ORDER_PAY.name().equalsIgnoreCase(messageType)) {
+                // 订单已经支付，更新订单状态
+                String outTradeNo = eventMessage.getBizId();
+                Long accountNo = eventMessage.getAccountNo();
+                // 更新订单支付状态，从新建状态转为已支付状态
+                int rows = productOrderManager.updateOrderPayState(outTradeNo, accountNo,
+                        ProductOrderStateEnum.PAY.name(), ProductOrderStateEnum.NEW.name());
+                // 记录订单更新日志
+                logger.info("订单更新成功:rows={},eventMessage={}", rows, eventMessage);
+            }
+
+        } catch (Exception e) {
+            // 记录订单消费失败日志
+            logger.error("订单消费者消费失败:{}", eventMessage);
+            // 抛出业务异常，指示消息消费失败
+            throw new BizException(BizCodeEnum.MQ_CONSUME_EXCEPTION);
+        }
     }
 
     /**

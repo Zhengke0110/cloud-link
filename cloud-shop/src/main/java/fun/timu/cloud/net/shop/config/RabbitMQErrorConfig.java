@@ -80,7 +80,6 @@ public class RabbitMQErrorConfig {
      */
     @Bean
     public MessageRecoverer messageRecoverer() {
-
         return new RepublishMessageRecoverer(rabbitTemplate, orderErrorExchange, orderErrorRoutingKey);
     }
 
