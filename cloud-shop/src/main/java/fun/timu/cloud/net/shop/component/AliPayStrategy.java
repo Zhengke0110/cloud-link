@@ -21,7 +21,11 @@ public class AliPayStrategy implements PayStrategy {
 
     @Override
     public String queryPayStatus(PayInfoVO payInfoVO) {
-        return null;
+        // 记录查询支付结果的日志信息
+        log.info("查询支付宝支付结果");
+        // 由于微信支付相关接口未实现，这里默认返回查询支付成功的字符串信息
+        String result = "注意:支付宝支付相关接口未实现, 这里默认查询支付成功";
+        return result;
     }
 
     @Override
