@@ -8,13 +8,19 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @TableName traffic
  */
 @TableName(value = "traffic")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Traffic implements Serializable {
     private Long id;
 

@@ -18,7 +18,7 @@ import java.util.Date;
 
 @Component
 public class TrafficManagerImpl implements TrafficManager {
-    private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
+    private static Logger logger = LoggerFactory.getLogger(TrafficManager.class);
     private final TrafficMapper trafficMapper;
 
     public TrafficManagerImpl(TrafficMapper trafficMapper) {
