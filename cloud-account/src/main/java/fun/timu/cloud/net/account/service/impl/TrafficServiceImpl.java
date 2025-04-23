@@ -2,8 +2,10 @@ package fun.timu.cloud.net.account.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.alibaba.fastjson.TypeReference;
 
 import fun.timu.cloud.net.account.controller.request.TrafficPageRequest;
+import fun.timu.cloud.net.account.feign.ProductFeignService;
 import fun.timu.cloud.net.account.manager.AccountManager;
 import fun.timu.cloud.net.account.manager.TrafficManager;
 import fun.timu.cloud.net.account.mapper.TrafficMapper;
@@ -15,12 +17,11 @@ import fun.timu.cloud.net.common.enums.EventMessageType;
 import fun.timu.cloud.net.common.interceptor.LoginInterceptor;
 import fun.timu.cloud.net.common.model.EventMessage;
 import fun.timu.cloud.net.common.model.LoginUser;
+import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.common.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,9 +44,11 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
     private static Logger logger = LoggerFactory.getLogger(TrafficService.class);
 
     private final TrafficManager trafficManager;
+    private final ProductFeignService productFeignService;
 
-    public TrafficServiceImpl(TrafficManager trafficManager) {
+    public TrafficServiceImpl(TrafficManager trafficManager, ProductFeignService productFeignService) {
         this.trafficManager = trafficManager;
+        this.productFeignService = productFeignService;
     }
 
     /**
@@ -57,39 +60,49 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void handleTrafficMessage(EventMessage eventMessage) {
+        Long accountNo = eventMessage.getAccountNo();
+
         // 获取消息类型
         String messageType = eventMessage.getEventMessageType();
         // 判断消息类型是否为产品订单支付
         if (EventMessageType.PRODUCT_ORDER_PAY.name().equalsIgnoreCase(messageType)) {
+            // 订单已经支付，新增流量
 
-            //订单已经支付，新增流量
-
-            // 获取消息内容
             String content = eventMessage.getContent();
-            // 将消息内容转换为Map对象
             Map<String, Object> orderInfoMap = JsonUtil.json2Obj(content, Map.class);
 
-            //还原订单商品信息
-            Long accountNo = (Long) orderInfoMap.get("accountNo");
+            // 还原订单商品信息
             String outTradeNo = (String) orderInfoMap.get("outTradeNo");
             Integer buyNum = (Integer) orderInfoMap.get("buyNum");
             String productStr = (String) orderInfoMap.get("product");
             ProductVO productVO = JsonUtil.json2Obj(productStr, ProductVO.class);
             logger.info("商品信息:{}", productVO);
 
-            //计算流量包有效期
+            // 流量包有效期
             LocalDateTime expiredDateTime = LocalDateTime.now().plusDays(productVO.getValidDay());
             Date date = Date.from(expiredDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
-            //构建流量包对象
+            // 构建流量包对象
             Traffic trafficDO = Traffic.builder().accountNo(accountNo).dayLimit(productVO.getDayTimes() * buyNum).dayUsed(0).totalLimit(productVO.getTotalTimes()).pluginType(productVO.getPluginType()).level(productVO.getLevel()).productId(productVO.getId()).outTradeNo(outTradeNo).expiredDate(date).build();
 
-            //添加流量包到数据库
             int rows = trafficManager.add(trafficDO);
             logger.info("消费消息新增流量包:rows={},trafficDO={}", rows, trafficDO);
 
+        } else if (EventMessageType.TRAFFIC_FREE_INIT.name().equalsIgnoreCase(messageType)) {
+            // 发放免费流量包
+            Long productId = Long.valueOf(eventMessage.getBizId());
+
+            JsonData jsonData = productFeignService.detail(productId);
+
+            ProductVO productVO = jsonData.getData(new TypeReference<ProductVO>() {
+            });
+            // 构建流量包对象
+            Traffic trafficDO = Traffic.builder().accountNo(accountNo).dayLimit(productVO.getDayTimes()).dayUsed(0).totalLimit(productVO.getTotalTimes()).pluginType(productVO.getPluginType()).level(productVO.getLevel()).productId(productVO.getId()).outTradeNo("free_init").expiredDate(new Date()).build();
+
+            trafficManager.add(trafficDO);
         }
     }
+
 
     /**
      * 根据请求分页查询可用的流量包信息
