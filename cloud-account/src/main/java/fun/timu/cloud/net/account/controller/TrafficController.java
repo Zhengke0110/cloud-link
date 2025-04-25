@@ -37,7 +37,7 @@ public class TrafficController {
 
         //具体使用流量包逻辑
         JsonData jsonData = trafficService.reduce(useTrafficRequest);
-        return JsonData.buildSuccess();
+        return jsonData;
     }
 
     /**
@@ -53,7 +53,6 @@ public class TrafficController {
 
         // 构建并返回查询结果的JSON数据
         return JsonData.buildSuccess(pageMap);
-
     }
 
 
