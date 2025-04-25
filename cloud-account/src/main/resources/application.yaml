@@ -1,6 +1,7 @@
 server:
   port: 8001
-
+rpc:
+  token: timu.fun
 spring:
   application:
     name: cloud-account

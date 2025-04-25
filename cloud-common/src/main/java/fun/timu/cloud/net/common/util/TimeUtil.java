@@ -25,7 +25,7 @@ public class TimeUtil {
      * 此方法主要用于将日期和时间以特定格式呈现，提高可读性和适应不同场景的需求
      *
      * @param localDateTime 需要格式化的 LocalDateTime 对象，代表一个具体的日期和时间点
-     * @param pattern 日期时间格式模式，用于定义返回字符串的格式
+     * @param pattern       日期时间格式模式，用于定义返回字符串的格式
      * @return 根据指定格式转换后的日期时间字符串
      */
     public static String format(LocalDateTime localDateTime, String pattern) {

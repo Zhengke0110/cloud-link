@@ -1,6 +1,8 @@
 package fun.timu.cloud.net.link.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import fun.timu.cloud.net.common.constant.RedisKey;
+import fun.timu.cloud.net.common.enums.BizCodeEnum;
 import fun.timu.cloud.net.common.enums.DomainTypeEnum;
 import fun.timu.cloud.net.common.enums.EventMessageType;
 import fun.timu.cloud.net.common.enums.ShortLinkStateEnum;
@@ -109,29 +111,53 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     /**
      * 创建短链接
      * <p>
-     * 此方法接收一个ShortLinkAddRequest对象作为请求参数，用于生成短链接信息它通过RabbitMQ异步处理短链接的创建过程
+     * 此方法接收一个ShortLinkAddRequest对象作为请求参数，用于生成短链接信息。
+     * 它通过RabbitMQ异步处理短链接的创建过程，并在创建前检查用户的流量包是否充足。
      *
-     * @param request 包含短链接相关信息的请求对象
-     * @return 返回一个表示操作结果的JsonData对象
+     * @param request 包含短链接相关信息的请求对象，包括原始URL等信息
+     * @return 返回一个表示操作结果的JsonData对象，如果成功则返回成功状态，否则返回失败状态及错误码
      */
     @Override
     public JsonData createShortLink(ShortLinkAddRequest request) {
-        // 获取当前登录用户的账户编号
+        // 获取当前登录用户的账户编号，用于后续的流量校验和事件消息构建
         Long accountNo = LoginInterceptor.threadLocal.get().getAccountNo();
 
-        // 确保原始URL具有正确的格式，如果缺少http或https前缀，则添加之
-        String newOriginalUrl = CommonUtil.addUrlPrefix(request.getOriginalUrl());
-        request.setOriginalUrl(newOriginalUrl);
+        // 构造Redis缓存键，用于存储用户每日剩余的流量次数
+        String cacheKey = String.format(RedisKey.DAY_TOTAL_TRAFFIC, accountNo);
 
-        // 构建事件消息对象，用于发送到RabbitMQ
-        EventMessage eventMessage = EventMessage.builder().accountNo(accountNo).content(JsonUtil.obj2Json(request)).messageId(IDUtil.geneSnowFlakeID().toString()).eventMessageType(EventMessageType.SHORT_LINK_ADD.name()).build();
+        // 使用Lua脚本检查Redis中是否存在该用户的流量缓存键，并递减其值
+        // 如果缓存键不存在，则返回0；如果存在，则递减其值并返回新的值
+        String script = "if redis.call('get',KEYS[1]) then return redis.call('decr',KEYS[1]) else return 0 end";
 
-        // 将事件消息发送到指定的RabbitMQ交换机和路由键
-        rabbitTemplate.convertAndSend(rabbitMQConfig.getShortLinkEventExchange(), rabbitMQConfig.getShortLinkAddRoutingKey(), eventMessage);
+        // 执行Lua脚本，获取用户今日剩余的流量次数
+        Long leftTimes = redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(cacheKey), "");
+        logger.info("今日流量包剩余次数:{}", leftTimes);
 
-        // 返回成功响应，表示短链接创建请求已成功发送
-        return JsonData.buildSuccess();
+        // 如果剩余流量次数大于等于0，则允许创建短链接
+        if (leftTimes >= 0) {
+            // 确保原始URL以正确的前缀开头
+            String newOriginalUrl = CommonUtil.addUrlPrefix(request.getOriginalUrl());
+            request.setOriginalUrl(newOriginalUrl);
+
+            // 构建事件消息对象，包含账户编号、请求内容、消息ID和事件类型
+            EventMessage eventMessage = EventMessage.builder()
+                    .accountNo(accountNo)
+                    .content(JsonUtil.obj2Json(request)) // 将请求对象序列化为JSON字符串
+                    .messageId(IDUtil.geneSnowFlakeID().toString()) // 生成唯一的消息ID
+                    .eventMessageType(EventMessageType.SHORT_LINK_ADD.name()) // 设置事件类型为短链接新增
+                    .build();
+
+            // 将事件消息发送到RabbitMQ，通过指定的交换机和路由键进行异步处理
+            rabbitTemplate.convertAndSend(rabbitMQConfig.getShortLinkEventExchange(), rabbitMQConfig.getShortLinkAddRoutingKey(), eventMessage);
+
+            // 返回操作成功的结果
+            return JsonData.buildSuccess();
+        } else {
+            // 如果流量不足，返回操作失败的结果，并附带相应的错误码
+            return JsonData.buildResult(BizCodeEnum.TRAFFIC_REDUCE_FAIL);
+        }
     }
+
 
     /**
      * 处理更新短链的请求

@@ -1,5 +1,7 @@
 server:
   port: 8003
+rpc:
+  token: timu.fun
 spring:
   application:
     name: cloud-link

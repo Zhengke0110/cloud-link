@@ -15,6 +15,7 @@ import fun.timu.cloud.net.account.model.VO.ProductVO;
 import fun.timu.cloud.net.account.model.VO.TrafficVO;
 import fun.timu.cloud.net.account.model.VO.UseTrafficVO;
 import fun.timu.cloud.net.account.service.TrafficService;
+import fun.timu.cloud.net.common.constant.RedisKey;
 import fun.timu.cloud.net.common.enums.BizCodeEnum;
 import fun.timu.cloud.net.common.enums.EventMessageType;
 import fun.timu.cloud.net.common.exception.BizException;
@@ -27,6 +28,8 @@ import fun.timu.cloud.net.common.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -47,6 +51,8 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
 
     private final TrafficManager trafficManager;
     private final ProductFeignService productFeignService;
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     public TrafficServiceImpl(TrafficManager trafficManager, ProductFeignService productFeignService) {
         this.trafficManager = trafficManager;
@@ -90,6 +96,9 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
             int rows = trafficManager.add(trafficDO);
             logger.info("消费消息新增流量包:rows={},trafficDO={}", rows, trafficDO);
 
+            //新增流量包，应该删除这个key
+            String totalTrafficTimesKey = String.format(RedisKey.DAY_TOTAL_TRAFFIC, accountNo);
+            redisTemplate.delete(totalTrafficTimesKey);
         } else if (EventMessageType.TRAFFIC_FREE_INIT.name().equalsIgnoreCase(messageType)) {
             // 发放免费流量包
             Long productId = Long.valueOf(eventMessage.getBizId());
@@ -99,16 +108,7 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
             ProductVO productVO = jsonData.getData(new TypeReference<ProductVO>() {
             });
             // 构建流量包对象
-            Traffic trafficDO = Traffic.builder()
-                    .accountNo(accountNo)
-                    .dayLimit(productVO.getDayTimes())
-                    .dayUsed(0)
-                    .totalLimit(productVO.getTotalTimes())
-                    .pluginType(productVO.getPluginType())
-                    .level(productVO.getLevel())
-                    .productId(productVO.getId())
-                    .outTradeNo("free_init")
-                    .expiredDate(new Date()).build();
+            Traffic trafficDO = Traffic.builder().accountNo(accountNo).dayLimit(productVO.getDayTimes()).dayUsed(0).totalLimit(productVO.getTotalTimes()).pluginType(productVO.getPluginType()).level(productVO.getLevel()).productId(productVO.getId()).outTradeNo("free_init").expiredDate(new Date()).build();
 
             trafficManager.add(trafficDO);
         }
@@ -195,37 +195,38 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public JsonData reduce(UseTrafficRequest trafficRequest) {
 
-        // 获取账户编号
         Long accountNo = trafficRequest.getAccountNo();
 
-        // 处理流量包，筛选出未更新流量包，当前使用的流量包
+        //处理流量包，筛选出未更新流量包，当前使用的流量包
         UseTrafficVO useTrafficVO = processTrafficList(accountNo);
 
-        // 日志输出今天可用总次数和当前使用流量包的信息
         logger.info("今天可用总次数:{},当前使用流量包:{}", useTrafficVO.getDayTotalLeftTimes(), useTrafficVO.getCurrentTrafficDO());
-
-        // 如果没有当前使用的流量包，则返回失败结果
         if (useTrafficVO.getCurrentTrafficDO() == null) {
             return JsonData.buildResult(BizCodeEnum.TRAFFIC_REDUCE_FAIL);
         }
 
-        // 日志输出待更新流量包列表
         logger.info("待更新流量包列表:{}", useTrafficVO.getUnUpdatedTrafficIds());
 
-        // 如果有待更新的流量包列表，则批量更新今日流量包的使用次数
+        //如果有未更新的流量包，进行批量更新
         if (useTrafficVO.getUnUpdatedTrafficIds().size() > 0) {
+            //更新今日流量包
             trafficManager.batchUpdateUsedTimes(accountNo, useTrafficVO.getUnUpdatedTrafficIds());
         }
 
-        // 先更新，再扣减当前使用的流量包
+        //先更新，再扣减当前使用的流量包
         int rows = trafficManager.addDayUsedTimes(accountNo, useTrafficVO.getCurrentTrafficDO().getId(), 1);
 
-        // 如果更新失败，则抛出业务异常
         if (rows != 1) {
             throw new BizException(BizCodeEnum.TRAFFIC_REDUCE_FAIL);
         }
 
-        // 返回成功结果
+        //往redis设置下总流量包次数，短链服务那边递减即可； 如果有新增流量包，则删除这个key
+        long leftSeconds = TimeUtil.getRemainSecondsOneDay(new Date());
+
+        String totalTrafficTimesKey = String.format(RedisKey.DAY_TOTAL_TRAFFIC, accountNo);
+
+        redisTemplate.opsForValue().set(totalTrafficTimesKey, useTrafficVO.getDayTotalLeftTimes() - 1, leftSeconds, TimeUnit.SECONDS);
+
         return JsonData.buildSuccess();
     }
 
