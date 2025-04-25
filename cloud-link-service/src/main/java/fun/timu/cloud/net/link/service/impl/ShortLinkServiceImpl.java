@@ -12,10 +12,8 @@ import fun.timu.cloud.net.common.util.JsonData;
 import fun.timu.cloud.net.common.util.JsonUtil;
 import fun.timu.cloud.net.link.component.ShortLinkComponent;
 import fun.timu.cloud.net.link.config.RabbitMQConfig;
-import fun.timu.cloud.net.link.controller.request.ShortLinkAddRequest;
-import fun.timu.cloud.net.link.controller.request.ShortLinkDelRequest;
-import fun.timu.cloud.net.link.controller.request.ShortLinkPageRequest;
-import fun.timu.cloud.net.link.controller.request.ShortLinkUpdateRequest;
+import fun.timu.cloud.net.link.controller.request.*;
+import fun.timu.cloud.net.link.feign.TrafficFeignService;
 import fun.timu.cloud.net.link.manager.DomainManager;
 import fun.timu.cloud.net.link.manager.GroupCodeMappingManager;
 import fun.timu.cloud.net.link.manager.LinkGroupManager;
@@ -70,13 +68,15 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     private final ShortLinkComponent shortLinkComponent;
 
     private final GroupCodeMappingManager groupCodeMappingManager;
+    private final TrafficFeignService trafficFeignService;
 
-    public ShortLinkServiceImpl(ShortLinkManager shortLinkManager, DomainManager domainManager, LinkGroupManager linkGroupManager, ShortLinkComponent shortLinkComponent, GroupCodeMappingManager groupCodeMappingManager) {
+    public ShortLinkServiceImpl(ShortLinkManager shortLinkManager, DomainManager domainManager, LinkGroupManager linkGroupManager, ShortLinkComponent shortLinkComponent, GroupCodeMappingManager groupCodeMappingManager, TrafficFeignService trafficFeignService) {
         this.shortLinkManager = shortLinkManager;
         this.domainManager = domainManager;
         this.linkGroupManager = linkGroupManager;
         this.shortLinkComponent = shortLinkComponent;
         this.groupCodeMappingManager = groupCodeMappingManager;
+        this.trafficFeignService = trafficFeignService;
     }
 
 
@@ -158,9 +158,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         if (EventMessageType.SHORT_LINK_UPDATE_LINK.name().equalsIgnoreCase(messageType)) {
 
             // 构建ShortLink对象并更新C端短链信息
-            ShortLink shortLinkDO = ShortLink.builder().code(request.getCode()).title(request.getTitle())
-                    .domain(domainDO.getValue())
-                    .accountNo(accountNo).build();
+            ShortLink shortLinkDO = ShortLink.builder().code(request.getCode()).title(request.getTitle()).domain(domainDO.getValue()).accountNo(accountNo).build();
 
             // 执行更新操作并记录受影响的行数
             int rows = shortLinkManager.update(shortLinkDO);
@@ -170,11 +168,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         } else if (EventMessageType.SHORT_LINK_UPDATE_MAPPING.name().equalsIgnoreCase(messageType)) {
             // B端处理
             // 构建GroupCodeMapping对象并更新B端短链映射信息
-            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().id(request.getMappingId()).groupId(request.getGroupId())
-                    .accountNo(accountNo)
-                    .title(request.getTitle())
-                    .domain(domainDO.getValue())
-                    .build();
+            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().id(request.getMappingId()).groupId(request.getGroupId()).accountNo(accountNo).title(request.getTitle()).domain(domainDO.getValue()).build();
 
             // 执行更新操作并记录受影响的行数
             int rows = groupCodeMappingManager.update(groupCodeMappingDO);
@@ -219,9 +213,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         } else if (EventMessageType.SHORT_LINK_DEL_MAPPING.name().equalsIgnoreCase(messageType)) {
 
             // 构建组代码映射对象，准备删除
-            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder()
-                    .id(request.getMappingId()).accountNo(accountNo)
-                    .groupId(request.getGroupId()).build();
+            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().id(request.getMappingId()).accountNo(accountNo).groupId(request.getGroupId()).build();
 
             // 执行删除操作并记录删除的行数
             int rows = groupCodeMappingManager.del(groupCodeMappingDO);
@@ -284,9 +276,12 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 ShortLink shortLinCodeDOInDB = shortLinkManager.findByShortLinCode(shortLinkCode);
 
                 if (shortLinCodeDOInDB == null) {
-                    ShortLink shortLinkDO = ShortLink.builder().accountNo(accountNo).code(shortLinkCode).title(addRequest.getTitle()).originalUrl(addRequest.getOriginalUrl()).domain(domainDO.getValue()).groupId(linkGroupDO.getId()).expired(addRequest.getExpired()).sign(originalUrlDigest).state(ShortLinkStateEnum.ACTIVE.name()).del(0).build();
-                    shortLinkManager.addShortLink(shortLinkDO);
-                    return true;
+                    boolean reduceFlag = reduceTraffic(eventMessage, shortLinkCode);
+                    if (reduceFlag) {
+                        ShortLink shortLinkDO = ShortLink.builder().accountNo(accountNo).code(shortLinkCode).title(addRequest.getTitle()).originalUrl(addRequest.getOriginalUrl()).domain(domainDO.getValue()).groupId(linkGroupDO.getId()).expired(addRequest.getExpired()).sign(originalUrlDigest).state(ShortLinkStateEnum.ACTIVE.name()).del(0).build();
+                        shortLinkManager.addShortLink(shortLinkDO);
+                        return true;
+                    }
                 } else {
                     logger.error("C端短链码重复:{}", eventMessage);
                     duplicateCodeFlag = true;
@@ -450,6 +445,33 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         Assert.notNull(linkGroupDO, "组名不合法");
         // 返回获取的组对象
         return linkGroupDO;
+    }
+
+    /**
+     * 减少流量使用
+     * <p>
+     * 此方法用于减少与特定短链接代码关联的流量它构建一个使用流量的请求，并通过Feign客户端调用流量服务来执行减少操作
+     * 如果流量服务返回的响应码不为0，则表示流量包不足或扣减失败，并记录错误日志
+     *
+     * @param eventMessage  包含账户信息的事件消息
+     * @param shortLinkCode 短链接代码，用于标识特定的流量资源
+     * @return boolean 表示流量是否成功减少如果返回true，则表示成功；如果返回false，则表示失败
+     */
+    private boolean reduceTraffic(EventMessage eventMessage, String shortLinkCode) {
+
+        // 构建使用流量的请求
+        UseTrafficRequest request = UseTrafficRequest.builder().accountNo(eventMessage.getAccountNo()).bizId(shortLinkCode).build();
+
+        // 调用流量服务执行使用流量的操作
+        JsonData jsonData = trafficFeignService.useTraffic(request);
+
+        // 检查流量服务的响应码，如果非0，则记录错误日志并返回false
+        if (jsonData.getCode() != 0) {
+            logger.error("流量包不足，扣减失败:{}", eventMessage);
+            return false;
+        }
+        // 如果流量服务调用成功，返回true
+        return true;
     }
 }
 

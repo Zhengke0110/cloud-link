@@ -5,6 +5,7 @@ import fun.timu.cloud.net.account.controller.request.UseTrafficRequest;
 import fun.timu.cloud.net.account.model.VO.TrafficVO;
 import fun.timu.cloud.net.account.service.TrafficService;
 import fun.timu.cloud.net.common.util.JsonData;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,9 @@ import java.util.Map;
 @RequestMapping("/api/traffic/v1")
 public class TrafficController {
     private final TrafficService trafficService;
+
+    @Value("${rpc.token}")
+    private String rpcToken;
 
     public TrafficController(TrafficService trafficService) {
         this.trafficService = trafficService;
@@ -35,9 +39,18 @@ public class TrafficController {
     @PostMapping("reduce")
     public JsonData useTraffic(@RequestBody UseTrafficRequest useTrafficRequest, HttpServletRequest request) {
 
-        //具体使用流量包逻辑
-        JsonData jsonData = trafficService.reduce(useTrafficRequest);
-        return jsonData;
+        // 获取请求头中的rpc-token，用于验证请求的合法性
+        String requestToken = request.getHeader("rpc-token");
+        // 比较请求头中的rpc-token与预设的rpcToken是否一致
+        if (rpcToken.equalsIgnoreCase(requestToken)) {
+            // 具体使用流量包逻辑
+            JsonData jsonData = trafficService.reduce(useTrafficRequest);
+            return jsonData;
+        } else {
+            // 如果rpc-token验证失败，返回错误信息
+            return JsonData.buildError("非法访问");
+        }
+
     }
 
     /**
