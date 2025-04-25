@@ -25,4 +25,26 @@
         level,expired_date,plugin_type,product_id,gmt_create,
         gmt_modified
     </sql>
+
+    <!--给某个流量包增加天使用次数-->
+    <update id="addDayUsedTimes">
+        <!-- 更新traffic表中的day_used字段，增加每日使用次数 -->
+        update traffic set day_used = day_used + #{usedTimes}
+        <!-- 条件：匹配特定的流量包 -->
+        where id = #{trafficId} and account_no = #{accountNo}
+          <!-- 确保增加使用次数后不会超过每日限制 -->
+          and (day_limit - day_used) >= #{usedTimes} limit 1
+    </update>
+
+    <!--恢复流量包-->
+    <update id="releaseUsedTimes">
+        <!--更新traffic表中的流量信息-->
+        update traffic
+        set day_used = day_used - #{usedTimes}
+        <!--条件：匹配特定的流量记录-->
+        where id = #{trafficId}
+        and account_no = #{accountNo}
+        <!--确保更新后的当日已用流量不会为负数，并且只更新一条记录-->
+        and (day_used - #{usedTimes}) >= 0 limit 1;
+    </update>
 </mapper>
