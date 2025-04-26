@@ -5,12 +5,12 @@ import fun.timu.cloud.net.link.controller.request.ShortLinkAddRequest;
 import fun.timu.cloud.net.link.controller.request.ShortLinkDelRequest;
 import fun.timu.cloud.net.link.controller.request.ShortLinkPageRequest;
 import fun.timu.cloud.net.link.controller.request.ShortLinkUpdateRequest;
+import fun.timu.cloud.net.link.model.VO.ShortLinkVO;
 import fun.timu.cloud.net.link.service.ShortLinkService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -21,6 +21,38 @@ public class ShortLinkController {
 
     public ShortLinkController(ShortLinkService shortLinkService) {
         this.shortLinkService = shortLinkService;
+    }
+
+
+    @Value("${rpc.token}")
+    private String rpcToken;
+
+    /**
+     * 检查短链的有效性
+     *
+     * @param shortLinkCode 短链代码，用于解析短链信息
+     * @param request       HTTP请求对象，用于获取请求头信息
+     * @return 返回一个JsonData对象，包含检查结果
+     */
+    @GetMapping("check")
+    public JsonData check(@RequestParam("shortLinkCode") String shortLinkCode, HttpServletRequest request) {
+
+        // 从请求头中获取token
+        String token = request.getHeader("rpc-token");
+
+        // 检查token是否匹配，以验证请求的合法性
+        if (rpcToken.equalsIgnoreCase(token)) {
+
+            // 解析短链代码，获取短链信息
+            ShortLinkVO shortLinkVO = shortLinkService.parseShortLinkCode(shortLinkCode);
+
+            // 根据解析结果构建响应数据
+            return shortLinkVO == null ? JsonData.buildError("短链不存在") : JsonData.buildSuccess();
+
+        } else {
+            // 如果token不匹配，返回非法访问错误
+            return JsonData.buildError("非法访问");
+        }
     }
 
 
@@ -40,6 +72,7 @@ public class ShortLinkController {
         // 返回处理结果
         return jsonData;
     }
+
     /**
      * 根据组ID分页查询短链接信息
      * 此方法使用@RequestMapping注解来映射HTTP请求到此方法
@@ -49,9 +82,9 @@ public class ShortLinkController {
      * @return 返回一个JsonData对象，其中包含分页查询结果
      */
     @RequestMapping("page")
-    public JsonData pageByGroupId(@RequestBody ShortLinkPageRequest request){
+    public JsonData pageByGroupId(@RequestBody ShortLinkPageRequest request) {
         // 调用shortLinkService的pageByGroupId方法执行分页查询
-        Map<String,Object> result = shortLinkService.pageByGroupId(request);
+        Map<String, Object> result = shortLinkService.pageByGroupId(request);
 
         // 构建并返回包含查询结果的JsonData对象
         return JsonData.buildSuccess(result);
@@ -60,11 +93,12 @@ public class ShortLinkController {
 
     /**
      * 删除短链
+     *
      * @param request
      * @return
      */
     @PostMapping("del")
-    public JsonData del(@RequestBody ShortLinkDelRequest request){
+    public JsonData del(@RequestBody ShortLinkDelRequest request) {
         // 调用shortLinkService的del方法删除短链
         JsonData jsonData = shortLinkService.del(request);
 
@@ -73,20 +107,19 @@ public class ShortLinkController {
     }
 
 
-
     /**
      * 更新短链
+     *
      * @param request
      * @return
      */
     @PostMapping("update")
-    public JsonData update(@RequestBody ShortLinkUpdateRequest request){
+    public JsonData update(@RequestBody ShortLinkUpdateRequest request) {
 
         JsonData jsonData = shortLinkService.update(request);
 
         return jsonData;
     }
-
 
 
 }

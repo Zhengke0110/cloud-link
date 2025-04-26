@@ -14,9 +14,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
-@RabbitListener(queuesToDeclare = {@Queue("order.traffic.queue")})
 @Slf4j
+@Component
+@RabbitListener(queuesToDeclare = {@Queue("order.traffic.queue"), @Queue("traffic.free_init.queue"), @Queue("traffic.release.queue")})
 public class TrafficMQListener {
 
     private final TrafficService trafficService;

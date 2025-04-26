@@ -1,5 +1,6 @@
 package fun.timu.cloud.net.account.config;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Exchange;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @Configuration
 @Slf4j
+@Data
 public class RabbitMQConfig {
 
     /**

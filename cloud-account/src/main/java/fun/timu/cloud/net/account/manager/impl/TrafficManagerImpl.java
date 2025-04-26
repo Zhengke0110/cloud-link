@@ -155,9 +155,10 @@ public class TrafficManagerImpl implements TrafficManager {
      * @return 返回更新影响的行数，用于确认更新操作是否成功
      */
     @Override
-    public int releaseUsedTimes(Long accountNo, Long trafficId, Integer usedTimes) {
-        return trafficMapper.releaseUsedTimes(accountNo, trafficId, usedTimes);
+    public int releaseUsedTimes(Long accountNo, Long trafficId, Integer usedTimes, String useDateStr) {
+        return trafficMapper.releaseUsedTimes(accountNo, trafficId, usedTimes, useDateStr);
     }
+
 
     /**
      * 批量更新指定账户的流量使用次数

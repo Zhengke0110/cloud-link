@@ -4,13 +4,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.alibaba.fastjson.TypeReference;
 
+import fun.timu.cloud.net.account.config.RabbitMQConfig;
 import fun.timu.cloud.net.account.controller.request.TrafficPageRequest;
 import fun.timu.cloud.net.account.controller.request.UseTrafficRequest;
 import fun.timu.cloud.net.account.feign.ProductFeignService;
+import fun.timu.cloud.net.account.feign.ShortLinkFeignService;
 import fun.timu.cloud.net.account.manager.AccountManager;
 import fun.timu.cloud.net.account.manager.TrafficManager;
+import fun.timu.cloud.net.account.manager.TrafficTaskManager;
 import fun.timu.cloud.net.account.mapper.TrafficMapper;
 import fun.timu.cloud.net.account.model.DO.Traffic;
+import fun.timu.cloud.net.account.model.DO.TrafficTask;
 import fun.timu.cloud.net.account.model.VO.ProductVO;
 import fun.timu.cloud.net.account.model.VO.TrafficVO;
 import fun.timu.cloud.net.account.model.VO.UseTrafficVO;
@@ -18,6 +22,7 @@ import fun.timu.cloud.net.account.service.TrafficService;
 import fun.timu.cloud.net.common.constant.RedisKey;
 import fun.timu.cloud.net.common.enums.BizCodeEnum;
 import fun.timu.cloud.net.common.enums.EventMessageType;
+import fun.timu.cloud.net.common.enums.TaskStateEnum;
 import fun.timu.cloud.net.common.exception.BizException;
 import fun.timu.cloud.net.common.interceptor.LoginInterceptor;
 import fun.timu.cloud.net.common.model.EventMessage;
@@ -27,6 +32,7 @@ import fun.timu.cloud.net.common.util.JsonUtil;
 import fun.timu.cloud.net.common.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -51,16 +57,24 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
 
     private final TrafficManager trafficManager;
     private final ProductFeignService productFeignService;
+    private final TrafficTaskManager trafficTaskManager;
+    private final RabbitTemplate rabbitTemplate;
+    private final ShortLinkFeignService shortLinkFeignService;
+    @Autowired
+    private RabbitMQConfig rabbitMQConfig;
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
-    public TrafficServiceImpl(TrafficManager trafficManager, ProductFeignService productFeignService) {
+    public TrafficServiceImpl(TrafficManager trafficManager, ProductFeignService productFeignService, TrafficTaskManager trafficTaskManager, RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig, ShortLinkFeignService shortLinkFeignService) {
         this.trafficManager = trafficManager;
         this.productFeignService = productFeignService;
+        this.trafficTaskManager = trafficTaskManager;
+        this.rabbitTemplate = rabbitTemplate;
+        this.shortLinkFeignService = shortLinkFeignService;
     }
 
     /**
-     * 重写处理交通信息的方法
+     * 重写处理流量信息的方法
      * 该方法用于处理产品订单支付事件，当订单支付成功后，为用户添加相应的流量包
      *
      * @param eventMessage 事件消息，包含订单支付的相关信息
@@ -111,6 +125,39 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
             Traffic trafficDO = Traffic.builder().accountNo(accountNo).dayLimit(productVO.getDayTimes()).dayUsed(0).totalLimit(productVO.getTotalTimes()).pluginType(productVO.getPluginType()).level(productVO.getLevel()).productId(productVO.getId()).outTradeNo("free_init").expiredDate(new Date()).build();
 
             trafficManager.add(trafficDO);
+        } else if (EventMessageType.TRAFFIC_USED.name().equalsIgnoreCase(messageType)) {
+            //流量包使用，检查是否成功使用
+            //检查task是否存在
+            //检查短链是否成功
+            //如果不成功，则恢复流量包
+            //删除task (也可以更新task状态，定时删除就行)
+
+            Long trafficTaskId = Long.valueOf(eventMessage.getBizId());
+            TrafficTask trafficTaskDO = trafficTaskManager.findByIdAndAccountNo(trafficTaskId, accountNo);
+
+            //非空且锁定
+            if (trafficTaskDO != null && trafficTaskDO.getLockState().equalsIgnoreCase(TaskStateEnum.LOCK.name())) {
+
+                JsonData jsonData = shortLinkFeignService.check(trafficTaskDO.getBizId());
+
+                if (jsonData.getCode() != 0) {
+
+                    logger.error("创建短链失败，流量包回滚");
+
+                    String useDateStr = TimeUtil.format(trafficTaskDO.getGmtCreate(), "yyyy-MM-dd");
+
+                    trafficManager.releaseUsedTimes(accountNo, trafficTaskDO.getTrafficId(), 1, useDateStr);
+
+                    //恢复流量包，应该删除这个key（也可以让这个key递增）
+                    String totalTrafficTimesKey = String.format(RedisKey.DAY_TOTAL_TRAFFIC, accountNo);
+                    redisTemplate.delete(totalTrafficTimesKey);
+
+                }
+
+                //多种方式处理task，不立刻删除，可以更新状态，然后定时删除也行
+                trafficTaskManager.deleteByIdAndAccountNo(trafficTaskId, accountNo);
+
+            }
         }
     }
 
@@ -216,6 +263,9 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
         //先更新，再扣减当前使用的流量包
         int rows = trafficManager.addDayUsedTimes(accountNo, useTrafficVO.getCurrentTrafficDO().getId(), 1);
 
+        TrafficTask trafficTaskDO = TrafficTask.builder().accountNo(accountNo).bizId(trafficRequest.getBizId()).useTimes(1).trafficId(useTrafficVO.getCurrentTrafficDO().getId()).lockState(TaskStateEnum.LOCK.name()).build();
+
+        trafficTaskManager.add(trafficTaskDO);
         if (rows != 1) {
             throw new BizException(BizCodeEnum.TRAFFIC_REDUCE_FAIL);
         }
@@ -227,6 +277,10 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
 
         redisTemplate.opsForValue().set(totalTrafficTimesKey, useTrafficVO.getDayTotalLeftTimes() - 1, leftSeconds, TimeUnit.SECONDS);
 
+        EventMessage trafficUseEventMessage = EventMessage.builder().accountNo(accountNo).bizId(trafficTaskDO.getId() + "").eventMessageType(EventMessageType.TRAFFIC_USED.name()).build();
+
+        //发送延迟消息，用于异常回滚
+        rabbitTemplate.convertAndSend(rabbitMQConfig.getTrafficEventExchange(), rabbitMQConfig.getTrafficReleaseDelayRoutingKey(), trafficUseEventMessage);
         return JsonData.buildSuccess();
     }
 

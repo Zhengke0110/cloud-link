@@ -71,7 +71,7 @@ public interface TrafficManager {
      * @param useTimes  恢复的使用次数
      * @return 返回更新的流量包数量，通常为1
      */
-    int releaseUsedTimes(Long accountNo, Long trafficId, Integer useTimes);
+    int releaseUsedTimes(Long accountNo, Long trafficId, Integer useTimes, String useDateStr);
 
     /**
      * 批量更新流量包使用次数为0

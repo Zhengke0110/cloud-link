@@ -32,19 +32,22 @@
         update traffic set day_used = day_used + #{usedTimes}
         <!-- 条件：匹配特定的流量包 -->
         where id = #{trafficId} and account_no = #{accountNo}
-          <!-- 确保增加使用次数后不会超过每日限制 -->
-          and (day_limit - day_used) >= #{usedTimes} limit 1
+        <!-- 确保增加使用次数后不会超过每日限制 -->
+        and (day_limit - day_used) >= #{usedTimes} limit 1
     </update>
 
     <!--恢复流量包-->
     <update id="releaseUsedTimes">
-        <!--更新traffic表中的流量信息-->
+
         update traffic
         set day_used = day_used - #{usedTimes}
-        <!--条件：匹配特定的流量记录-->
+
         where id = #{trafficId}
-        and account_no = #{accountNo}
-        <!--确保更新后的当日已用流量不会为负数，并且只更新一条记录-->
-        and (day_used - #{usedTimes}) >= 0 limit 1;
+          and account_no = #{accountNo}
+
+          and (day_used - #{usedTimes}) >= 0
+          and date_format(gmt_modified, '%Y-%m-%d') = #{useDateStr} limit 1;
+
+
     </update>
 </mapper>
