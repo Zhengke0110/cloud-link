@@ -39,8 +39,6 @@ public class ShortLinkAddLinkMQListener {
     public void shortLinkHandler(EventMessage eventMessage, Message message, Channel channel) throws IOException {
         // 记录接收到的消息内容
         logger.info("监听到消息ShortLinkAddLinkMQListener message消息内容:{}", message);
-        // 获取消息的确认标签
-        long tag = message.getMessageProperties().getDeliveryTag();
         try {
             // 设置事件消息类型
             eventMessage.setEventMessageType(EventMessageType.SHORT_LINK_ADD_LINK.name());
