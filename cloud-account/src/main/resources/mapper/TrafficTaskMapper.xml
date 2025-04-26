@@ -10,7 +10,7 @@
         <result property="trafficId" column="traffic_id"/>
         <result property="useTimes" column="use_times"/>
         <result property="lockState" column="lock_state"/>
-        <result property="messageId" column="message_id"/>
+        <result property="bizId" column="biz_id"/>
         <result property="gmtCreate" column="gmt_create"/>
         <result property="gmtModified" column="gmt_modified"/>
     </resultMap>
