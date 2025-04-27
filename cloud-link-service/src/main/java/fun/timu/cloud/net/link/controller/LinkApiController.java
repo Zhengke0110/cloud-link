@@ -3,28 +3,34 @@ package fun.timu.cloud.net.link.controller;
 import fun.timu.cloud.net.common.enums.ShortLinkStateEnum;
 import fun.timu.cloud.net.common.util.CommonUtil;
 import fun.timu.cloud.net.link.model.VO.ShortLinkVO;
+import fun.timu.cloud.net.link.service.LogService;
 import fun.timu.cloud.net.link.service.ShortLinkService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@RestController
 public class LinkApiController {
 
     private static Logger logger = LoggerFactory.getLogger(LinkApiController.class);
 
     private final ShortLinkService shortLinkService;
+    private final LogService logService;
 
-    public LinkApiController(ShortLinkService shortLinkService) {
+    public LinkApiController(ShortLinkService shortLinkService, LogService logService) {
         this.shortLinkService = shortLinkService;
+        this.logService = logService;
     }
 
 
     /**
+     * 转发请求
      * 解析 301还是302，这边是返回http code是302
      * <p>
      * 知识点一，为什么要用 301 跳转而不是 302 呐？
@@ -43,26 +49,39 @@ public class LinkApiController {
      */
     @GetMapping(path = "/{shortLinkCode}")
     public void dispatch(@PathVariable(name = "shortLinkCode") String shortLinkCode, HttpServletRequest request, HttpServletResponse response) {
+
+        //尝试解析并重定向短链接，同时处理可能的异常
         try {
             logger.info("短链码:{}", shortLinkCode);
-            // 判断短链码是否合规
+            //判断短链码是否合规
             if (isLetterDigit(shortLinkCode)) {
-                // 查找短链
+                //查找短链
                 ShortLinkVO shortLinkVO = shortLinkService.parseShortLinkCode(shortLinkCode);
-                // 判断是否过期和可用
+
+                //记录短链访问日志
+                if (shortLinkVO != null) {
+                    logService.recordShortLinkLog(request, shortLinkCode, shortLinkVO.getAccountNo());
+                }
+
+                //判断是否过期和可用
                 if (isVisitable(shortLinkVO)) {
+
                     String originalUrl = CommonUtil.removeUrlPrefix(shortLinkVO.getOriginalUrl());
+
+                    //设置重定向地址
                     response.setHeader("Location", originalUrl);
-                    // 302跳转
+
+                    //302跳转
                     response.setStatus(HttpStatus.FOUND.value());
+
                 } else {
-                    // 短链无效或过期
+                    //短链无效或过期，返回404
                     response.setStatus(HttpStatus.NOT_FOUND.value());
                     return;
                 }
             }
         } catch (Exception e) {
-            // 处理异常情况
+            //处理异常，返回500错误
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
