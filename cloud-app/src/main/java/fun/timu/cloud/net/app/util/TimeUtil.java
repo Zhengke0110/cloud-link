@@ -7,16 +7,23 @@ import java.util.Date;
 
 public class TimeUtil {
 
-
     /**
      * 默认日期格式
      */
     private static final String DEFAULT_PATTERN = "yyyy-MM-dd";
 
+    private static final String DEFAULT_PATTERN_WITH_TIME = "yyyy-MM-dd hh:mm:ss";
+
     /**
      * 默认日期格式
      */
-    private static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_PATTERN);
+    private static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_PATTERN);
+
+    /**
+     * 默认日期时间格式
+     */
+    private static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_PATTERN_WITH_TIME);
+
 
     private static final ZoneId DEFAULT_ZONE_ID = ZoneId.systemDefault();
 
@@ -68,14 +75,30 @@ public class TimeUtil {
     }
 
     /**
-     * 将时间戳转换为字符串表示的日期和时间
-     * 此方法使用默认的日期时间格式和时区进行转换
+     * 将Date对象转换为字符串表示，使用默认的日期格式
+     * 此方法主要用于将给定的时间戳转换为人类可读的日期字符串
+     * 它使用了默认的日期格式和时区设置
      *
-     * @param timestamp 时间戳，自1970年1月1日0时0分0秒UTC以来的毫秒数
-     * @return 日期和时间的字符串表示
+     * @param timestamp 时间戳，表示自1970年1月1日0时0分0秒（UTC）以来的毫秒数
+     * @return 转换后的日期字符串
      */
-    public static String format(long timestamp) {
-        // 使用默认日期时间格式和时区将时间戳格式化为字符串
+    public static String format(Long timestamp) {
+        // 使用默认日期格式和时区将时间戳格式化为日期字符串
+        String timeStr = DEFAULT_DATE_FORMATTER.format(new Date(timestamp).toInstant().atZone(DEFAULT_ZONE_ID));
+        return timeStr;
+    }
+
+
+    /**
+     * 将时间戳转换为指定格式的日期字符串
+     * 此方法用于将给定的时间戳转换为一个符合指定日期时间格式的字符串表示形式
+     * 主要用途是用于日志记录、事件时间显示等，其中时间格式的一致性至关重要
+     *
+     * @param timestamp 时间戳，单位为毫秒
+     * @return 格式化后的日期时间字符串
+     */
+    public static String formatWithTime(long timestamp) {
+        // 使用默认的日期时间格式器和时区ID将时间戳转换为日期字符串
         String timeStr = DEFAULT_DATE_TIME_FORMATTER.format(new Date(timestamp).toInstant().atZone(DEFAULT_ZONE_ID));
         return timeStr;
     }
