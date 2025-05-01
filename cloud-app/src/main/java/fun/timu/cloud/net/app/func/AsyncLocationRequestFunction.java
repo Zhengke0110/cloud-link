@@ -90,7 +90,9 @@ public class AsyncLocationRequestFunction extends RichAsyncFunction<ShortLinkWid
                     // 日志记录IP解析错误信息
                     log.error("ip解析错误,value={},msg={}", shortLinkWideDO, e.getMessage());
                 }
-                return null;
+                shortLinkWideDO.setProvince("-");
+                shortLinkWideDO.setCity("-");
+                return shortLinkWideDO;
             }
         });
 
