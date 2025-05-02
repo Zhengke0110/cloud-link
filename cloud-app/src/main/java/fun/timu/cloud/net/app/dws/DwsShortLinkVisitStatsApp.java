@@ -42,23 +42,25 @@ public class DwsShortLinkVisitStatsApp {
 
 
     public static void main(String[] args) throws Exception {
-
+        // 获取执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
+        // 设置并行度为1，确保数据处理的顺序性
         env.setParallelism(1);
 
-        //1、获取多个数据
+        // 1、获取多个数据源
+        // 获取短链数据源并设置对应的Kafka消费者
         FlinkKafkaConsumer<String> shortLinkSource = KafkaUtil.getKafkaConsumer(SHORT_LINK_SOURCE_TOPIC, SHORT_LINK_SOURCE_GROUP);
         DataStreamSource<String> shortLinkDS = env.addSource(shortLinkSource);
 
+        // 获取独立访客数据源并设置对应的Kafka消费者
         FlinkKafkaConsumer<String> uniqueVisitorSource = KafkaUtil.getKafkaConsumer(UNIQUE_VISITOR_SOURCE_TOPIC, UNIQUE_VISITOR_SOURCE_GROUP);
         DataStreamSource<String> uniqueVisitorDS = env.addSource(uniqueVisitorSource);
 
-        //2、结构转换 uniqueVisitorDS、shortLinkDS
+        // 2、结构转换：将数据源转换为所需的结构
+        // 将短链数据源转换为访问统计对象，设置PV为1，UV为0
         SingleOutputStreamOperator<ShortLinkVisitStats> shortLinkMapDS = shortLinkDS.map(new MapFunction<String, ShortLinkVisitStats>() {
             @Override
             public ShortLinkVisitStats map(String value) throws Exception {
-
                 ShortLinkVisitStats visitStatsDO = parseVisitStats(value);
                 visitStatsDO.setPv(1L);
                 visitStatsDO.setUv(0L);
@@ -66,7 +68,7 @@ public class DwsShortLinkVisitStatsApp {
             }
         });
 
-
+        // 将独立访客数据源转换为访问统计对象，设置PV为0，UV为1
         SingleOutputStreamOperator<ShortLinkVisitStats> uniqueVisitorMapDS = uniqueVisitorDS.map(new MapFunction<String, ShortLinkVisitStats>() {
             @Override
             public ShortLinkVisitStats map(String value) throws Exception {
@@ -77,23 +79,18 @@ public class DwsShortLinkVisitStatsApp {
             }
         });
 
-
-        //3、多流合并（合并相同结构的流）
+        // 3、多流合并（合并相同结构的流）
+        // 合并短链数据流和独立访客数据流
         DataStream<ShortLinkVisitStats> unionDS = shortLinkMapDS.union(uniqueVisitorMapDS);
 
-        //4、设置WaterMark
-
+        // 4、设置WaterMark
+        // 为合并后的数据流设置WaterMark，允许最大3秒的乱序延迟
         SingleOutputStreamOperator<ShortLinkVisitStats> watermarkDS = unionDS.assignTimestampsAndWatermarks(WatermarkStrategy
-                //指定允许乱序延迟最大3秒
                 .<ShortLinkVisitStats>forBoundedOutOfOrderness(Duration.ofSeconds(3))
-                //指定事件时间列，毫秒
                 .withTimestampAssigner((event, timestamp) -> event.getVisitTime()));
 
-
-        //5、多维度、多个字段分组
-        // code、referer、isNew
-        // province、city、ip
-        // browserName、os、deviceType
+        // 5、多维度、多个字段分组
+        // 按照code、referer、isNew、province、city、ip、browserName、os、deviceType进行分组
         KeyedStream<ShortLinkVisitStats, Tuple9<String, String, Integer, String, String, String, String, String, String>> keyedStream = watermarkDS.keyBy(new KeySelector<ShortLinkVisitStats, Tuple9<String, String, Integer, String, String, String, String, String, String>>() {
             @Override
             public Tuple9<String, String, Integer, String, String, String, String, String, String> getKey(ShortLinkVisitStats obj) throws Exception {
@@ -103,54 +100,62 @@ public class DwsShortLinkVisitStatsApp {
             }
         });
 
-
-        //6、开窗 10秒一次数据插入到 ck
+        // 6、开窗：每10秒一次数据插入到Clickhouse
+        // 对分组后的数据流进行窗口操作，设置窗口大小为10秒
         WindowedStream<ShortLinkVisitStats, Tuple9<String, String, Integer, String, String, String, String, String, String>, TimeWindow> windowedStream =
                 keyedStream.window(TumblingEventTimeWindows.of(Time.seconds(10)));
 
-
-        //7、聚合统计(补充统计起止时间)
+        // 7、聚合统计（补充统计起止时间）
+        // 在窗口内进行聚合统计，计算PV和UV，并补充统计起止时间
         SingleOutputStreamOperator<Object> reduceDS = windowedStream.reduce(new ReduceFunction<ShortLinkVisitStats>() {
             @Override
             public ShortLinkVisitStats reduce(ShortLinkVisitStats value1, ShortLinkVisitStats value2) throws Exception {
                 value1.setPv(value1.getPv() + value2.getPv());
                 value1.setUv(value1.getUv() + value2.getUv());
-
                 return value1;
             }
         }, new ProcessWindowFunction<ShortLinkVisitStats, Object, Tuple9<String, String, Integer, String, String, String, String, String, String>, TimeWindow>() {
             @Override
             public void process(Tuple9<String, String, Integer, String, String, String, String, String, String> tuple,
                                 Context context, Iterable<ShortLinkVisitStats> elements, Collector<Object> out) throws Exception {
-
                 for (ShortLinkVisitStats visitStatsDO : elements) {
-                    //窗口开始和结束时间
+                    // 窗口开始和结束时间
                     String startTime = TimeUtil.formatWithTime(context.window().getStart());
                     String endTime = TimeUtil.formatWithTime(context.window().getEnd());
                     visitStatsDO.setStartTime(startTime);
                     visitStatsDO.setEndTime(endTime);
                     out.collect(visitStatsDO);
                 }
-
             }
         });
 
+        // 打印结果到控制台
         reduceDS.print(">>>>>>");
 
-        //8、输出Clickhouse
+        // 8、输出到Clickhouse
+        // 将聚合统计后的数据插入到Clickhouse中
         String sql = "insert into visit_stats values(?,?,?,? ,?,?,?,? ,?,?,?,? ,?,?,?)";
-
         reduceDS.addSink(MyClickHouseSink.getJdbcSink(sql));
 
+        // 执行环境
         env.execute();
-
     }
 
 
+    /**
+     * 解析访问统计信息
+     * 该方法将给定的字符串值解析为ShortLinkVisitStats对象
+     * 字符串应为JSON格式，包含短链接的访问统计信息
+     *
+     * @param value 包含访问统计信息的JSON字符串
+     * @return 解析后的ShortLinkVisitStats对象
+     */
     private static ShortLinkVisitStats parseVisitStats(String value) {
 
+        // 将输入的字符串解析为JSONObject
         JSONObject jsonObj = JSON.parseObject(value);
 
+        // 使用builder模式构建ShortLinkVisitStats对象，并填充从JSON对象中提取的字段
         ShortLinkVisitStats visitStatsDO = ShortLinkVisitStats.builder()
                 .code(jsonObj.getString("code"))
                 .accountNo(jsonObj.getLong("accountNo"))
@@ -174,6 +179,7 @@ public class DwsShortLinkVisitStatsApp {
 
                 .build();
 
+        // 返回构建好的ShortLinkVisitStats对象
         return visitStatsDO;
     }
 
