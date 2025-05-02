@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fun.timu.cloud.net.data.mapper.VisitStatsMapper">
+
+    <resultMap id="BaseResultMap" type="fun.timu.cloud.net.data.model.DO.VisitStats">
+        <result property="code" column="code"/>
+        <result property="referer" column="referer"/>
+        <result property="isNew" column="is_new"/>
+        <result property="accountNo" column="account_no"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="ip" column="ip"/>
+        <result property="browserName" column="browser_name"/>
+        <result property="os" column="os"/>
+        <result property="deviceType" column="device_type"/>
+        <result property="pv" column="pv"/>
+        <result property="uv" column="uv"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="ts" column="ts"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        code
+        ,referer,is_new,account_no,province,city,
+        ip,browser_name,os,device_type,pv,
+        uv,start_time,end_time,ts
+    </sql>
+</mapper>
