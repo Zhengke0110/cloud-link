@@ -5,21 +5,28 @@
 <mapper namespace="fun.timu.cloud.net.data.mapper.VisitStatsMapper">
 
     <resultMap id="BaseResultMap" type="fun.timu.cloud.net.data.model.DO.VisitStats">
-        <result property="code" column="code"/>
-        <result property="referer" column="referer"/>
-        <result property="isNew" column="is_new"/>
-        <result property="accountNo" column="account_no"/>
-        <result property="province" column="province"/>
-        <result property="city" column="city"/>
-        <result property="ip" column="ip"/>
-        <result property="browserName" column="browser_name"/>
-        <result property="os" column="os"/>
-        <result property="deviceType" column="device_type"/>
-        <result property="pv" column="pv"/>
-        <result property="uv" column="uv"/>
-        <result property="startTime" column="start_time"/>
-        <result property="endTime" column="end_time"/>
-        <result property="ts" column="ts"/>
+        <result column="code" property="code"/>
+        <result column="referer" property="referer"/>
+        <result column="is_new" property="isNew"/>
+        <result column="account_no" property="accountNo"/>
+        <result column="ts" property="visitTime"/>
+
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="ip" property="ip"/>
+
+        <result column="browser_name" property="browserName"/>
+        <result column="os" property="os"/>
+        <result column="device_type" property="deviceType"/>
+
+        <result column="start_time" property="startTime"/>
+        <result column="uv_count" property="uvCount"/>
+        <result column="pv_count" property="pvCount"/>
+
+        <result column="ip_count" property="ipCount"/>
+        <result column="new_uv_count" property="newUVCount"/>
+        <result column="date_time_str" property="dateTimeStr"/>
+
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -28,4 +35,21 @@
         ip,browser_name,os,device_type,pv,
         uv,start_time,end_time,ts
     </sql>
+
+    <!--统计总条数-->
+    <select id="countTotal" resultType="java.lang.Integer">
+        select count(1)
+        from visit_stats
+        where account_no = #{accountNo}
+          and code = #{code} limit 1000
+    </select>
+
+
+    <!--分页查找-->
+    <select id="pageVisitRecord" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from visit_stats where account_no=#{accountNo} and code=#{code}
+        order by ts desc limit #{from},#{size}
+    </select>
 </mapper>

@@ -1,18 +1,16 @@
-package fun.timu.cloud.net.data.model.DO;
+package fun.timu.cloud.net.data.model.VO;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.Date;
-
-/**
- * @TableName visit_stats
- */
-@TableName(value = "visit_stats")
 @Data
-public class VisitStats {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class VisitStatsVO {
+
     /**
      * 窗口开始时间  Clickhouse里面会用到
      */
@@ -113,7 +111,6 @@ public class VisitStats {
     private Long uv = 0L;
 
     private Long pv = 0L;
-
 
     private Long ipCount = 0L;
 
