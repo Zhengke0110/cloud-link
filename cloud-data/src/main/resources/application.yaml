@@ -6,7 +6,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.0.108:8848
         namespace: 327d6e78-c121-4c52-b83f-1c5c0da33f61
   datasource:
     #数据库配置
@@ -14,7 +14,7 @@ spring:
     url: jdbc:clickhouse://192.168.0.108:8123/default
   redis:
     client-type: jedis
-    host: 127.0.0.1
+    host: 192.168.0.108
     port: 6379
     jedis:
       pool:

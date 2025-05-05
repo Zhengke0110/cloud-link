@@ -5,15 +5,17 @@ rpc:
 spring:
   application:
     name: cloud-link
+  profiles:
+    active: dev
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.0.108:8848
         namespace: 327d6e78-c121-4c52-b83f-1c5c0da33f61
   # RabbitMQ服务配置
   rabbitmq:
     # RabbitMQ服务器地址
-    host: 127.0.0.1
+    host: 192.168.0.108
     # 消息监听器配置
     listener:
       simple:
@@ -37,7 +39,7 @@ spring:
     virtual-host: dev
   redis:
     client-type: jedis
-    host: 127.0.0.1
+    host: 192.168.0.108
     port: 6379
     jedis:
       pool:
@@ -64,7 +66,7 @@ spring:
         connectionTimeoutMilliseconds: 30000
         driver-class-name: com.mysql.cj.jdbc.Driver
         idleTimeoutMilliseconds: 60000
-        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link_0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+#        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link_0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
         maintenanceIntervalMilliseconds: 30000
         maxLifetimeMilliseconds: 1800000
         maxPoolSize: 50
@@ -76,7 +78,7 @@ spring:
         connectionTimeoutMilliseconds: 30000
         driver-class-name: com.mysql.cj.jdbc.Driver
         idleTimeoutMilliseconds: 60000
-        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link_1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+#        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link_1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
         maintenanceIntervalMilliseconds: 30000
         maxLifetimeMilliseconds: 1800000
         maxPoolSize: 50
@@ -88,7 +90,7 @@ spring:
         connectionTimeoutMilliseconds: 30000
         driver-class-name: com.mysql.cj.jdbc.Driver
         idleTimeoutMilliseconds: 60000
-        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link_a?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+#        jdbc-url: jdbc:mysql://127.0.0.1:3306/cloud_link_a?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
         maintenanceIntervalMilliseconds: 30000
         maxLifetimeMilliseconds: 1800000
         maxPoolSize: 50

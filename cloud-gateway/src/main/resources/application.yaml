@@ -6,7 +6,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.0.108:8848
         namespace: 327d6e78-c121-4c52-b83f-1c5c0da33f61
     gateway:
       routes: #数组形式
