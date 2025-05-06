@@ -45,6 +45,8 @@ public enum BizCodeEnum {
 
     ACCOUNT_UNLOGIN(250004, "账号未登录"),
 
+    ACCOUNT_UPDATE_ERROR(250005, "账号更新失败"),
+
     /**
      * 数据库路由信息
      */

@@ -3,6 +3,7 @@ package fun.timu.cloud.net.account.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import fun.timu.cloud.net.account.controller.request.AccountLoginRequest;
 import fun.timu.cloud.net.account.controller.request.AccountRegisterRequest;
+import fun.timu.cloud.net.account.controller.request.AccountUpdateRequest;
 import fun.timu.cloud.net.account.model.DO.Account;
 import fun.timu.cloud.net.common.util.JsonData;
 
@@ -41,5 +42,15 @@ public interface AccountService extends IService<Account> {
      * @return 返回一个JsonData对象，包含用户详细信息和可能的错误信息
      */
     JsonData detail();
+
+    /**
+     * 更新用户信息
+     * <p>
+     * 此方法用于更新当前登录用户的个人信息
+     *
+     * @param request 包含用户更新信息的请求对象
+     * @return 返回更新结果的JsonData对象
+     */
+    JsonData updateInfo(AccountUpdateRequest request);
 }
 

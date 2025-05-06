@@ -10,4 +10,6 @@ public interface AccountManager {
     List<Account> findByPhone(String phone);
 
     Account detail(long accountNo);
+
+    int updateInfo(Account accountDO);
 }

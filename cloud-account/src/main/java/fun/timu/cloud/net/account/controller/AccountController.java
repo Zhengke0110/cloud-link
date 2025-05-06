@@ -2,6 +2,7 @@ package fun.timu.cloud.net.account.controller;
 
 import fun.timu.cloud.net.account.controller.request.AccountLoginRequest;
 import fun.timu.cloud.net.account.controller.request.AccountRegisterRequest;
+import fun.timu.cloud.net.account.controller.request.AccountUpdateRequest;
 import fun.timu.cloud.net.account.service.AccountService;
 import fun.timu.cloud.net.account.service.FileService;
 import fun.timu.cloud.net.common.enums.BizCodeEnum;
@@ -91,6 +92,24 @@ public class AccountController {
         // 调用AccountService的detail方法获取账户详情信息
         JsonData jsonData = accountService.detail();
         // 返回账户详情信息
+        return jsonData;
+    }
+
+    /**
+     * 更新用户信息
+     * <p>
+     * 此方法处理用户信息更新请求，接收更新信息并返回更新结果
+     * 使用PostMapping注解限定HTTP请求方法为POST，路径为"update"
+     * 使用RequestBody注解将HTTP请求体转换为AccountUpdateRequest对象
+     *
+     * @param request 包含用户更新信息的请求对象
+     * @return 返回表示更新结果的JsonData对象
+     */
+    @PostMapping("update")
+    public JsonData update(@RequestBody AccountUpdateRequest request) {
+        // 调用服务层方法更新用户信息
+        JsonData jsonData = accountService.updateInfo(request);
+        // 返回更新结果
         return jsonData;
     }
 

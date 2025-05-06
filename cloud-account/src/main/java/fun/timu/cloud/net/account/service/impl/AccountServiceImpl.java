@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import fun.timu.cloud.net.account.config.RabbitMQConfig;
 import fun.timu.cloud.net.account.controller.request.AccountLoginRequest;
 import fun.timu.cloud.net.account.controller.request.AccountRegisterRequest;
+import fun.timu.cloud.net.account.controller.request.AccountUpdateRequest;
 import fun.timu.cloud.net.account.manager.AccountManager;
 import fun.timu.cloud.net.account.mapper.AccountMapper;
 import fun.timu.cloud.net.account.model.DO.Account;
@@ -175,6 +176,38 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         return JsonData.buildSuccess(accountVO);
     }
 
+    @Override
+    public JsonData updateInfo(AccountUpdateRequest request) {
+        // 从线程局部变量中获取当前登录用户信息
+        LoginUser loginUser = LoginInterceptor.threadLocal.get();
+
+        // 参数校验
+        if (loginUser == null) {
+            return JsonData.buildResult(BizCodeEnum.ACCOUNT_UNLOGIN);
+        }
+
+        // 创建账户对象，设置账号
+        Account accountDO = new Account();
+        accountDO.setAccountNo(loginUser.getAccountNo());
+
+        // 设置需要更新的字段
+        if (StringUtils.isNotBlank(request.getHeadImg())) {
+            accountDO.setHeadImg(request.getHeadImg());
+        }
+        if (StringUtils.isNotBlank(request.getMail())) {
+            accountDO.setMail(request.getMail());
+        }
+        if (StringUtils.isNotBlank(request.getUsername())) {
+            accountDO.setUsername(request.getUsername());
+        }
+
+        // 调用账户管理器更新账户信息
+        int rows = accountManager.updateInfo(accountDO);
+
+        logger.info("更新用户信息，用户ID:{}，更新结果:{}", loginUser.getAccountNo(), rows > 0);
+
+        return rows > 0 ? JsonData.buildSuccess() : JsonData.buildResult(BizCodeEnum.ACCOUNT_UPDATE_ERROR);
+    }
 
     /**
      * 用户初始化，发放福利：流量包

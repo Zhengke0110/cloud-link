@@ -1,6 +1,7 @@
 package fun.timu.cloud.net.account.manager.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import fun.timu.cloud.net.account.manager.AccountManager;
 import fun.timu.cloud.net.account.mapper.AccountMapper;
 import fun.timu.cloud.net.account.model.DO.Account;
@@ -39,5 +40,15 @@ public class AccountManagerImpl implements AccountManager {
         Account accountDO = accountMapper.selectOne(new QueryWrapper<Account>().eq("account_no", accountNo));
 
         return accountDO;
+    }
+
+    @Override
+    public int updateInfo(Account accountDO) {
+        // 使用UpdateWrapper指定更新条件和需要更新的字段
+        UpdateWrapper<Account> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("account_no", accountDO.getAccountNo());
+
+        // 执行更新操作
+        return accountMapper.update(accountDO, updateWrapper);
     }
 }
