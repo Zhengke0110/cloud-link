@@ -35,6 +35,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -199,8 +200,9 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
             payInfoVO.setOutTradeNo(outTradeNo);
             payInfoVO.setAccountNo(accountNo);
 
-            // TODO 需要向第三方支付平台查询状态
-            String payResult = "";
+            // TODO 需要向第三方支付平台查询状态，这里随机生成支付结果
+//            String payResult = "";
+            String payResult = getRandomPayResult(0.8f);
 
             // 根据查询结果处理订单状态
             if (StringUtils.isBlank(payResult)) {
@@ -246,13 +248,7 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
         content.put("product", productOrderDO.getProductSnapshot());
 
         //构建消息
-        EventMessage eventMessage = EventMessage.builder()
-                .bizId(outTradeNo)
-                .accountNo(accountNo)
-                .messageId(outTradeNo)
-                .content(JsonUtil.obj2Json(content))
-                .eventMessageType(EventMessageType.PRODUCT_ORDER_PAY.name())
-                .build();
+        EventMessage eventMessage = EventMessage.builder().bizId(outTradeNo).accountNo(accountNo).messageId(outTradeNo).content(JsonUtil.obj2Json(content)).eventMessageType(EventMessageType.PRODUCT_ORDER_PAY.name()).build();
 
         //根据支付类型处理回调消息
         if (payType.name().equalsIgnoreCase(ProductOrderPayTypeEnum.ALI_PAY.name())) {
@@ -301,8 +297,7 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
                 String outTradeNo = eventMessage.getBizId();
                 Long accountNo = eventMessage.getAccountNo();
                 // 更新订单支付状态，从新建状态转为已支付状态
-                int rows = productOrderManager.updateOrderPayState(outTradeNo, accountNo,
-                        ProductOrderStateEnum.PAY.name(), ProductOrderStateEnum.NEW.name());
+                int rows = productOrderManager.updateOrderPayState(outTradeNo, accountNo, ProductOrderStateEnum.PAY.name(), ProductOrderStateEnum.NEW.name());
                 // 记录订单更新日志
                 logger.info("订单更新成功:rows={},eventMessage={}", rows, eventMessage);
             }
@@ -391,6 +386,24 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
 
         //返回保存后的订单对象
         return productOrderDO;
+    }
+
+    /**
+     * 根据给定的成功概率生成支付结果
+     * 此方法用于模拟支付结果，根据成功概率返回支付成功或失败的结果
+     *
+     * @param successRate 支付成功的概率，取值范围为0到1，表示0%到100%的成功概率
+     * @return 如果支付成功，返回模拟的支付结果字符串；如果支付失败，返回空字符串
+     */
+    private String getRandomPayResult(double successRate) {
+        Random random = new Random();
+
+        // 根据生成的随机数和成功概率决定支付结果
+        if (random.nextDouble() < successRate) {
+            return "PAY_SUCCESS_20250418"; // 支付成功
+        } else {
+            return ""; // 未支付/失败
+        }
     }
 }
 

@@ -99,7 +99,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         // 记录日志，显示插入的行数和账户信息
         logger.info("rows:{},注册成功:{}", rows, accountDO);
 
-        // 用户注册成功后，执行初始化任务，如发放福利等  TODO
+        // 用户注册成功后，执行初始化任务，如发放福利等
         userRegisterInitTask(accountDO);
 
         // 返回注册成功的JSON数据

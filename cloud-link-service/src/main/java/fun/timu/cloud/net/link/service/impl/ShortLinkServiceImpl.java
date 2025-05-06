@@ -286,7 +286,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         // 生成短链码
         String shortLinkCode = shortLinkComponent.createShortLinkCode(addRequest.getOriginalUrl());
 
-        // TODO 加锁
+        //  加锁
         String script = "if redis.call('EXISTS',KEYS[1])==0 then redis.call('set',KEYS[1],ARGV[1]); redis.call('expire',KEYS[1],ARGV[2]); return 1;" + " elseif redis.call('get',KEYS[1]) == ARGV[1] then return 2;" + " else return 0; end;";
 
         Long result = redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(shortLinkCode), accountNo, 100);
