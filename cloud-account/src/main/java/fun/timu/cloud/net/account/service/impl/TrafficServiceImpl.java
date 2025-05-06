@@ -348,12 +348,23 @@ public class TrafficServiceImpl extends ServiceImpl<TrafficMapper, Traffic> impl
      * 此方法的作用是将从数据库中获取的Traffic对象转换为用于展示层的TrafficVO对象
      * 它利用Apache Commons BeanUtils库中的copyProperties方法进行属性复制，以简化代码并提高可维护性
      *
-     * @param trafficDO Traffic实体类对象，包含从数据库中获取的交通数据
+     * @param trafficDO Traffic实体类对象，包含从数据库中获取的流量包数据
      * @return 返回一个新创建的TrafficVO对象，其属性与传入的Traffic实体类对象相同
      */
     private TrafficVO beanProcess(Traffic trafficDO) {
         TrafficVO trafficVO = new TrafficVO();
         BeanUtils.copyProperties(trafficDO, trafficVO);
+
+        //惰性更新，前端显示的问题，根据更新时间进行判断是否需要显示最新的流量包
+        //通过比较流量包数据的更新时间和当前时间，决定是否重置日使用流量
+
+        String todayStr = TimeUtil.format(new Date(), "yyyy-MM-dd");
+        String trafficUpdateStr = TimeUtil.format(trafficDO.getGmtModified(), "yyyy-MM-dd");
+
+        if (!todayStr.equalsIgnoreCase(trafficUpdateStr)) {
+            trafficVO.setDayUsed(0);
+        }
+
         return trafficVO;
     }
 

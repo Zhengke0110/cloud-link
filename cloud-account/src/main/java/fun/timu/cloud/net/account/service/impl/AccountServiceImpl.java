@@ -3,16 +3,21 @@ package fun.timu.cloud.net.account.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 
+import fun.timu.cloud.net.account.config.RabbitMQConfig;
 import fun.timu.cloud.net.account.controller.request.AccountLoginRequest;
 import fun.timu.cloud.net.account.controller.request.AccountRegisterRequest;
 import fun.timu.cloud.net.account.manager.AccountManager;
 import fun.timu.cloud.net.account.mapper.AccountMapper;
 import fun.timu.cloud.net.account.model.DO.Account;
+import fun.timu.cloud.net.account.model.VO.AccountVO;
 import fun.timu.cloud.net.account.service.AccountService;
 import fun.timu.cloud.net.account.service.NotifyService;
 import fun.timu.cloud.net.common.enums.AuthTypeEnum;
 import fun.timu.cloud.net.common.enums.BizCodeEnum;
+import fun.timu.cloud.net.common.enums.EventMessageType;
 import fun.timu.cloud.net.common.enums.SendCodeEnum;
+import fun.timu.cloud.net.common.interceptor.LoginInterceptor;
+import fun.timu.cloud.net.common.model.EventMessage;
 import fun.timu.cloud.net.common.model.LoginUser;
 import fun.timu.cloud.net.common.util.CommonUtil;
 import fun.timu.cloud.net.common.util.IDUtil;
@@ -22,6 +27,7 @@ import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -35,14 +41,19 @@ import java.util.List;
 @Service
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements AccountService {
     private static Logger logger = LoggerFactory.getLogger(AccountService.class);
-
+    private static final Long FREE_TRAFFIC_PRODUCT_ID = 1L;
     private final NotifyService notifyService;
 
     private final AccountManager accountManager;
+    private final RabbitTemplate rabbitTemplate;
+    private final RabbitMQConfig rabbitMQConfig;
 
-    public AccountServiceImpl(NotifyService notifyService, AccountManager accountManager) {
+
+    public AccountServiceImpl(NotifyService notifyService, AccountManager accountManager, RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig) {
         this.notifyService = notifyService;
         this.accountManager = accountManager;
+        this.rabbitTemplate = rabbitTemplate;
+        this.rabbitMQConfig = rabbitMQConfig;
     }
 
     /**
@@ -137,13 +148,45 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         }
     }
 
+    /**
+     * 获取用户账户详细信息
+     * <p>
+     * 此方法用于获取当前登录用户的账户详细信息它首先从线程局部变量中获取登录用户信息，
+     * 然后通过账户管理器获取账户详情，并将账户信息转换后返回
+     *
+     * @return 返回包含用户账户详细信息的JsonData对象
+     */
+    @Override
+    public JsonData detail() {
+
+        // 从线程局部变量中获取当前登录用户信息
+        LoginUser loginUser = LoginInterceptor.threadLocal.get();
+
+        // 通过账户管理器根据账户编号获取账户详细信息
+        Account accountDO = accountManager.detail(loginUser.getAccountNo());
+
+        // 创建一个账户信息传输对象
+        AccountVO accountVO = new AccountVO();
+
+        // 将账户详细信息从账户数据对象复制到账户信息传输对象
+        BeanUtils.copyProperties(accountDO, accountVO);
+
+        // 构建并返回包含账户信息传输对象的成功响应Json数据
+        return JsonData.buildSuccess(accountVO);
+    }
+
 
     /**
-     * 用户初始化，发放福利：流量包 TODO
+     * 用户初始化，发放福利：流量包
      *
      * @param accountDO
      */
     private void userRegisterInitTask(Account accountDO) {
+
+        EventMessage eventMessage = EventMessage.builder().messageId(IDUtil.geneSnowFlakeID().toString()).accountNo(accountDO.getAccountNo()).eventMessageType(EventMessageType.TRAFFIC_FREE_INIT.name()).bizId(FREE_TRAFFIC_PRODUCT_ID.toString()).build();
+
+        //发送发放流量包消息
+        rabbitTemplate.convertAndSend(rabbitMQConfig.getTrafficEventExchange(), rabbitMQConfig.getTrafficFreeInitRoutingKey(), eventMessage);
 
     }
 }

@@ -78,4 +78,21 @@ public class AccountController {
         return jsonData;
     }
 
+    /**
+     * 获取账户详情信息
+     * <p>
+     * 通过GET请求调用此方法，以获取账户的详细信息该方法不接受任何参数，
+     * 并返回一个包含账户详情的JsonData对象主要用于前端展示账户详细信息的页面
+     *
+     * @return 返回包含账户详情信息的JsonData对象
+     */
+    @GetMapping("detail")
+    public JsonData detail() {
+        // 调用AccountService的detail方法获取账户详情信息
+        JsonData jsonData = accountService.detail();
+        // 返回账户详情信息
+        return jsonData;
+    }
+
+
 }

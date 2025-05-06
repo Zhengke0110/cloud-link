@@ -33,4 +33,11 @@ public class AccountManagerImpl implements AccountManager {
         List<Account> accountDOList = accountMapper.selectList(new QueryWrapper<Account>().eq("phone", phone));
         return accountDOList;
     }
+
+    @Override
+    public Account detail(long accountNo) {
+        Account accountDO = accountMapper.selectOne(new QueryWrapper<Account>().eq("account_no", accountNo));
+
+        return accountDO;
+    }
 }

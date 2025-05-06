@@ -8,4 +8,6 @@ public interface AccountManager {
     int insert(Account accountDO);
 
     List<Account> findByPhone(String phone);
+
+    Account detail(long accountNo);
 }
