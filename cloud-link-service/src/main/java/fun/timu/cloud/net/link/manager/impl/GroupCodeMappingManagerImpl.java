@@ -93,7 +93,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
 
         // 执行分页查询，筛选出符合账号编号和组ID条件的记录
         Page<GroupCodeMapping> groupCodeMappingDOPage = groupCodeMappingMapper.selectPage(pageInfo, new QueryWrapper<GroupCodeMapping>().eq("account_no", accountNo)
-                .eq("group_id", groupId));
+                .eq("group_id", groupId).eq("del", 0).orderByDesc("gmt_create"));
 
         // 创建Map对象存储分页查询结果
         Map<String, Object> pageMap = new HashMap<>(3);

@@ -152,23 +152,21 @@ public class DeviceUtil {
      * @return 返回操作系统的版本，如 Android 1.x、Intel Mac OS X 10.15 如果无法解析或userAgent为空，则返回空字符串
      */
     public static String getOSVersion(String userAgent) {
-        // 初始化操作系统版本为空字符串
         String osVersion = "";
-        // 检查userAgent是否为空或仅包含空白字符，如果为真，则直接返回空字符串
         if (StringUtils.isBlank(userAgent)) {
             return osVersion;
         }
-        // 从userAgent中提取操作系统版本信息
-        String[] strArr = userAgent.substring(userAgent.indexOf("(") + 1, userAgent.indexOf(")")).split(";");
-        // 检查提取的结果是否为空或长度为0，如果为真，则直接返回空字符串
-        if (null == strArr || strArr.length == 0) {
+        if (userAgent.indexOf("(") >= 0 && userAgent.indexOf(")") >= 0) {
+            String[] strArr = userAgent.substring(userAgent.indexOf("(") + 1,
+                    userAgent.indexOf(")")).split(";");
+            if (null == strArr || strArr.length == 0) {
+                return osVersion;
+            }
+            osVersion = strArr[1];
             return osVersion;
         }
+        return "";
 
-        // 将操作系统版本信息赋值给osVersion变量
-        osVersion = strArr[1];
-        // 返回操作系统版本信息
-        return osVersion;
     }
 
 

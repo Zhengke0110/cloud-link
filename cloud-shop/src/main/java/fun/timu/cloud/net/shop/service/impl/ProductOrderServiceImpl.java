@@ -213,12 +213,37 @@ public class ProductOrderServiceImpl extends ServiceImpl<ProductOrderMapper, Pro
                 // 支付成功，主动把订单状态更新成支付
                 logger.warn("支付成功，但是微信回调通知失败，需要排查问题:{}", eventMessage);
                 productOrderManager.updateOrderPayState(outTradeNo, accountNo, ProductOrderStateEnum.PAY.name(), ProductOrderStateEnum.NEW.name());
-                // TODO 触发支付成功后的逻辑
+                //  触发支付成功后的逻辑
+                Map<String, Object> content = new HashMap<>(4);
+                content.put("outTradeNo", outTradeNo);
+                content.put("buyNum", productOrderDO.getBuyNum());
+                content.put("accountNo", accountNo);
+                content.put("product", productOrderDO.getProductSnapshot());
+
+                //构建消息
+                EventMessage payEventMessage = EventMessage.builder()
+                        .bizId(outTradeNo)
+                        .accountNo(accountNo)
+                        .messageId(outTradeNo)
+                        .content(JsonUtil.obj2Json(content))
+                        .eventMessageType(EventMessageType.PRODUCT_ORDER_PAY.name())
+                        .build();
+                //如果key不存在，则设置成功，返回true
+                Boolean flag = redisTemplate.opsForValue().setIfAbsent(outTradeNo, "OK", 3, TimeUnit.DAYS);
+
+                if (flag) {
+                    rabbitTemplate.convertAndSend(rabbitMQConfig.getOrderEventExchange(),
+                            rabbitMQConfig.getOrderUpdateTrafficRoutingKey(), payEventMessage);
+
+                    return false;
+                }
+
             }
         }
 
         return true;
     }
+
 
     /**
      * 处理订单回调消息

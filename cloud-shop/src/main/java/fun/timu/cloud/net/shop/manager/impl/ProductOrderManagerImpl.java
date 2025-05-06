@@ -97,10 +97,16 @@ public class ProductOrderManagerImpl implements ProductOrderManager {
         // 根据订单状态查询订单
         if (!StringUtils.isBlank(state)) {
             // 如果状态不为空，根据账户编号和订单状态查询
-            orderDOIPage = productOrderMapper.selectPage(pageInfo, new QueryWrapper<ProductOrder>().eq("account_no", accountNo).eq("state", state).eq("del", 0));
+            orderDOIPage = productOrderMapper.selectPage(pageInfo, new QueryWrapper<ProductOrder>()
+                    .eq("account_no", accountNo).eq("del", 0)
+                    .orderByDesc("gmt_create"));
         } else {
             // 如果状态为空，仅根据账户编号查询
-            orderDOIPage = productOrderMapper.selectPage(pageInfo, new QueryWrapper<ProductOrder>().eq("account_no", accountNo).eq("del", 0));
+            orderDOIPage = productOrderMapper.selectPage(pageInfo, new QueryWrapper<ProductOrder>()
+                    .eq("account_no", accountNo)
+                    .eq("state", state)
+                    .eq("del", 0)
+                    .orderByDesc("gmt_create"));
         }
 
         // 获取查询结果列表

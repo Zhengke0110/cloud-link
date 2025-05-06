@@ -29,12 +29,12 @@
 
     </resultMap>
 
+    <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         code
-        ,referer,is_new,account_no,province,city,
-        ip,browser_name,os,device_type,pv,
-        uv,start_time,end_time,ts
+        ,referer,ts,is_new,account_no,province,city,ip,browser_name,os,device_type,start_time
     </sql>
+
 
     <!--统计总条数-->
     <select id="countTotal" resultType="java.lang.Integer">
@@ -79,7 +79,7 @@
           and toYYYYMMDD(start_time) BETWEEN #{startTime}
             and #{endTime}
         group by date_time_str
-        ORDER BY date_time_str desc
+        ORDER BY date_time_str asc
     </select>
 
 
@@ -95,7 +95,7 @@
           and code = #{code}
           and toYYYYMMDD(start_time) = #{startTime}
         group by date_time_str
-        ORDER BY date_time_str desc
+        ORDER BY date_time_str asc
     </select>
 
 
@@ -111,7 +111,7 @@
           and code = #{code}
           and toYYYYMMDDhhmmss(start_time) BETWEEN #{startTime} and #{endTime}
         group by date_time_str
-        ORDER BY date_time_str desc
+        ORDER BY date_time_str asc
     </select>
 
 
