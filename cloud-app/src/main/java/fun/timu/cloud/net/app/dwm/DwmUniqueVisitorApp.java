@@ -38,7 +38,7 @@ public class DwmUniqueVisitorApp {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // 设置并行度为1
-        env.setParallelism(1);
+//        env.setParallelism(1);
 
         // 通过Kafka工具类获取Kafka消费者，指定源主题和消费者组ID
         FlinkKafkaConsumer<String> kafkaConsumer = KafkaUtil.getKafkaConsumer(SOURCE_TOPIC, GROUP_ID);

@@ -41,7 +41,7 @@ public class DwmShortLinWideApp {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // 设置并行度为1
-        env.setParallelism(1);
+//        env.setParallelism(1);
 
         // 从Kafka中获取数据流
         FlinkKafkaConsumer<String> kafkaConsumer = KafkaUtil.getKafkaConsumer(SOURCE_TOPIC, GROUP_ID);
