@@ -99,6 +99,8 @@ public class LinkApiController {
         return str.matches(regex);
     }
 
+    private static long FOREVER_TIME = 315504000000L;
+
     /**
      * 检查短链接是否可访问
      *
@@ -112,15 +114,13 @@ public class LinkApiController {
             if (ShortLinkStateEnum.ACTIVE.name().equalsIgnoreCase(shortLinkVO.getState())) {
                 return true;
             }
-        } else if ((shortLinkVO != null && shortLinkVO.getExpired().getTime() == -1)) {
-            // 检查短链接对象是否非空且设定为永不过期
-            // 再次检查短链接状态是否为激活状态
+        } else if ((shortLinkVO != null && shortLinkVO.getExpired().getTime() < FOREVER_TIME)) {
+            // 检查短链接状态是否为激活状态
             if (ShortLinkStateEnum.ACTIVE.name().equalsIgnoreCase(shortLinkVO.getState())) {
                 return true;
             }
         }
 
-        // 如果以上条件都不满足，则短链接不可访问
         return false;
     }
 
