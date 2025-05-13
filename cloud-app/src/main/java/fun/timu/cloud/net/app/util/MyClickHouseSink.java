@@ -20,6 +20,8 @@ public class MyClickHouseSink {
      * ClickHouse地址
      */
     private static String CLICK_HOUSE_SERVER = null;
+    private static String CLICK_HOUSE_USER = null;
+    private static String CLICK_HOUSE_PASSWORD = null;
 
     static {
         Properties properties = new Properties();
@@ -34,7 +36,8 @@ public class MyClickHouseSink {
 
         //获取key配置对应的value
         CLICK_HOUSE_SERVER = properties.getProperty("clickhouse.servers");
-
+        CLICK_HOUSE_USER = properties.getProperty("clickhouse.username");
+        CLICK_HOUSE_PASSWORD  = properties.getProperty("clickhouse.password");
     }
 
     /**
@@ -77,7 +80,8 @@ public class MyClickHouseSink {
                 new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
                         .withUrl(CLICK_HOUSE_SERVER)
                         .withDriverName("ru.yandex.clickhouse.ClickHouseDriver")
-                        .withUsername("default")
+                        .withUsername(CLICK_HOUSE_USER)
+                        .withPassword(CLICK_HOUSE_PASSWORD)
                         .build());
 
         return sinkFunction;
