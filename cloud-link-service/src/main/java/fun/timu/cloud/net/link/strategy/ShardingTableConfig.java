@@ -14,7 +14,7 @@ public class ShardingTableConfig {
 
     private static Random random = new Random();
 
-    //配置启用那些表的后缀
+    // TODO 配置启用那些表的后缀
     static {
         tableSuffixList.add("0");
         tableSuffixList.add("a");

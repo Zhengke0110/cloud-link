@@ -15,7 +15,7 @@ public class ShardingDBConfig {
     // 用于生成随机数
     private static Random random = new Random();
 
-    // 配置启用那些库的前缀
+    // TODO 配置启用那些库的前缀
     static {
         dbPrefixList.add("0");
         dbPrefixList.add("1");
