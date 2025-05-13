@@ -22,6 +22,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 验证码相关接口
+ */
 @RestController
 @RequestMapping("/api/notify/v1")
 public class NotifyController {

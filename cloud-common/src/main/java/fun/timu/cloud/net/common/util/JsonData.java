@@ -12,6 +12,7 @@ import com.alibaba.fastjson.TypeReference;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JsonData {
+    private static String SUCCESS = "success";
     /**
      * 状态码 0 表示成功
      */
@@ -46,7 +47,7 @@ public class JsonData {
      * @return
      */
     public static JsonData buildSuccess() {
-        return new JsonData(0, null, null);
+        return new JsonData(0, null, SUCCESS);
     }
 
     /**
@@ -56,7 +57,7 @@ public class JsonData {
      * @return
      */
     public static JsonData buildSuccess(Object data) {
-        return new JsonData(0, data, null);
+        return new JsonData(0, data, SUCCESS);
     }
 
     /**
