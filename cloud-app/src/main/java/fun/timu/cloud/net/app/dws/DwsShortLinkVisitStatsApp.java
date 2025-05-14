@@ -45,7 +45,7 @@ public class DwsShortLinkVisitStatsApp {
         // 获取执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         // 设置并行度为1，确保数据处理的顺序性
-//        env.setParallelism(1);
+        env.setParallelism(1);
 
         // 1、获取多个数据源
         // 获取短链数据源并设置对应的Kafka消费者

@@ -10,11 +10,14 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.0.108:8848
-        namespace: 327d6e78-c121-4c52-b83f-1c5c0da33f61
+        server-addr: 192.168.0.103:8848
+        namespace: 742f58f0-dee5-4607-96a7-21bf9170f03f
+      config:
+        enabled: false
+        server-addr: none
   redis:
     client-type: jedis
-    host: 192.168.0.108
+    host: 192.168.0.103
     port: 6379
     jedis:
       pool:
@@ -73,7 +76,7 @@ spring:
   # RabbitMQ服务配置
   rabbitmq:
     # RabbitMQ服务器地址
-    host: 192.168.0.108
+    host: 192.168.0.103
     # 消息监听器配置
     listener:
       simple:
@@ -110,7 +113,7 @@ xxl:
   job:
     accessToken: timu.fun
     admin:
-      addresses: http://192.168.0.108:18080/xxl-job-admin
+      addresses: http://192.168.0.103:19001/xxl-job-admin
     executor:
       address: ''
       appname: traffic-app-executor

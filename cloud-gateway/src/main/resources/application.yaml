@@ -6,8 +6,8 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.0.108:8848
-        namespace: 327d6e78-c121-4c52-b83f-1c5c0da33f61
+        server-addr: 192.168.0.103:8848
+        namespace: 742f58f0-dee5-4607-96a7-21bf9170f03f
     gateway:
       routes: #数组形式
         - id: cloud-link-api-service  #数据服务 路由唯一标识

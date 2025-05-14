@@ -46,7 +46,7 @@ public class DwdShortLinkLogApp {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-//        env.setParallelism(1);
+        env.setParallelism(1);
 
 //        DataStream<String> ds = env.socketTextStream("127.0.0.1", 8888);
 

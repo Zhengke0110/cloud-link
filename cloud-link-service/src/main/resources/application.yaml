@@ -10,12 +10,15 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.0.108:8848
-        namespace: 327d6e78-c121-4c52-b83f-1c5c0da33f61
+        server-addr: 192.168.0.103:8848
+        namespace: 742f58f0-dee5-4607-96a7-21bf9170f03f
+      config:
+        enabled: false
+        server-addr: none
   # RabbitMQ服务配置
   rabbitmq:
     # RabbitMQ服务器地址
-    host: 192.168.0.108
+    host: 192.168.0.103
     # 消息监听器配置
     listener:
       simple:
@@ -39,7 +42,7 @@ spring:
     virtual-host: dev
   redis:
     client-type: jedis
-    host: 192.168.0.108
+    host: 192.168.0.103
     port: 6379
     jedis:
       pool:
@@ -52,7 +55,7 @@ spring:
         # 连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: 60000
   kafka:
-    bootstrap-servers: 192.168.0.108:9092
+    bootstrap-servers: 192.168.0.103:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
