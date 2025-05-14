@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+/**
+ * 短链接控制器
+ * 该控制器处理与短链接相关的请求，包括创建、检查、分页查询和删除短链接等操作
+ */
 @RestController
 @RequestMapping("/api/link/v1")
 public class ShortLinkController {

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 链接分组控制器
+ */
 @RestController
 @RequestMapping("/api/group/v1")
 public class LinkGroupController {
@@ -73,7 +76,7 @@ public class LinkGroupController {
 
     /**
      * 获取所有链接分组信息
-     *
+     * <p>
      * 该方法通过GET请求处理[list]路径，返回所有链接分组的列表
      * 它调用了LinkGroupService中的listAllGroup方法来获取数据，并将结果封装到JsonData中返回
      *

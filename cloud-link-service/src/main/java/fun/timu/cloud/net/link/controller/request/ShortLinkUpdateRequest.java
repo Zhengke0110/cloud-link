@@ -12,11 +12,6 @@ public class ShortLinkUpdateRequest {
     private Long groupId;
 
     /**
-     * 映射id
-     */
-    private Long mappingId;
-
-    /**
      * 短链码
      */
     private String code;
