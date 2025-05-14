@@ -169,7 +169,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     public int update(GroupCodeMapping groupCodeMappingDO) {
         // 更新操作，只更新匹配特定条件的记录的title和domain字段
         int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
-                .eq("id", groupCodeMappingDO.getId())
+                .eq("code", groupCodeMappingDO.getCode())
                 .eq("account_no", groupCodeMappingDO.getAccountNo())
                 .eq("group_id", groupCodeMappingDO.getGroupId())
                 .eq("del", 0)
