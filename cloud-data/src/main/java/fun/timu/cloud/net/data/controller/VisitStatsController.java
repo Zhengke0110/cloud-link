@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 访问统计控制器
+ */
 @RestController
 @RequestMapping("/api/visitStats/v1")
 public class VisitStatsController {

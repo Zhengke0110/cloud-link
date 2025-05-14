@@ -148,25 +148,38 @@ public class DeviceUtil {
     /**
      * 获取操作系统版本
      *
-     * @param userAgent 用户代理字符串，包含了客户端操作系统的信息
-     * @return 返回操作系统的版本，如 Android 1.x、Intel Mac OS X 10.15 如果无法解析或userAgent为空，则返回空字符串
+     * @param userAgent 用户代理字符串
+     * @return 操作系统版本，如 Android 1.x、Intel Mac OS X 10.15 等；
+     * 如果解析失败或输入为空，则返回空字符串
      */
     public static String getOSVersion(String userAgent) {
         String osVersion = "";
         if (StringUtils.isBlank(userAgent)) {
             return osVersion;
         }
-        if (userAgent.indexOf("(") >= 0 && userAgent.indexOf(")") >= 0) {
-            String[] strArr = userAgent.substring(userAgent.indexOf("(") + 1,
-                    userAgent.indexOf(")")).split(";");
-            if (null == strArr || strArr.length == 0) {
-                return osVersion;
+
+        try {
+            int start = userAgent.indexOf("(");
+            int end = userAgent.indexOf(")");
+            if (start < 0 || end < 0 || start >= end) {
+                return osVersion; // 括号不完整或顺序错误
             }
-            osVersion = strArr[1];
+
+            String content = userAgent.substring(start + 1, end);
+            String[] strArr = content.split(";");
+
+            if (strArr == null || strArr.length < 2) {
+                return osVersion; // 数组长度不够，无法取索引1
+            }
+
+            osVersion = strArr[1].trim(); // 去除前后空格
+        } catch (Exception e) {
+            // 可选：记录日志以便排查异常情况
+            // logger.warn("解析User-Agent获取OS版本失败: {}", userAgent, e);
             return osVersion;
         }
-        return "";
 
+        return osVersion;
     }
 
 
