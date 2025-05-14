@@ -1,17 +1,17 @@
 <script setup lang="ts"></script>
 
 <template>
-  <transition name="page" mode="out-in">
-    <router-view></router-view>
-  </transition>
+  <router-view v-slot="{ Component }">
+    <transition name="page" mode="out-in">
+      <component :is="Component" />
+    </transition>
+  </router-view>
 </template>
 
 <style>
 .page-enter-active,
 .page-leave-active {
-  transition:
-    opacity 0.3s,
-    transform 0.3s;
+  transition: opacity 0.3s, transform 0.3s;
 }
 
 .page-enter-from,
