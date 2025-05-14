@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 支付相关控制器接口
+ */
 @RestController
 @RequestMapping("/api/callback/order/v1/")
 public class PayCallbackController {

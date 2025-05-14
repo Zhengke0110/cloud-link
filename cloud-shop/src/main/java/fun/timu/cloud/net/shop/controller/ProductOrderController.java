@@ -21,6 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 订单控制器接口
+ */
 @RestController
 @RequestMapping("/api/order/v1")
 public class ProductOrderController {

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 商品控制器接口
+ */
 @RestController
 @RequestMapping("/api/product/v1")
 public class ProductController {
@@ -22,7 +25,7 @@ public class ProductController {
 
     /**
      * 查看商品列表接口
-     *
+     * <p>
      * 此方法响应GET请求，提供商品列表数据
      * 它没有输入参数，因为GET请求的性质不需要用户发送数据到服务器
      * 返回的是一个JsonData对象，其中包含了从productService获取的商品列表
@@ -38,7 +41,7 @@ public class ProductController {
 
     /**
      * 查看商品详情
-     *
+     * <p>
      * 此方法通过商品ID获取并返回商品的详细信息它使用GET请求来访问资源，
      * 并以JSON格式返回商品信息
      *
