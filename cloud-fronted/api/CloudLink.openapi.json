@@ -13,18 +13,7 @@
         "deprecated": false,
         "description": "该接口接收一个UseTrafficRequest对象作为请求体，处理用户使用流量包的请求\n主要用于减少用户账户中的流量余额",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -63,18 +52,7 @@
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -122,16 +100,6 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
           }
         ],
         "responses": {
@@ -167,10 +135,9 @@
             "name": "token",
             "in": "header",
             "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "example": "",
             "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+              "type": "string"
             }
           }
         ],
@@ -262,18 +229,7 @@
         "deprecated": false,
         "description": "<p>\n此方法处理用户的登录请求它期望接收一个AccountLoginRequest对象作为参数，\n该对象中包含了登录所需的信息，例如用户名和密码这些信息用于验证用户身份\n登录成功后，将返回一个包含成功信息的JsonData对象；如果登录失败，则返回一个包含错误信息的JsonData对象",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -312,18 +268,7 @@
         "deprecated": false,
         "description": "<p>\n通过GET请求调用此方法，以获取账户的详细信息该方法不接受任何参数，\n并返回一个包含账户详情的JsonData对象主要用于前端展示账户详细信息的页面",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "",
@@ -352,18 +297,7 @@
         "deprecated": false,
         "description": "<p>\n此方法处理用户信息更新请求，接收更新信息并返回更新结果\n使用PostMapping注解限定HTTP请求方法为POST，路径为\"update\"\n使用RequestBody注解将HTTP请求体转换为AccountUpdateRequest对象",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -402,18 +336,7 @@
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "",
@@ -437,18 +360,7 @@
         "deprecated": false,
         "description": "该方法用于验证用户提交的验证码，并在验证成功后发送新的验证码",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -488,18 +400,7 @@
         "deprecated": false,
         "description": "<p>\n此方法响应GET请求，提供商品列表数据\n它没有输入参数，因为GET请求的性质不需要用户发送数据到服务器\n返回的是一个JsonData对象，其中包含了从productService获取的商品列表\n使用List<ProductVO>类型来存储商品数据，ProductVO代表商品的视图对象，用于数据传输\n使用JsonData.buildSuccess方法构建返回对象，确保客户端能够接收到成功状态和商品列表数据",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "",
@@ -537,16 +438,6 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
           }
         ],
         "responses": {
@@ -577,18 +468,7 @@
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -623,18 +503,7 @@
         "deprecated": false,
         "description": "<p>\n本方法用于生成和返回一个下单所需的令牌(token)，以确保用户在下单时的操作合法性\n它首先从ThreadLocal中获取当前用户的账户编号，然后生成一个随机令牌，并将该令牌与账户编号组合，\n作为Redis中的键，用于存储和验证令牌的有效性",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "",
@@ -663,18 +532,7 @@
         "deprecated": false,
         "description": "<p>\n该方法接收一个ProductOrderPageRequest对象作为参数，其中包含了分页查询的相关信息，\n如页码、每页记录数以及可能的筛选条件等它通过HTTP POST方法接收请求，\n请求体中包含分页查询的具体参数，并返回一个JsonData对象，其中包含了查询结果",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -722,16 +580,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
           }
         ],
         "responses": {
@@ -762,18 +610,7 @@
         "deprecated": false,
         "description": "根据订单请求信息，确认订单并根据支付类型和客户端类型进行相应处理",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -808,18 +645,7 @@
         "deprecated": false,
         "description": "<p>\n该方法通过GET请求获取系统中全部可用的域名列表，并以JSON格式返回\n主要用于前端展示或系统间数据交互",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "",
@@ -866,16 +692,6 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
           }
         ],
         "responses": {
@@ -915,16 +731,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
           }
         ],
         "responses": {
@@ -950,18 +756,7 @@
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1009,16 +804,6 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
           }
         ],
         "responses": {
@@ -1058,16 +843,6 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
           }
         ],
         "responses": {
@@ -1098,18 +873,7 @@
         "deprecated": false,
         "description": "<p>\n该方法通过GET请求处理[list]路径，返回所有链接分组的列表\n它调用了LinkGroupService中的listAllGroup方法来获取数据，并将结果封装到JsonData中返回",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "",
@@ -1138,18 +902,7 @@
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1208,16 +961,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
           }
         ],
         "responses": {
@@ -1248,18 +991,7 @@
         "deprecated": false,
         "description": "该方法接收一个HTTP POST请求，用于添加新的短链接信息",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1299,18 +1031,7 @@
         "deprecated": false,
         "description": "此方法使用@RequestMapping注解来映射HTTP请求到此方法\n请求体应包含ShortLinkPageRequest对象，其中包含分页查询所需的信息",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1349,18 +1070,7 @@
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1400,18 +1110,7 @@
         "deprecated": false,
         "description": "",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1451,18 +1150,7 @@
         "deprecated": false,
         "description": "<p>\n此方法用于处理分页查询访问记录的请求它首先检查请求的总条数是否超过限制，\n如果超过，则返回错误信息；否则，调用服务层方法获取分页数据并返回",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1502,18 +1190,7 @@
         "deprecated": false,
         "description": "<p>\n该方法通过接收一个请求对象来查询特定时间范围内不同地区的访问分布情况\n它使用了@RequestMapping注解来映射HTTP请求到此方法，并使用@RequestBody注解来将HTTP请求的正文转换为RegionQueryRequest对象",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1553,18 +1230,7 @@
         "deprecated": false,
         "description": "<p>\n该方法用于处理查询访问趋势的请求它接收一个VisitTrendQueryRequest对象作为参数，\n该对象包含了查询访问趋势所需的参数信息方法通过调用statsService的queryVisitTrend方法\n获取访问趋势数据，并将结果封装在JsonData对象中返回",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1604,18 +1270,7 @@
         "deprecated": false,
         "description": "该接口用于获取系统中频繁访问的来源信息，通过分析访问数据来确定主要的流量来源\n对于参数和返回值的详细说明，采用JSON格式进行数据交互，以适应前后端分离的架构设计",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1655,18 +1310,7 @@
         "deprecated": false,
         "description": "<p>\n该方法通过接收一个QueryDeviceRequest对象作为参数，来查询设备的访问分布情况\n它使用了@RequestMapping注解来映射HTTP请求到此方法，参数通过@RequestBody注解指定，意味着请求体中的内容将被转换为方法参数",
         "tags": [],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "header",
-            "description": "",
-            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
-            "schema": {
-              "type": "string",
-              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {

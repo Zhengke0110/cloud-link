@@ -17,6 +17,9 @@ importers:
       axios:
         specifier: ^1.9.0
         version: 1.9.0
+      form-data:
+        specifier: ^4.0.2
+        version: 4.0.2
       pinia:
         specifier: ^3.0.0
         version: 3.0.0(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))
@@ -39,6 +42,9 @@ importers:
       '@iconify/tailwind4':
         specifier: ^1.0.3
         version: 1.0.3(tailwindcss@4.0.6)
+      '@types/form-data':
+        specifier: ^2.5.2
+        version: 2.5.2
       '@types/node':
         specifier: ^22.13.1
         version: 22.13.1
@@ -530,6 +536,10 @@ packages:
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
+
+  '@types/form-data@2.5.2':
+    resolution: {integrity: sha512-tfmcyHn1Pp9YHAO5r40+UuZUPAZbUEgqTel3EuEKpmF9hPkXgR4l41853raliXnb4gwyPNoQOfvgGGlHN5WSog==}
+    deprecated: This is a stub types definition. form-data provides its own type definitions, so you do not need this installed.
 
   '@types/gensync@1.0.4':
     resolution: {integrity: sha512-C3YYeRQWp2fmq9OryX+FoDy8nXS6scQ7dPptD8LnFDAUNcKWJjXQKDNJD3HVm+kOUsXhTOkpi69vI4EuAr95bA==}
@@ -1847,6 +1857,10 @@ snapshots:
       vite: 6.1.0(@types/node@22.13.1)(jiti@2.4.2)(lightningcss@1.29.1)
 
   '@types/estree@1.0.6': {}
+
+  '@types/form-data@2.5.2':
+    dependencies:
+      form-data: 4.0.2
 
   '@types/gensync@1.0.4': {}
 
