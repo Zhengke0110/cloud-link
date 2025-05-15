@@ -1,10 +1,22 @@
 <template>
-    <div class="animate-slideUp mx-auto w-full max-w-md">
+    <div class="animate-slideUp mx-auto w-full rounded-2xl bg-white shadow-lg" :class="{
+        'max-w-xs p-6': deviceType.isMobile,
+        'max-w-md p-6': deviceType.isTablet,
+        'max-w-lg p-8': deviceType.isDesktop,
+    }">
         <div class="mb-8 text-center">
-            <h1 class="text-3xl font-bold tracking-tight text-indigo-600" :class="{ 'text-2xl': deviceType.isMobile }">
+            <h1 class="font-bold tracking-tight text-indigo-600" :class="{
+                'text-xl': deviceType.isMobile,
+                'text-2xl': deviceType.isTablet,
+                'text-3xl': deviceType.isDesktop,
+            }">
                 欢迎回来
             </h1>
-            <p class="mt-2 text-gray-600" :class="{ 'text-sm': deviceType.isMobile }">
+            <p class="mt-2 text-gray-600" :class="{
+                'text-xs': deviceType.isMobile,
+                'text-sm': deviceType.isTablet,
+                'text-base': deviceType.isDesktop,
+            }">
                 请输入您的账号信息进行登录
             </p>
         </div>
@@ -14,15 +26,29 @@
             <p class="text-sm text-red-600">{{ errors.general }}</p>
         </div>
 
-        <form @submit.prevent="handleLogin" class="space-y-6">
+        <form @submit.prevent="handleLogin" class="space-y-6" :class="{
+            'space-y-4': deviceType.isMobile,
+            'space-y-5': deviceType.isTablet,
+            'space-y-6': deviceType.isDesktop,
+        }">
             <!-- 手机号输入框 -->
             <div>
-                <label for="phone" class="block text-sm font-medium text-gray-700">手机号码</label>
+                <label for="phone" class="block font-medium text-gray-700" :class="{
+                    'text-xs': deviceType.isMobile,
+                    'text-sm': !deviceType.isMobile,
+                }">手机号码</label>
                 <div class="mt-1">
                     <input type="text" id="phone" v-model="loginForm.phone" autocomplete="tel"
-                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none sm:text-sm"
-                        :class="{ 'border-red-500': errors.phone }" placeholder="请输入手机号码" />
-                    <p v-if="errors.phone" class="mt-1 text-sm text-red-600">
+                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
+                        :class="{
+                            'border-red-500': errors.phone,
+                            'py-1.5 text-xs': deviceType.isMobile,
+                            'py-2 text-sm': !deviceType.isMobile,
+                        }" placeholder="请输入手机号码" />
+                    <p v-if="errors.phone" class="mt-1 text-red-600" :class="{
+                        'text-xs': deviceType.isMobile,
+                        'text-sm': !deviceType.isMobile,
+                    }">
                         {{ errors.phone }}
                     </p>
                 </div>
@@ -30,20 +56,31 @@
 
             <!-- 密码输入框 -->
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">密码</label>
+                <label for="password" class="block font-medium text-gray-700" :class="{
+                    'text-xs': deviceType.isMobile,
+                    'text-sm': !deviceType.isMobile,
+                }">密码</label>
                 <div class="relative mt-1">
                     <input :type="showPassword ? 'text' : 'password'" id="password" v-model="loginForm.pwd"
-                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none sm:text-sm"
-                        :class="{ 'border-red-500': errors.pwd }" placeholder="请输入密码" />
+                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
+                        :class="{
+                            'border-red-500': errors.pwd,
+                            'py-1.5 text-xs': deviceType.isMobile,
+                            'py-2 text-sm': !deviceType.isMobile,
+                        }" placeholder="请输入密码" />
                     <button type="button" @click="showPassword = !showPassword"
                         class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500">
                         <i :class="[
                             showPassword
                                 ? 'icon-[material-symbols--visibility-off-outline]'
                                 : 'icon-[material-symbols--visibility-outline]',
-                        ]" class="size-5"></i>
+                            deviceType.isMobile ? 'size-4' : 'size-5',
+                        ]"></i>
                     </button>
-                    <p v-if="errors.pwd" class="mt-1 text-sm text-red-600">
+                    <p v-if="errors.pwd" class="mt-1 text-red-600" :class="{
+                        'text-xs': deviceType.isMobile,
+                        'text-sm': !deviceType.isMobile,
+                    }">
                         {{ errors.pwd }}
                     </p>
                 </div>
@@ -52,21 +89,36 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <input id="remember-me" type="checkbox" v-model="loginForm.remember"
-                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label for="remember-me" class="ml-2 block text-sm text-gray-700">记住我</label>
+                        class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" :class="{
+                            'h-3 w-3': deviceType.isMobile,
+                            'h-4 w-4': !deviceType.isMobile,
+                        }" />
+                    <label for="remember-me" class="ml-2 block text-gray-700" :class="{
+                        'text-xs': deviceType.isMobile,
+                        'text-sm': !deviceType.isMobile,
+                    }">记住我</label>
                 </div>
 
-                <div class="text-sm">
+                <div :class="{
+                    'text-xs': deviceType.isMobile,
+                    'text-sm': !deviceType.isMobile,
+                }">
                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">忘记密码?</a>
                 </div>
             </div>
 
             <div>
                 <button type="submit"
-                    class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
-                    :disabled="loading">
+                    class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+                    :class="{
+                        'py-1.5 text-xs': deviceType.isMobile,
+                        'py-2 text-sm': !deviceType.isMobile,
+                    }" :disabled="loading">
                     <span v-if="loading" class="inline-flex items-center">
-                        <i class="icon-[eos-icons--loading] mr-2 animate-spin"></i>
+                        <i class="icon-[eos-icons--loading] mr-2 animate-spin" :class="{
+                            'size-3': deviceType.isMobile,
+                            'size-4': !deviceType.isMobile,
+                        }"></i>
                         登录中...
                     </span>
                     <span v-else>登录</span>

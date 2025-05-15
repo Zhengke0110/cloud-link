@@ -18,7 +18,7 @@
                 <div class="relative flex-grow">
                     <div class="animate-slideUp w-full my-0 mx-auto py-0 px-5 box-border transform transition-all duration-300"
                         :class="{
-                            'max-w-[300px]': deviceType.isMobile,
+                            'max-w-[350px]': deviceType.isMobile,
                             'max-w-[400px]': deviceType.isTablet,
                             'max-w-[500px]': deviceType.isDesktop
                         }">
