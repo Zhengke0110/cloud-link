@@ -1,0 +1,2122 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "CloudLink",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/account-server/api/traffic/v1/reduce": {
+      "post": {
+        "summary": "使用流量包接口",
+        "deprecated": false,
+        "description": "该接口接收一个UseTrafficRequest对象作为请求体，处理用户使用流量包的请求\n主要用于减少用户账户中的流量余额",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UseTrafficRequest",
+                "description": "包含用户ID和所需减少的流量信息的请求对象"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/account-server/api/traffic/v1/page": {
+      "post": {
+        "summary": "分页查询流量包列表，查看可用的流量包",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrafficPageRequest",
+                "description": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/account-server/api/traffic/v1/detail/{trafficId}": {
+      "get": {
+        "summary": "查找某个流量包详情",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "trafficId",
+            "in": "path",
+            "description": "流量包的唯一标识符",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/account-server/api/account/v1/upload": {
+      "post": {
+        "summary": "文件上传接口，最大默认1M",
+        "deprecated": false,
+        "description": "该方法负责处理用户图像的上传请求，包括对文件的格式、扩展名等进行判断\n使用@PostMapping注解限定HTTP的POST请求，路径为\"upload\"",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "description": "用户上传的文件，通过@RequestPart注解指定文件参数名为\"file\"",
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/account-server/api/account/v1/register": {
+      "post": {
+        "summary": "用户注册",
+        "deprecated": false,
+        "description": "<p>\n此方法处理用户注册请求，接收注册信息并返回注册结果\n使用PostMapping注解限定HTTP请求方法为POST，路径为\"register\"\n使用RequestBody注解将HTTP请求的JSON格式请求体转换为AccountRegisterRequest对象",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountRegisterRequest",
+                "description": "包含用户注册信息的请求对象"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/account-server/api/account/v1/login": {
+      "post": {
+        "summary": "用户登录",
+        "deprecated": false,
+        "description": "<p>\n此方法处理用户的登录请求它期望接收一个AccountLoginRequest对象作为参数，\n该对象中包含了登录所需的信息，例如用户名和密码这些信息用于验证用户身份\n登录成功后，将返回一个包含成功信息的JsonData对象；如果登录失败，则返回一个包含错误信息的JsonData对象",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountLoginRequest",
+                "description": "包含用户登录信息的请求对象"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/account-server/api/account/v1/detail": {
+      "get": {
+        "summary": "获取账户详情信息",
+        "deprecated": false,
+        "description": "<p>\n通过GET请求调用此方法，以获取账户的详细信息该方法不接受任何参数，\n并返回一个包含账户详情的JsonData对象主要用于前端展示账户详细信息的页面",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/account-server/api/account/v1/update": {
+      "post": {
+        "summary": "更新用户信息",
+        "deprecated": false,
+        "description": "<p>\n此方法处理用户信息更新请求，接收更新信息并返回更新结果\n使用PostMapping注解限定HTTP请求方法为POST，路径为\"update\"\n使用RequestBody注解将HTTP请求体转换为AccountUpdateRequest对象",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountUpdateRequest",
+                "description": "包含用户更新信息的请求对象"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/account-server/api/notify/v1/captcha": {
+      "get": {
+        "summary": "生成验证码",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/account-server/api/notify/v1/send_code": {
+      "post": {
+        "summary": "处理发送验证码请求",
+        "deprecated": false,
+        "description": "该方法用于验证用户提交的验证码，并在验证成功后发送新的验证码",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendCodeRequest",
+                "description": "包含用户提交的验证码和接收新验证码的目标地址"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/shop-server/api/product/v1/list": {
+      "get": {
+        "summary": "查看商品列表接口",
+        "deprecated": false,
+        "description": "<p>\n此方法响应GET请求，提供商品列表数据\n它没有输入参数，因为GET请求的性质不需要用户发送数据到服务器\n返回的是一个JsonData对象，其中包含了从productService获取的商品列表\n使用List<ProductVO>类型来存储商品数据，ProductVO代表商品的视图对象，用于数据传输\n使用JsonData.buildSuccess方法构建返回对象，确保客户端能够接收到成功状态和商品列表数据",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/shop-server/api/product/v1/detail/{productId}": {
+      "get": {
+        "summary": "查看商品详情",
+        "deprecated": false,
+        "description": "<p>\n此方法通过商品ID获取并返回商品的详细信息它使用GET请求来访问资源，\n并以JSON格式返回商品信息",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "商品ID，用于标识特定的商品",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/shop-server/api/callback/order/v1/wechat": {
+      "post": {
+        "summary": "WechatPayCallback",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayCallbackRequest",
+                "description": ""
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/shop-server/api/order/v1/token": {
+      "get": {
+        "summary": "获取下单令牌",
+        "deprecated": false,
+        "description": "<p>\n本方法用于生成和返回一个下单所需的令牌(token)，以确保用户在下单时的操作合法性\n它首先从ThreadLocal中获取当前用户的账户编号，然后生成一个随机令牌，并将该令牌与账户编号组合，\n作为Redis中的键，用于存储和验证令牌的有效性",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/shop-server/api/order/v1/page": {
+      "post": {
+        "summary": "处理产品订单的分页查询请求",
+        "deprecated": false,
+        "description": "<p>\n该方法接收一个ProductOrderPageRequest对象作为参数，其中包含了分页查询的相关信息，\n如页码、每页记录数以及可能的筛选条件等它通过HTTP POST方法接收请求，\n请求体中包含分页查询的具体参数，并返回一个JsonData对象，其中包含了查询结果",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductOrderPageRequest",
+                "description": "包含分页查询信息的请求对象"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/shop-server/api/order/v1/queryState": {
+      "get": {
+        "summary": "查询订单状态",
+        "deprecated": false,
+        "description": "<p>\n此方法通过订单号查询订单的状态，并以Json格式返回结果\n如果订单号不存在或状态为空，则返回特定的错误码\n否则，返回订单的当前状态",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "outTradeNo",
+            "in": "query",
+            "description": "订单号，用于查询订单状态",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/shop-server/api/order/v1/confirm": {
+      "post": {
+        "summary": "确认订单接口",
+        "deprecated": false,
+        "description": "根据订单请求信息，确认订单并根据支付类型和客户端类型进行相应处理",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmOrderRequest",
+                "description": "订单请求对象，包含订单相关信息"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/domain/v1/list": {
+      "get": {
+        "summary": "列举全部可用域名列表",
+        "deprecated": false,
+        "description": "<p>\n该方法通过GET请求获取系统中全部可用的域名列表，并以JSON格式返回\n主要用于前端展示或系统间数据交互",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/domain/v1/test": {
+      "get": {
+        "summary": "处理测试请求，主要用于验证短链码和账户号的关联",
+        "deprecated": false,
+        "description": "此方法通过执行Lua脚本在Redis中检查和设置短链码与账户号的映射关系",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "短链码，用于识别特定的资源或信息",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountNo",
+            "in": "query",
+            "description": "账户号，代表用户账户的唯一标识",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/{shortLinkCode}": {
+      "get": {
+        "summary": "转发请求",
+        "deprecated": false,
+        "description": "解析 301还是302，这边是返回http code是302\n<p>\n知识点一，为什么要用 301 跳转而不是 302 呐？\n<p>\n301 是永久重定向，302 是临时重定向。\n<p>\n短地址一经生成就不会变化，所以用 301 是同时对服务器压力也会有一定减少\n<p>\n但是如果使用了 301，无法统计到短地址被点击的次数。\n<p>\n所以选择302虽然会增加服务器压力，但是有很多数据可以获取进行分析",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "shortLinkCode",
+            "in": "path",
+            "description": "短链接代码",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/group/v1/add": {
+      "post": {
+        "summary": "处理添加链接组的请求",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkGroupAddRequest",
+                "description": "包含要添加的链接组信息的请求体"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/group/v1/del/{groupId}": {
+      "delete": {
+        "summary": "处理删除链接分组的请求",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "需要删除的分组的ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/group/v1/detail/{groupId}": {
+      "get": {
+        "summary": "获取指定ID的友链分组详细信息",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "友链分组的唯一标识符",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/group/v1/list": {
+      "get": {
+        "summary": "获取所有链接分组信息",
+        "deprecated": false,
+        "description": "<p>\n该方法通过GET请求处理[list]路径，返回所有链接分组的列表\n它调用了LinkGroupService中的listAllGroup方法来获取数据，并将结果封装到JsonData中返回",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/group/v1/update": {
+      "put": {
+        "summary": "处理更新链接分组的请求",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkGroupUpdateRequest",
+                "description": "包含链接分组更新信息的请求对象"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/link/v1/check": {
+      "get": {
+        "summary": "检查短链的有效性",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "shortLinkCode",
+            "in": "query",
+            "description": "短链代码，用于解析短链信息",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rpc-token",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "example": "timu.fun",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/link/v1/add": {
+      "post": {
+        "summary": "创建短链接的控制器方法",
+        "deprecated": false,
+        "description": "该方法接收一个HTTP POST请求，用于添加新的短链接信息",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShortLinkAddRequest",
+                "description": "包含短链接相关数据的请求对象，由请求体自动转换而来"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/link/v1/page": {
+      "post": {
+        "summary": "根据组ID分页查询短链接信息",
+        "deprecated": false,
+        "description": "此方法使用@RequestMapping注解来映射HTTP请求到此方法\n请求体应包含ShortLinkPageRequest对象，其中包含分页查询所需的信息",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShortLinkPageRequest",
+                "description": "ShortLinkPageRequest对象，包含分页查询参数"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/link/v1/del": {
+      "post": {
+        "summary": "删除短链",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShortLinkDelRequest",
+                "description": ""
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/link-server/api/link/v1/update": {
+      "post": {
+        "summary": "更新短链",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShortLinkUpdateRequest",
+                "description": ""
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/data-server/api/visitStats/v1/pageRecord": {
+      "post": {
+        "summary": "处理页面访问记录的请求",
+        "deprecated": false,
+        "description": "<p>\n此方法用于处理分页查询访问记录的请求它首先检查请求的总条数是否超过限制，\n如果超过，则返回错误信息；否则，调用服务层方法获取分页数据并返回",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VisitRecordPageRequest",
+                "description": "包含分页查询信息的请求对象"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/data-server/api/visitStats/v1/regionDay": {
+      "post": {
+        "summary": "查询时间范围内的，地区访问分布",
+        "deprecated": false,
+        "description": "<p>\n该方法通过接收一个请求对象来查询特定时间范围内不同地区的访问分布情况\n它使用了@RequestMapping注解来映射HTTP请求到此方法，并使用@RequestBody注解来将HTTP请求的正文转换为RegionQueryRequest对象",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionQueryRequest",
+                "description": "包含查询条件的请求对象，如开始时间、结束时间等"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/data-server/api/visitStats/v1/trend": {
+      "post": {
+        "summary": "访问趋势图",
+        "deprecated": false,
+        "description": "<p>\n该方法用于处理查询访问趋势的请求它接收一个VisitTrendQueryRequest对象作为参数，\n该对象包含了查询访问趋势所需的参数信息方法通过调用statsService的queryVisitTrend方法\n获取访问趋势数据，并将结果封装在JsonData对象中返回",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VisitTrendQueryRequest",
+                "description": "包含查询参数的VisitTrendQueryRequest对象"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/data-server/api/visitStats/v1/frequentSource": {
+      "post": {
+        "summary": "高频来源统计接口",
+        "deprecated": false,
+        "description": "该接口用于获取系统中频繁访问的来源信息，通过分析访问数据来确定主要的流量来源\n对于参数和返回值的详细说明，采用JSON格式进行数据交互，以适应前后端分离的架构设计",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FrequentSourceRequset",
+                "description": "包含查询条件的请求对象，通过RequestBody注解接收前端传来的JSON数据"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/data-server/api/visitStats/v1/deviceInfo": {
+      "post": {
+        "summary": "查询设备访问分布情况",
+        "deprecated": false,
+        "description": "<p>\n该方法通过接收一个QueryDeviceRequest对象作为参数，来查询设备的访问分布情况\n它使用了@RequestMapping注解来映射HTTP请求到此方法，参数通过@RequestBody注解指定，意味着请求体中的内容将被转换为方法参数",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "example": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA",
+            "schema": {
+              "type": "string",
+              "default": "cloud-linkeyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbG91ZCIsImhlYWRfaW1nIjoiaHR0cHM6Ly9sb3JlbWZsaWNrci5jb20vNDAwLzQwMD9sb2NrPTgzNTQ4MDIyMTQ2OTQ4MjMiLCJhY2NvdW50X25vIjoxMTI2MjU2MjcyNzE1Mjg0NDgwLCJ1c2VybmFtZSI6IuminOaWh-mfrCIsIm1haWwiOiJrMXprNW0ubTEwMjlAcXEuY29tIiwicGhvbmUiOiIxOTAyNTc4MTQ1MCIsImF1dGgiOiJERUZBVUxUIiwiaWF0IjoxNzQ3MTUxMTA1LCJleHAiOjE3NDc3NTU5MDV9.noDT0A7_fbdlGf5nX1IMQBAIUOdRvNzK-yFtvUX8hlA"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryDeviceRequest",
+                "description": "包含查询设备访问分布所需信息的请求对象"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "JsonData": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "状态码 0 表示成功"
+          },
+          "data": {
+            "type": "object",
+            "properties": {},
+            "description": "数据"
+          },
+          "msg": {
+            "type": "string",
+            "description": "描述"
+          }
+        }
+      },
+      "PayCallbackRequest": {
+        "type": "object",
+        "properties": {
+          "outTradeNo": {
+            "type": "string",
+            "description": ""
+          },
+          "tradeState": {
+            "type": "string",
+            "description": ""
+          },
+          "accountNo": {
+            "type": "string",
+            "description": ""
+          }
+        }
+      },
+      "SendCodeRequest": {
+        "type": "object",
+        "properties": {
+          "captcha": {
+            "type": "string",
+            "description": ""
+          },
+          "to": {
+            "type": "string",
+            "description": ""
+          }
+        }
+      },
+      "AccountRegisterRequest": {
+        "type": "object",
+        "properties": {
+          "headImg": {
+            "type": "string",
+            "description": "头像"
+          },
+          "phone": {
+            "type": "string",
+            "description": "手机号"
+          },
+          "pwd": {
+            "type": "string",
+            "description": "密码"
+          },
+          "mail": {
+            "type": "string",
+            "description": "邮箱"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名"
+          },
+          "code": {
+            "type": "string",
+            "description": "短信验证码"
+          }
+        }
+      },
+      "LinkGroupAddRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "组名"
+          }
+        }
+      },
+      "ShortLinkAddRequest": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "integer",
+            "description": "组",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string",
+            "description": "短链标题"
+          },
+          "originalUrl": {
+            "type": "string",
+            "description": "原生url"
+          },
+          "domainId": {
+            "type": "integer",
+            "description": "域名id",
+            "format": "int64"
+          },
+          "domainType": {
+            "type": "string",
+            "description": "域名类型"
+          },
+          "expired": {
+            "type": "string",
+            "description": "过期时间"
+          }
+        }
+      },
+      "ConfirmOrderRequest": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "description": "商品id",
+            "format": "int64"
+          },
+          "buyNum": {
+            "type": "integer",
+            "description": "购买数量"
+          },
+          "clientType": {
+            "type": "string",
+            "description": "终端类型"
+          },
+          "payType": {
+            "type": "string",
+            "description": "支付类型，微信-银行-支付宝"
+          },
+          "totalAmount": {
+            "type": "number",
+            "description": "订单总金额"
+          },
+          "payAmount": {
+            "type": "number",
+            "description": "订单实际支付价格"
+          },
+          "token": {
+            "type": "string",
+            "description": "防重令牌"
+          },
+          "billType": {
+            "type": "string",
+            "description": "发票类型：0->不开发票；1->电子发票；2->纸质发票"
+          },
+          "billHeader": {
+            "type": "string",
+            "description": "发票抬头"
+          },
+          "billContent": {
+            "type": "string",
+            "description": "发票内容"
+          },
+          "billReceiverPhone": {
+            "type": "string",
+            "description": "发票收票人电话"
+          },
+          "billReceiverEmail": {
+            "type": "string",
+            "description": "发票收票人邮箱"
+          }
+        }
+      },
+      "ProductOrderPageRequest": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "description": "状态"
+          },
+          "page": {
+            "type": "integer",
+            "description": "第几页"
+          },
+          "size": {
+            "type": "integer",
+            "description": "每页多少条"
+          }
+        }
+      },
+      "UseTrafficRequest": {
+        "type": "object",
+        "properties": {
+          "accountNo": {
+            "type": "integer",
+            "description": "账号",
+            "format": "int64"
+          },
+          "bizId": {
+            "type": "string",
+            "description": "业务id, 短链码"
+          }
+        }
+      },
+      "VisitRecordPageRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": ""
+          },
+          "size": {
+            "type": "integer",
+            "description": ""
+          },
+          "page": {
+            "type": "integer",
+            "description": ""
+          }
+        }
+      },
+      "AccountLoginRequest": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "description": ""
+          },
+          "pwd": {
+            "type": "string",
+            "description": ""
+          }
+        }
+      },
+      "LinkGroupUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "组id",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string",
+            "description": "组名"
+          }
+        }
+      },
+      "ShortLinkPageRequest": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "integer",
+            "description": "组",
+            "format": "int64"
+          },
+          "page": {
+            "type": "integer",
+            "description": "第几页"
+          },
+          "size": {
+            "type": "integer",
+            "description": "每页多少条"
+          }
+        }
+      },
+      "TrafficPageRequest": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "description": ""
+          },
+          "size": {
+            "type": "integer",
+            "description": ""
+          }
+        }
+      },
+      "RegionQueryRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": ""
+          },
+          "startTime": {
+            "type": "string",
+            "description": ""
+          },
+          "endTime": {
+            "type": "string",
+            "description": ""
+          }
+        }
+      },
+      "ShortLinkDelRequest": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "integer",
+            "description": "组",
+            "format": "int64"
+          },
+          "mappingId": {
+            "type": "integer",
+            "description": "映射id",
+            "format": "int64"
+          },
+          "code": {
+            "type": "string",
+            "description": "短链码"
+          }
+        }
+      },
+      "VisitTrendQueryRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": ""
+          },
+          "type": {
+            "type": "string",
+            "description": "跨天、当天24小时、分钟级别"
+          },
+          "startTime": {
+            "type": "string",
+            "description": ""
+          },
+          "endTime": {
+            "type": "string",
+            "description": ""
+          }
+        }
+      },
+      "AccountUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "headImg": {
+            "type": "string",
+            "description": "头像"
+          },
+          "mail": {
+            "type": "string",
+            "description": "邮箱"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名"
+          }
+        }
+      },
+      "ShortLinkUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "type": "integer",
+            "description": "组",
+            "format": "int64"
+          },
+          "code": {
+            "type": "string",
+            "description": "短链码"
+          },
+          "title": {
+            "type": "string",
+            "description": "标题"
+          },
+          "domainId": {
+            "type": "integer",
+            "description": "域名id",
+            "format": "int64"
+          },
+          "domainType": {
+            "type": "string",
+            "description": "域名类型"
+          }
+        }
+      },
+      "FrequentSourceRequset": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": ""
+          },
+          "startTime": {
+            "type": "string",
+            "description": ""
+          },
+          "endTime": {
+            "type": "string",
+            "description": ""
+          }
+        }
+      },
+      "QueryDeviceRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": ""
+          },
+          "startTime": {
+            "type": "string",
+            "description": ""
+          },
+          "endTime": {
+            "type": "string",
+            "description": ""
+          }
+        }
+      }
+    },
+    "securitySchemes": {}
+  },
+  "servers": [],
+  "security": []
+}
