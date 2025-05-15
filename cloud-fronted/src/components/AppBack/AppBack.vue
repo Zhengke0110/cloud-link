@@ -1,10 +1,12 @@
 <template>
-    <div
-        class="z-10 fixed left-0 top-0 right-0 p-6 box-border flex items-center justify-between transition-all duration-200">
+    <div class="z-10 fixed left-0 top-0 right-0 p-6 box-border flex items-center justify-between transition-all duration-200"
+        :class="{ 'p-4': deviceType.isMobile }">
         <RouterLink :to="currentPath.patch"
-            class="text-[var(--button-color,#91949b)] no-underline relative text-sm font-[inherit] tracking-[-0.125px] py-[10px] pr-4 pl-3 font-semibold transition duration-200 opacity-100 hover:scale-105 active:scale-50">
+            class="text-[var(--button-color,#91949b)] no-underline relative text-sm font-[inherit] tracking-[-0.125px] py-[10px] pr-4 pl-3 font-semibold transition duration-200 opacity-100 hover:scale-105 active:scale-50"
+            :class="{ 'py-2 px-2': deviceType.isMobile }">
             <div class="relative z-10 flex items-center gap-2 min-h-[20px] transition duration-200">
-                <i class="icon-[material-symbols--swipe-left-alt-outline-rounded] size-5"></i>
+                <i class="icon-[material-symbols--swipe-left-alt-outline-rounded]"
+                    :class="deviceType.isMobile ? 'size-4' : 'size-5'"></i>
                 {{ currentPath.text }}
             </div>
         </RouterLink>
@@ -14,6 +16,7 @@
 <script setup lang="ts">
 import { reactive, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { deviceType } from "@/utils/flexible";
 
 const route = useRoute();
 
