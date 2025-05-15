@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,13 +49,15 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     private final AccountManager accountManager;
     private final RabbitTemplate rabbitTemplate;
     private final RabbitMQConfig rabbitMQConfig;
+    private final RedisTemplate<Object, Object> redisTemplate;
 
 
-    public AccountServiceImpl(NotifyService notifyService, AccountManager accountManager, RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig) {
+    public AccountServiceImpl(NotifyService notifyService, AccountManager accountManager, RabbitTemplate rabbitTemplate, RabbitMQConfig rabbitMQConfig, RedisTemplate<Object, Object> redisTemplate) {
         this.notifyService = notifyService;
         this.accountManager = accountManager;
         this.rabbitTemplate = rabbitTemplate;
         this.rabbitMQConfig = rabbitMQConfig;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -176,6 +179,19 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         return JsonData.buildSuccess(accountVO);
     }
 
+    /**
+     * 更新用户信息
+     * <p>
+     * 此方法用于处理用户信息的更新请求，主要执行以下操作：
+     * 1. 从线程局部变量中获取当前登录用户信息
+     * 2. 对请求参数进行校验，确保用户已登录
+     * 3. 根据请求内容设置需要更新的用户信息字段
+     * 4. 调用账户管理器更新数据库中的用户信息
+     * 5. 根据更新结果返回相应的JSON数据
+     *
+     * @param request 包含用户信息更新请求的参数，如用户名、头像、邮箱等
+     * @return 返回一个JsonData对象，表示更新操作的结果
+     */
     @Override
     public JsonData updateInfo(AccountUpdateRequest request) {
         // 从线程局部变量中获取当前登录用户信息
@@ -204,9 +220,51 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         // 调用账户管理器更新账户信息
         int rows = accountManager.updateInfo(accountDO);
 
+        // 记录日志
         logger.info("更新用户信息，用户ID:{}，更新结果:{}", loginUser.getAccountNo(), rows > 0);
 
+        // 根据更新结果返回相应的JSON数据
         return rows > 0 ? JsonData.buildSuccess() : JsonData.buildResult(BizCodeEnum.ACCOUNT_UPDATE_ERROR);
+    }
+
+    /**
+     * 用户登出功能
+     * <p>
+     * 该方法处理用户登出请求，清除当前用户的登录状态
+     * 将token加入黑名单，确保该token无法再次使用
+     *
+     * @param token 用户当前的token
+     * @return 返回登出结果的JSON数据
+     */
+    @Override
+    public JsonData logout(String token) {
+        // 从线程局部变量中获取当前登录用户信息
+        LoginUser loginUser = LoginInterceptor.threadLocal.get();
+
+        if (loginUser == null) {
+            return JsonData.buildResult(BizCodeEnum.ACCOUNT_UNLOGIN);
+        }
+
+        try {
+            // 清除线程局部变量中的用户信息
+            LoginInterceptor.threadLocal.remove();
+
+            // 将token加入黑名单
+            if (StringUtils.isNotBlank(token)) {
+                boolean added = JWTUtil.addToBlacklist(token, redisTemplate);
+                if (!added) {
+                    logger.warn("添加token到黑名单失败，token可能已过期: {}", token);
+                }
+            }
+
+            // 记录用户登出日志
+            logger.info("用户登出成功，用户ID:{}", loginUser.getAccountNo());
+
+            return JsonData.buildSuccess("登出成功");
+        } catch (Exception e) {
+            logger.error("用户登出异常：{}", e.getMessage());
+            return JsonData.buildError("登出失败，请重试");
+        }
     }
 
     /**

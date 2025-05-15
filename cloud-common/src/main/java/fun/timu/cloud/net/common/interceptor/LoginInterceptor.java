@@ -10,6 +10,7 @@ import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
@@ -22,14 +23,22 @@ public class LoginInterceptor implements HandlerInterceptor {
     private static Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
     public static ThreadLocal<LoginUser> threadLocal = new ThreadLocal<>();
 
+    private final RedisTemplate<Object, Object> redisTemplate;
+
+    // 添加构造函数接收RedisTemplate
+    public LoginInterceptor(RedisTemplate<Object, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
     /**
-     * 在请求处理之前进行拦截处理
+     * 在请求处理之前进行预处理
+     * 主要用于处理跨域请求和验证用户登录状态
      *
-     * @param request  请求对象，用于获取请求头和请求参数
-     * @param response 响应对象，用于设置响应状态码和响应体
-     * @param handler  处理请求的处理器对象
-     * @return boolean 返回值决定是否继续执行其他拦截器和目标方法
-     * @throws Exception 可能抛出的异常
+     * @param request  HttpServletRequest对象，用于获取请求信息
+     * @param response HttpServletResponse对象，用于发送响应信息
+     * @param handler  请求处理者对象，通常是一个处理器方法
+     * @return boolean 返回值决定是否继续执行后续的请求处理方法
+     * @throws Exception 如果预处理过程中发生异常，则抛出此异常
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -48,6 +57,13 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         // 如果获取到了访问令牌
         if (StringUtils.isNotBlank(accessToken)) {
+            // 检查token是否在黑名单中
+            if (JWTUtil.isInBlacklist(accessToken, redisTemplate)) {
+                logger.info("Token在黑名单中，拒绝访问");
+                CommonUtil.sendJsonMessage(response, JsonData.buildResult(BizCodeEnum.ACCOUNT_UNLOGIN));
+                return false;
+            }
+
             // 验证JWT令牌的有效性
             Claims claims = JWTUtil.checkJWT(accessToken);
             if (claims == null) {
@@ -65,14 +81,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             String auth = (String) claims.get("auth");
 
             // 构建登录用户对象
-            LoginUser loginUser = LoginUser.builder()
-                    .accountNo(accountNo)
-                    .auth(auth)
-                    .phone(phone)
-                    .headImg(headImg)
-                    .mail(mail)
-                    .username(username)
-                    .build();
+            LoginUser loginUser = LoginUser.builder().accountNo(accountNo).auth(auth).phone(phone).headImg(headImg).mail(mail).username(username).build();
 
             // 将登录用户对象存储在ThreadLocal中，以便后续使用
             threadLocal.set(loginUser);
@@ -83,7 +92,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         CommonUtil.sendJsonMessage(response, JsonData.buildResult(BizCodeEnum.ACCOUNT_UNLOGIN));
         return false;
     }
-
 
     /**
      * 在请求完成后执行的操作

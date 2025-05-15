@@ -52,5 +52,14 @@ public interface AccountService extends IService<Account> {
      * @return 返回更新结果的JsonData对象
      */
     JsonData updateInfo(AccountUpdateRequest request);
+
+    /**
+     * 用户登出
+     *
+     * @param token 当前用户的token
+     * @return 登出结果
+     */
+    JsonData logout(String token);
+
 }
 

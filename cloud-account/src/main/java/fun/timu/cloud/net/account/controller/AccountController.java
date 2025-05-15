@@ -7,8 +7,11 @@ import fun.timu.cloud.net.account.service.AccountService;
 import fun.timu.cloud.net.account.service.FileService;
 import fun.timu.cloud.net.common.enums.BizCodeEnum;
 import fun.timu.cloud.net.common.util.JsonData;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户控制器相关接口
@@ -113,5 +116,23 @@ public class AccountController {
         return jsonData;
     }
 
+    /**
+     * 用户登出
+     * <p>
+     * 此方法处理用户登出请求，使当前token失效
+     *
+     * @param request HTTP请求对象，用于获取当前token
+     * @return 返回登出结果
+     */
+    @GetMapping("logout")
+    public JsonData logout(HttpServletRequest request) {
+        // 从请求头或参数中获取token
+        String token = request.getHeader("token");
+        if (StringUtils.isBlank(token)) {
+            token = request.getParameter("token");
+        }
+        // 调用登出服务
+        return accountService.logout(token);
+    }
 
 }
