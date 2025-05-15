@@ -330,6 +330,35 @@
         "security": []
       }
     },
+    "/account-server/api/account/v1/logout": {
+      "get": {
+        "summary": "用户登出",
+        "deprecated": false,
+        "description": "<p>\n此方法处理用户登出请求，使当前token失效",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
     "/account-server/api/notify/v1/captcha": {
       "get": {
         "summary": "生成验证码",

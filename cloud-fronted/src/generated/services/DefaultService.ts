@@ -181,6 +181,19 @@ export class DefaultService {
         });
     }
     /**
+     * 用户登出
+     * <p>
+     * 此方法处理用户登出请求，使当前token失效
+     * @returns JsonData
+     * @throws ApiError
+     */
+    public static getAccountServerApiAccountV1Logout(): CancelablePromise<JsonData> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/account-server/api/account/v1/logout',
+        });
+    }
+    /**
      * 生成验证码
      * @returns any
      * @throws ApiError
