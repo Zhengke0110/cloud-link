@@ -11,9 +11,31 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/Home.vue"),
   },
   {
+    path: "/login",
+    redirect: "/account/login",
+  },
+  {
+    path: "/register",
+    redirect: "/account/register",
+  },
+  {
+    path: "/account",
+    name: "Account",
+    component: () => import("@/layouts/AccountLayout.vue"),
+    children: [{
+      path: "login",
+      name: "Login",
+      component: () => import("@/views/account/Login.vue"),
+    }, {
+      path: "register",
+      name: "Register",
+      component: () => import("@/views/account/Register.vue"),
+    },]
+  },
+  {
     path: "/:pathMatch(.*)*",
-    name: "error",
-    component: () => import("@/views/Error.vue"),
+    name: "NotFound",
+    component: () => import("@/views/not-found"),
   },
 ];
 
