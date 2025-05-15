@@ -180,6 +180,7 @@ export const AccountUpdate = async (info: { headImg?: string; mail?: string; use
 
 
 
+// TODO 未测试:文件上传
 export const AccountUploadImage = async (file: File): Promise<any> => {
     const formData = new FormData();
     formData.append('file', file);

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
+import { LayoutMenu } from '@/config'
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
@@ -9,6 +10,7 @@ const routes: RouteRecordRaw[] = [
     path: "/home",
     name: "home",
     component: () => import("@/views/Home.vue"),
+    meta: { layout: LayoutMenu.BasicLayout }
   },
   {
     path: "/login",
