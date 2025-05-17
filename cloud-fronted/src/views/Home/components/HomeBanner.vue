@@ -28,7 +28,7 @@
         <div class="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col-reverse items-center justify-between gap-8 md:flex-row"
                 :class="{ 'text-center': deviceType.isMobile }">
-                <div class="mb-6 md:mb-0 md:max-w-xl md:text-left">
+                <div class="mb-6 w-full md:mb-0 md:max-w-xl md:text-left">
                     <div
                         class="mb-4 inline-block rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-800">
                         简单 · 高效 · 安全
@@ -72,9 +72,9 @@
 
                 </div>
 
-                <div class="relative">
-                    <div
-                        class="mockup-window relative z-20 rounded-xl border border-gray-200 bg-white/80 p-4 shadow-2xl backdrop-blur-sm">
+                <div class="relative w-full max-w-md">
+                    <div class="mockup-window relative z-20 rounded-xl border border-gray-200 bg-white/80 p-4 shadow-2xl backdrop-blur-sm"
+                        :class="{ 'scale-90': deviceType.isMobile }">
                         <div class="mb-6 flex items-center justify-between border-b border-gray-100 pb-4">
                             <div class="flex items-center">
                                 <div class="mr-2 h-3 w-3 rounded-full bg-red-500"></div>
@@ -118,16 +118,16 @@
                     </div>
 
                     <!-- 装饰性元素 -->
-                    <div
-                        class="absolute -bottom-6 -left-6 z-10 h-12 w-12 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-500 shadow-lg">
+                    <div class="absolute -bottom-6 -left-6 z-10 h-12 w-12 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-500 shadow-lg"
+                        :class="{ 'h-8 w-8 -bottom-4 -left-4': deviceType.isMobile }">
                     </div>
-                    <div
-                        class="absolute -right-6 -top-6 z-10 h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 shadow-lg">
+                    <div class="absolute -right-6 -top-6 z-10 h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 shadow-lg"
+                        :class="{ 'h-7 w-7 -right-4 -top-4': deviceType.isMobile }">
                     </div>
 
                     <!-- 数据卡片装饰 -->
-                    <div
-                        class="data-card absolute -right-10 -bottom-16 z-0 hidden transform rounded-lg border border-gray-200 bg-white p-4 shadow-lg md:block">
+                    <div class="data-card absolute -right-10 -bottom-16 z-0 transform rounded-lg border border-gray-200 bg-white p-4 shadow-lg"
+                        :class="{ 'hidden md:block': deviceType.isDesktop, 'right-0 -bottom-12 scale-75': deviceType.isMobile || deviceType.isTablet }">
                         <div class="mb-1 text-xs font-medium text-gray-500">总链接点击量</div>
                         <div class="text-lg font-bold text-gray-800">2,587</div>
                         <div class="flex items-center text-xs text-green-500">
@@ -142,9 +142,9 @@
                 </div>
             </div>
 
-            <!-- 特性指示器 -->
-            <div class="mt-16 hidden justify-center gap-8 text-center md:flex">
-                <div class="feature-item">
+            <!-- 特性指示器 - 修改为在所有设备上显示 -->
+            <div class="mt-16 flex flex-wrap justify-center gap-4 gap-y-6 text-center md:gap-8">
+                <div class="feature-item w-full sm:w-auto">
                     <div class="mb-2 flex items-center justify-center gap-2 font-medium text-gray-800">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500" viewBox="0 0 20 20"
                             fill="currentColor">
@@ -156,7 +156,7 @@
                     </div>
                     <p class="text-sm text-gray-500">立即获取访问数据</p>
                 </div>
-                <div class="feature-item">
+                <div class="feature-item w-full sm:w-auto">
                     <div class="mb-2 flex items-center justify-center gap-2 font-medium text-gray-800">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500" viewBox="0 0 20 20"
                             fill="currentColor">
@@ -168,7 +168,7 @@
                     </div>
                     <p class="text-sm text-gray-500">防止链接滥用</p>
                 </div>
-                <div class="feature-item">
+                <div class="feature-item w-full sm:w-auto">
                     <div class="mb-2 flex items-center justify-center gap-2 font-medium text-gray-800">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500" viewBox="0 0 20 20"
                             fill="currentColor">
@@ -281,6 +281,18 @@ import { deviceType } from "@/utils/flexible";
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* 添加移动端特定样式 */
+@media (max-width: 768px) {
+    .mockup-window {
+        margin: 0 auto;
+    }
+
+    .feature-item {
+        max-width: none;
+        padding: 0 1rem;
     }
 }
 </style>

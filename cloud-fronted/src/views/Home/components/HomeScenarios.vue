@@ -1,5 +1,5 @@
 <template>
-    <section class="relative overflow-hidden py-24">
+    <section class="relative overflow-hidden py-16 md:py-24">
         <!-- 背景装饰元素 -->
         <div class="absolute inset-0 z-0">
             <div class="grid-pattern absolute inset-0 opacity-5"></div>
@@ -9,57 +9,56 @@
             <div class="absolute top-1/3 right-1/4 h-64 w-64 rounded-full bg-purple-100/30 opacity-60 blur-3xl"></div>
         </div>
 
-        <!-- 漂浮元素装饰 -->
+        <!-- 漂浮元素装饰 - 在移动端隐藏部分元素 -->
         <div class="absolute inset-0 z-0 overflow-hidden">
-            <div
-                class="floating-element absolute top-[20%] right-[15%] h-12 w-12 rounded-lg border border-blue-200/50 bg-white/80 shadow-lg backdrop-blur-sm">
-            </div>
-            <div
-                class="floating-element-slow absolute top-[25%] left-[10%] h-10 w-10 rotate-12 rounded-full border border-indigo-200/50 bg-white/80 shadow-lg backdrop-blur-sm">
-            </div>
-            <div
-                class="floating-element-delay absolute top-[45%] left-[25%] h-16 w-16 -rotate-12 rounded-md border border-purple-200/50 bg-white/50 shadow-lg backdrop-blur-sm">
-            </div>
+            <div class="floating-element absolute top-[20%] right-[15%] h-12 w-12 rounded-lg border border-blue-200/50 bg-white/80 shadow-lg backdrop-blur-sm"
+                :class="{ hidden: deviceType.isMobile }"></div>
+            <div class="floating-element-slow absolute top-[25%] left-[10%] h-10 w-10 rotate-12 rounded-full border border-indigo-200/50 bg-white/80 shadow-lg backdrop-blur-sm"
+                :class="{ hidden: deviceType.isMobile }"></div>
+            <div class="floating-element-delay absolute top-[45%] left-[25%] h-16 w-16 -rotate-12 rounded-md border border-purple-200/50 bg-white/50 shadow-lg backdrop-blur-sm"
+                :class="{ hidden: deviceType.isMobile }"></div>
             <div
                 class="floating-element-delay-more absolute right-[20%] bottom-[25%] h-8 w-8 rotate-45 rounded-full border border-blue-200/50 bg-white/80 shadow-lg backdrop-blur-sm">
             </div>
         </div>
 
         <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- 标题区域 -->
-            <div class="mb-20 text-center">
-                <span class="animated-gradient-badge mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
+            <!-- 标题区域 - 调整移动端字体大小 -->
+            <div class="mb-12 text-center md:mb-20">
+                <span
+                    class="animated-gradient-badge mb-3 inline-block rounded-full px-3 py-1 text-xs font-medium md:mb-4 md:px-4 md:py-1.5 md:text-sm">
                     探索更多应用可能性
                 </span>
                 <h2
-                    class="reveal-text mb-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent md:text-5xl">
+                    class="reveal-text mb-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-2xl font-extrabold tracking-tight text-transparent md:mb-6 md:text-4xl lg:text-5xl">
                     丰富的应用场景
                 </h2>
-                <p class="mx-auto max-w-2xl text-lg leading-relaxed text-gray-600 md:text-xl">
+                <p class="mx-auto max-w-2xl text-sm leading-relaxed text-gray-600 md:text-xl">
                     无论您是电商营销、社群运营还是数据分析，我们的短链接解决方案都能满足您的专业需求
                 </p>
-                <div class="mt-8 flex justify-center">
-                    <div class="h-1 w-24 rounded-full bg-gradient-to-r from-indigo-300 via-blue-500 to-indigo-600">
+                <div class="mt-6 flex justify-center md:mt-8">
+                    <div
+                        class="h-1 w-16 rounded-full bg-gradient-to-r from-indigo-300 via-blue-500 to-indigo-600 md:w-24">
                     </div>
                 </div>
             </div>
 
             <!-- 替换主要场景展示部分的实现 -->
-            <div class="mx-auto mb-16">
+            <div class="mx-auto mb-12 md:mb-16">
                 <!-- 场景指示器和切换按钮 -->
-                <div class="mb-8 flex items-center justify-center">
+                <div class="mb-6 flex items-center justify-center md:mb-8">
                     <button @click="prevScene"
-                        class="mr-6 flex h-11 w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm transition-all duration-300 hover:bg-indigo-600 hover:text-white hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+                        class="mr-3 flex h-9 w-9 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm transition-all duration-300 hover:bg-indigo-600 hover:text-white hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 md:mr-6 md:h-11 md:w-11"
                         :disabled="isChangingScene">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
 
-                    <div class="flex space-x-3">
+                    <div class="flex space-x-2 md:space-x-3">
                         <button v-for="(_, index) in scenarioCards" :key="index" @click="setActiveScene(index)"
-                            class="h-3 w-3 rounded-full transition-all duration-300 hover:scale-110 hover:border-2 hover:border-indigo-200"
+                            class="h-2 w-2 rounded-full transition-all duration-300 hover:scale-110 hover:border-2 hover:border-indigo-200 md:h-3 md:w-3"
                             :class="activeSceneIndex === index
                                 ? 'scale-110 bg-indigo-600'
                                 : 'bg-gray-300'
@@ -67,63 +66,75 @@
                     </div>
 
                     <button @click="nextScene"
-                        class="ml-6 flex h-11 w-11 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm transition-all duration-300 hover:bg-indigo-600 hover:text-white hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+                        class="ml-3 flex h-9 w-9 items-center justify-center rounded-full border border-gray-100 bg-white text-gray-500 shadow-sm transition-all duration-300 hover:bg-indigo-600 hover:text-white hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 md:ml-6 md:h-11 md:w-11"
                         :disabled="isChangingScene">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
                 </div>
 
-                <!-- 固定高度的卡片显示容器 -->
-                <div class="relative mx-auto" :style="{ minHeight: scenarioMinHeight + 'px' }">
+                <!-- 固定高度的卡片显示容器 - 添加触摸事件支持 -->
+                <div class="relative mx-auto touch-pan-y" ref="scenarioContainer"
+                    :style="{ minHeight: scenarioMinHeight + 'px' }">
                     <!-- 预加载所有卡片，通过v-show控制显示 -->
                     <div v-for="(scene, index) in scenarioCards" :key="scene.title"
-                        class="invisible absolute top-0 left-0 w-full translate-x-8 transform opacity-0 transition-all duration-500"
+                        class="scenario-card invisible absolute top-0 left-0 w-full translate-x-8 transform opacity-0 transition-all duration-500"
                         :class="{
                             'visible translate-x-0 opacity-100': activeSceneIndex === index,
                         }" v-show="activeSceneIndex === index ||
                             (isChangingScene &&
                                 (index === previousIndex || index === activeSceneIndex))
                             ">
-                        <div class="transform rounded-2xl bg-white p-8 shadow-xl transition-all duration-500">
+                        <!-- 优化卡片样式，移动端更紧凑 -->
+                        <div class="transform rounded-2xl bg-white p-5 shadow-xl transition-all duration-500 md:p-8">
+                            <!-- 移动端垂直布局，桌面端水平布局 -->
                             <div class="flex flex-col md:flex-row md:items-start md:gap-8">
-                                <div class="relative mb-6 flex-shrink-0 md:mb-0">
-                                    <div class="flex h-20 w-20 items-center justify-center rounded-xl text-white shadow-lg transition-transform duration-300 hover:scale-110 hover:rotate-[-5deg]"
+                                <!-- 图标居中显示(移动端)，左对齐显示(桌面端) -->
+                                <div class="relative mx-auto mb-5 flex-shrink-0 order-1 md:mx-0 md:mb-0">
+                                    <div class="flex h-16 w-16 items-center justify-center rounded-xl text-white shadow-lg transition-transform duration-300 hover:scale-110 hover:rotate-[-5deg] md:h-20 md:w-20"
                                         :class="`bg-gradient-to-br ${scene.gradient}`">
-                                        <component :is="scene.icon" class="h-8 w-8" />
+                                        <component :is="scene.icon" class="h-7 w-7 md:h-8 md:w-8" />
                                     </div>
-                                    <div class="absolute top-1/2 left-1/2 -z-10 h-[180px] w-[180px] -translate-x-1/2 -translate-y-1/2 opacity-50 blur-[40px] transition-all duration-300 hover:h-[200px] hover:w-[200px] hover:opacity-80"
+                                    <div class="absolute top-1/2 left-1/2 -z-10 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 opacity-40 blur-[30px] transition-all duration-300 md:h-[180px] md:w-[180px] md:opacity-50 md:blur-[40px]"
                                         :style="{
-                                            background: `radial-gradient(circle at center, ${scene.color}20, transparent 70%)`,
+                                            background: `radial-gradient(circle at center, ${scene.color}30, transparent 70%)`,
                                         }"></div>
                                 </div>
 
-                                <div class="flex-grow">
-                                    <h3 class="relative mb-4 inline-block text-2xl font-bold text-gray-900">
-                                        {{ scene.title }}
-                                        <span
-                                            class="absolute bottom-[-4px] left-0 h-[3px] w-10 rounded-md bg-indigo-600 transition-all duration-300 group-hover:w-[60px]"></span>
-                                    </h3>
-                                    <p class="mb-6 text-lg leading-relaxed text-gray-600">
-                                        {{ scene.description }}
-                                    </p>
+                                <!-- 内容区域，移动端居中标题，桌面端左对齐 -->
+                                <div class="flex-grow order-2">
+                                    <div class="flex flex-col items-center md:items-start">
+                                        <h3
+                                            class="relative mb-3 text-center text-xl font-bold text-gray-900 md:mb-4 md:text-left md:text-2xl">
+                                            {{ scene.title }}
+                                            <span
+                                                class="absolute bottom-[-4px] left-1/2 h-[3px] w-10 -translate-x-1/2 transform rounded-md bg-indigo-600 transition-all duration-300 md:left-0 md:translate-x-0"></span>
+                                        </h3>
+                                        <p
+                                            class="mb-5 text-center text-sm leading-relaxed text-gray-600 md:mb-6 md:text-left md:text-lg">
+                                            {{ scene.description }}
+                                        </p>
+                                    </div>
 
-                                    <div class="sm:grid-cols-auto-fit mb-6 grid grid-cols-1 gap-4 sm:gap-4">
+                                    <!-- 特性列表，移动端更紧凑 -->
+                                    <div class="mb-5 grid grid-cols-1 gap-3 md:mb-6 md:gap-4">
+                                        <!-- 移动端垂直卡片，更易于阅读 -->
                                         <div v-for="(feature, fIndex) in scene.features" :key="fIndex"
-                                            class="flex items-start gap-3 rounded-lg bg-gray-50 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 hover:shadow-sm">
-                                            <div class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white"
+                                            class="feature-item flex items-start gap-2 rounded-lg bg-gray-50 p-2.5 transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 hover:shadow-sm md:gap-3 md:p-3">
+                                            <div class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white md:h-6 md:w-6"
                                                 :style="{ background: scene.color }">
                                                 <span>{{ fIndex + 1 }}</span>
                                             </div>
-                                            <span class="text-gray-700">{{ feature }}</span>
+                                            <span class="text-sm text-gray-700 md:text-base">{{ feature }}</span>
                                         </div>
                                     </div>
 
-                                    <div class="flex flex-wrap gap-2">
+                                    <!-- 标签区域，移动端居中 -->
+                                    <div class="flex flex-wrap justify-center gap-2 md:justify-start">
                                         <span v-for="(tag, tIndex) in scene.tags" :key="tIndex"
-                                            class="rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:bg-indigo-600 hover:text-white hover:shadow"
+                                            class="mb-1 rounded-full px-2.5 py-1 text-xs font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:bg-indigo-600 hover:text-white hover:shadow md:px-3.5 md:py-1.5"
                                             :style="{
                                                 color: scene.color,
                                                 backgroundColor: `${scene.color}10`,
@@ -136,40 +147,50 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 移动端滑动指示器 - 使用视觉提示替代文字 -->
+                <div v-if="deviceType.isMobile" class="mt-5 flex items-center justify-center">
+                    <div class="swipe-indicator flex items-center space-x-2">
+                        <div class="h-1 w-5 rounded-full bg-gray-300 animate-pulse"></div>
+                        <div class="h-1.5 w-16 rounded-full bg-indigo-500"></div>
+                        <div class="h-1 w-5 rounded-full bg-gray-300 animate-pulse"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- 应用场景收益展示 -->
-            <div class="mt-32">
-                <div class="mb-16 text-center">
-                    <h3 class="mb-4 text-2xl font-bold text-gray-900">
+            <div class="mt-20 md:mt-32">
+                <div class="mb-10 text-center md:mb-16">
+                    <h3 class="mb-3 text-xl font-bold text-gray-900 md:mb-4 md:text-2xl">
                         短链接为您带来的价值
                     </h3>
-                    <p class="mx-auto max-w-2xl text-gray-600">
+                    <p class="mx-auto max-w-2xl text-sm text-gray-600 md:text-base">
                         专业短链接服务为您的业务提供全方位助力
                     </p>
                 </div>
 
-                <div class="perspective-1000 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div class="perspective-1000 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                     <div v-for="(benefit, index) in benefits" :key="index"
-                        class="translate-y-10 transform rounded-xl border border-gray-50 bg-white p-8 opacity-0 shadow-md transition-all duration-600 hover:-translate-y-2.5 hover:border-indigo-100 hover:shadow-lg"
+                        class="translate-y-10 transform rounded-xl border border-gray-50 bg-white p-6 opacity-0 shadow-md transition-all duration-600 hover:-translate-y-2.5 hover:border-indigo-100 hover:shadow-lg md:p-8"
                         :class="{ visible: true }">
-                        <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-xl"
+                        <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-xl md:mb-6 md:h-16 md:w-16"
                             :class="`bg-${benefit.color}-50`">
-                            <component :is="benefit.icon" class="h-8 w-8" :class="`text-${benefit.color}-500`" />
+                            <component :is="benefit.icon" class="h-7 w-7 md:h-8 md:w-8"
+                                :class="`text-${benefit.color}-500`" />
                         </div>
-                        <h4 class="mb-3 text-xl font-bold text-gray-900">
+                        <h4 class="mb-2 text-lg font-bold text-gray-900 md:mb-3 md:text-xl">
                             {{ benefit.title }}
                         </h4>
-                        <p class="mb-6 leading-relaxed text-gray-600">
+                        <p class="mb-5 text-sm leading-relaxed text-gray-600 md:mb-6 md:text-base">
                             {{ benefit.description }}
                         </p>
                         <div class="border-t border-gray-100 pt-4">
                             <div class="flex items-baseline">
-                                <span class="text-3xl font-bold" :class="`text-${benefit.color}-600`">{{ benefit.stat
-                                }}</span>
-                                <span class="ml-1 text-sm text-gray-500">{{
+                                <span class="text-2xl font-bold md:text-3xl" :class="`text-${benefit.color}-600`">{{
+                                    benefit.stat }}</span>
+                                <span class="ml-1 text-xs text-gray-500 md:text-sm">{{
                                     benefit.unit
-                                }}</span>
+                                    }}</span>
                             </div>
                         </div>
                     </div>
@@ -177,20 +198,20 @@
             </div>
 
             <!-- 适用业务场景 - 重新设计为流线型布局 -->
-            <div class="mt-32">
-                <div class="mb-12 text-center">
-                    <h3 class="mb-2 text-2xl font-bold text-gray-900">
+            <div class="mt-20 md:mt-32">
+                <div class="mb-8 text-center md:mb-12">
+                    <h3 class="mb-2 text-xl font-bold text-gray-900 md:text-2xl">
                         适用多种业务场景
                     </h3>
-                    <p class="mx-auto mb-8 max-w-2xl text-gray-600">
+                    <p class="mx-auto mb-6 max-w-2xl text-sm text-gray-600 md:mb-8 md:text-base">
                         为各行各业提供专业的短链接解决方案
                     </p>
                 </div>
 
                 <div class="overflow-hidden py-4">
-                    <div class="flex flex-wrap justify-center gap-5">
+                    <div class="flex flex-wrap justify-center gap-4 md:gap-5">
                         <div v-for="(scenario, index) in businessScenarios" :key="index"
-                            class="business-scenario-card relative flex w-[260px] transform flex-col overflow-hidden rounded-xl border border-gray-50 bg-white p-7 shadow-md transition-all duration-800 hover:-translate-y-2 hover:border-indigo-100 hover:shadow-lg"
+                            class="business-scenario-card relative flex w-[140px] transform flex-col overflow-hidden rounded-xl border border-gray-50 bg-white p-4 shadow-md transition-all duration-800 hover:-translate-y-2 hover:border-indigo-100 hover:shadow-lg sm:w-[200px] md:w-[260px] md:p-7"
                             :style="{
                                 '--delay': `${index * 0.1}s`,
                                 '--color': scenario.color,
@@ -198,19 +219,20 @@
                             <div
                                 class="absolute top-0 right-0 left-0 h-1 -translate-y-1 bg-gradient-to-r from-transparent via-indigo-600 to-transparent opacity-0 transition-all duration-300">
                             </div>
-                            <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl text-white shadow-md transition-transform duration-300 hover:scale-110"
+                            <div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-md transition-transform duration-300 hover:scale-110 md:mb-4 md:h-14 md:w-14"
                                 :class="`bg-gradient-to-br ${scenario.gradient}`">
-                                <component :is="scenario.icon" class="h-5 w-5" />
+                                <component :is="scenario.icon" class="h-4 w-4 md:h-5 md:w-5" />
                             </div>
                             <div class="flex-1">
-                                <span class="mb-2 block text-center text-lg font-bold text-gray-900">{{ scenario.name
-                                }}</span>
-                                <p class="px-2 text-center text-sm text-gray-600">
+                                <span
+                                    class="mb-1 block text-center text-base font-bold text-gray-900 md:mb-2 md:text-lg">{{
+                                        scenario.name }}</span>
+                                <p class="px-1 text-center text-xs text-gray-600 md:px-2 md:text-sm">
                                     {{ scenario.description }}
                                 </p>
                             </div>
                             <div
-                                class="mx-auto mt-4 h-0.5 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent">
+                                class="mx-auto mt-3 h-0.5 w-8 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent md:mt-4 md:w-10">
                             </div>
                         </div>
                     </div>
@@ -218,10 +240,12 @@
             </div>
 
             <!-- 客户案例轮播 -->
-            <div class="mt-32 mb-8">
-                <div class="mb-12 text-center">
-                    <h3 class="mb-2 text-2xl font-bold text-gray-900">客户成功案例</h3>
-                    <p class="mx-auto max-w-2xl text-gray-600">
+            <div class="mt-20 mb-6 md:mt-32 md:mb-8">
+                <div class="mb-8 text-center md:mb-12">
+                    <h3 class="mb-2 text-xl font-bold text-gray-900 md:text-2xl">
+                        客户成功案例
+                    </h3>
+                    <p class="mx-auto max-w-2xl text-sm text-gray-600 md:text-base">
                         看看其他企业如何通过我们的短链接服务提升业务效果
                     </p>
                 </div>
@@ -231,14 +255,14 @@
                         transform: `translateX(-${activeTestimonialIndex * 100}%)`,
                     }">
                         <div v-for="(testimonial, index) in testimonials" :key="index"
-                            class="w-full flex-shrink-0 px-4">
-                            <div class="testimonial-card relative rounded-xl border border-gray-50 bg-white p-6 shadow-md transition-all duration-600 md:p-8"
-                                :class="{ 'visible': true }">
-                                <div class="mb-6 flex items-center justify-between">
+                            class="w-full flex-shrink-0 px-3 md:px-4">
+                            <div class="testimonial-card relative rounded-xl border border-gray-50 bg-white p-4 shadow-md transition-all duration-600 md:p-6 lg:p-8"
+                                :class="{ visible: true }">
+                                <div class="mb-5 flex items-center justify-between md:mb-6">
                                     <img :src="testimonial.image" :alt="testimonial.company"
-                                        class="h-12 w-12 rounded-lg object-contain" />
+                                        class="h-10 w-10 rounded-lg object-contain md:h-12 md:w-12" />
                                     <div class="flex">
-                                        <svg v-for="i in 5" :key="i" class="h-5 w-5" :class="i <= testimonial.rating
+                                        <svg v-for="i in 5" :key="i" class="h-4 w-4 md:h-5 md:w-5" :class="i <= testimonial.rating
                                             ? 'text-yellow-400'
                                             : 'text-gray-300'
                                             " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -248,27 +272,28 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <p class="mb-6 text-lg leading-relaxed text-gray-600 italic">
+                                <p
+                                    class="mb-5 line-clamp-4 text-base leading-relaxed text-gray-600 italic md:mb-6 md:line-clamp-none md:text-lg">
                                     {{ testimonial.quote }}
                                 </p>
-                                <div class="mb-6 flex flex-col">
-                                    <span class="text-lg font-bold text-gray-900">{{
+                                <div class="mb-5 flex flex-col md:mb-6">
+                                    <span class="text-base font-bold text-gray-900 md:text-lg">{{
                                         testimonial.name
-                                    }}</span>
-                                    <span class="text-sm text-gray-500">{{
+                                        }}</span>
+                                    <span class="text-xs text-gray-500 md:text-sm">{{
                                         testimonial.title
-                                    }}</span>
+                                        }}</span>
                                 </div>
-                                <div class="flex gap-6 border-t border-gray-100 pt-5">
+                                <div class="flex gap-4 border-t border-gray-100 pt-4 md:gap-6 md:pt-5">
                                     <div class="flex flex-col">
-                                        <span class="text-2xl font-bold text-indigo-600">{{ testimonial.clicksIncrease
-                                        }}%</span>
-                                        <span class="text-sm text-gray-500">点击率提升</span>
+                                        <span class="text-xl font-bold text-indigo-600 md:text-2xl">{{
+                                            testimonial.clicksIncrease }}%</span>
+                                        <span class="text-xs text-gray-500 md:text-sm">点击率提升</span>
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="text-2xl font-bold text-indigo-600">{{
+                                        <span class="text-xl font-bold text-indigo-600 md:text-2xl">{{
                                             testimonial.conversionIncrease }}%</span>
-                                        <span class="text-sm text-gray-500">转化率增长</span>
+                                        <span class="text-xs text-gray-500 md:text-sm">转化率增长</span>
                                     </div>
                                 </div>
                             </div>
@@ -276,7 +301,7 @@
                     </div>
 
                     <!-- 轮播指示器 -->
-                    <div class="mt-6 flex justify-center space-x-2">
+                    <div class="mt-4 flex justify-center space-x-2 md:mt-6">
                         <button v-for="(_, index) in testimonials" :key="index" @click="setActiveTestimonial(index)"
                             class="h-2 w-2 rounded-full bg-gray-300 transition-all duration-300 hover:bg-indigo-400"
                             :class="{
@@ -292,6 +317,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { useIntervalFn } from "@vueuse/core";
+import { deviceType } from "@/utils/flexible";
 import {
     scenarioCards,
     testimonials,
@@ -303,12 +329,15 @@ import {
 const activeSceneIndex = ref(0);
 const activeTestimonialIndex = ref(0);
 
-// 保存前一个场景索引
+// 保存前一个场景索引和触摸相关状态
 const previousIndex = ref(0);
-// 添加切换状态标记
 const isChangingScene = ref(false);
-// 添加场景卡片最小高度计算，以防止高度跳动导致的白屏
-const scenarioMinHeight = ref(400); // 默认最小高度
+const scenarioContainer = ref<HTMLElement | null>(null); // 添加容器引用
+const touchStartX = ref(0);
+const touchEndX = ref(0);
+
+// 移动端和桌面端采用不同的默认高度
+const scenarioMinHeight = ref(deviceType.value.isMobile ? 600 : 400);
 
 // 改进的场景卡片切换函数
 const setActiveScene = (index: number) => {
@@ -322,6 +351,27 @@ const setActiveScene = (index: number) => {
     setTimeout(() => {
         isChangingScene.value = false;
     }, 500); // 与CSS过渡时间匹配
+};
+
+// 添加触摸事件处理函数
+const handleTouchStart = (event: any) => {
+    touchStartX.value = event.touches[0].clientX;
+};
+
+const handleTouchEnd = (event: any) => {
+    touchEndX.value = event.changedTouches[0].clientX;
+    const touchDiff = touchEndX.value - touchStartX.value;
+
+    // 最小滑动距离阈值
+    const minSwipeDistance = 50;
+
+    if (touchDiff > minSwipeDistance && !isChangingScene.value) {
+        // 向右滑动，显示上一个场景
+        prevScene();
+    } else if (touchDiff < -minSwipeDistance && !isChangingScene.value) {
+        // 向左滑动，显示下一个场景
+        nextScene();
+    }
 };
 
 // 添加切换当前展示的客户案例的方法
@@ -341,17 +391,20 @@ const prevScene = () => {
     );
 };
 
+// 自动轮播间隔时间设置，移动端可以设置长一些
+const autoRotationInterval = deviceType.value.isMobile ? 8000 : 5000;
+
 // 自动轮播
 const { pause: pauseSceneRotation, resume: resumeSceneRotation } =
     useIntervalFn(() => {
         nextScene();
-    }, 5000);
+    }, autoRotationInterval);
 
 const { pause: pauseTestimonialRotation, resume: resumeTestimonialRotation } =
     useIntervalFn(() => {
         activeTestimonialIndex.value =
             (activeTestimonialIndex.value + 1) % testimonials.length;
-    }, 6000);
+    }, autoRotationInterval + 1000); // 错开轮播时间，避免同时切换
 
 onMounted(() => {
     try {
@@ -365,12 +418,18 @@ onMounted(() => {
                         }
                     });
                 },
-                { threshold: 0.1 }
+                { threshold: 0.1 },
             );
 
             // 找到所有业务场景卡片
-            const scenarioCards = document.querySelectorAll('.business-scenario-card');
-            scenarioCards.forEach(card => observer.observe(card));
+            const scenarioCards = document.querySelectorAll(
+                ".business-scenario-card",
+            );
+            scenarioCards.forEach((card) => observer.observe(card));
+
+            // 观察所有好处卡片
+            const benefitCards = document.querySelectorAll(".perspective-1000 > div");
+            benefitCards.forEach((card) => observer.observe(card));
         } else {
             // 降级处理：直接将所有元素设为可见
             console.warn("浏览器不支持 IntersectionObserver，将直接显示所有元素");
@@ -381,6 +440,12 @@ onMounted(() => {
                 .forEach((el) => {
                     el.classList.add("visible");
                 });
+        }
+
+        // 添加触摸事件监听器
+        if (scenarioContainer.value && deviceType.value.isMobile) {
+            scenarioContainer.value.addEventListener('touchstart', handleTouchStart, { passive: true });
+            scenarioContainer.value.addEventListener('touchend', handleTouchEnd, { passive: true });
         }
 
         // 启动自动轮播
@@ -430,9 +495,15 @@ onBeforeUnmount(() => {
     pauseSceneRotation();
     pauseTestimonialRotation();
     window.removeEventListener("resize", onResize);
+
+    // 移除触摸事件监听器
+    if (scenarioContainer.value && deviceType.value.isMobile) {
+        scenarioContainer.value.removeEventListener('touchstart', handleTouchStart);
+        scenarioContainer.value.removeEventListener('touchend', handleTouchEnd);
+    }
 });
 
-// 计算和更新卡片容器高度
+// 计算和更新卡片容器高度，考虑设备类型
 const updateCardHeight = () => {
     // 延迟计算以确保DOM已更新
     setTimeout(() => {
@@ -446,7 +517,9 @@ const updateCardHeight = () => {
                 }
             });
             // 添加额外空间以确保有足够空间
-            scenarioMinHeight.value = maxHeight + 20;
+            // 移动端需要更多空间，因为布局更垂直
+            const extraSpace = deviceType.value.isMobile ? 40 : 20;
+            scenarioMinHeight.value = maxHeight + extraSpace;
         }
     }, 100);
 };
@@ -456,16 +529,20 @@ const onResize = () => {
     updateCardHeight();
 };
 
-// 监听活动场景变化，更新卡片高度
-watch(activeSceneIndex, () => {
-    updateCardHeight();
-});
+// 监听活动场景变化和设备类型变化，更新卡片高度
+watch(
+    [activeSceneIndex, () => deviceType.value.isMobile],
+    () => {
+        updateCardHeight();
+    },
+    { immediate: true },
+);
 </script>
 
 <style scoped>
 /* 背景和基础样式 */
 .grid-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366F1' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366F1' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM36 0V4h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 .noise-bg {
@@ -609,11 +686,85 @@ watch(activeSceneIndex, () => {
     pointer-events: none;
 }
 
-/* 响应式调整 */
+/* 添加文本省略类 */
+.line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 移动端特定响应式调整 */
 @media (max-width: 640px) {
     .business-scenario-card {
-        width: 100%;
-        max-width: 300px;
+        width: calc(50% - 1rem);
+        min-width: 140px;
     }
+
+    /* 加强移动端响应式样式 */
+    .feature-item {
+        padding: 0.5rem 0.75rem;
+    }
+
+    /* 优化移动端卡片视觉层次 */
+    .scenario-card .rounded-2xl {
+        border: 1px solid rgba(229, 231, 235, 0.5);
+    }
+
+    .business-scenario-card .mx-auto.mb-3 {
+        margin-bottom: 0.5rem;
+    }
+
+    .business-scenario-card p {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* 在超小屏幕上优化场景卡片布局 */
+    .perspective-1000 {
+        gap: 1rem;
+    }
+
+    /* 优化客户案例显示 */
+    .testimonial-card {
+        padding: 1rem;
+    }
+
+    .testimonial-card p {
+        margin-bottom: 0.75rem;
+        -webkit-line-clamp: 3;
+    }
+}
+
+/* 添加触摸滑动相关样式 */
+.touch-pan-y {
+    touch-action: pan-y;
+    /* 允许垂直滚动但捕获水平滑动 */
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 滑动指示器动画 */
+@keyframes pulseIndication {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.animate-pulse {
+    animation: pulseIndication 1.5s ease-in-out infinite;
+}
+
+.swipe-indicator {
+    position: relative;
+    transition: all 0.3s ease;
 }
 </style>

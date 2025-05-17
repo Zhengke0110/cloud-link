@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white py-24">
+  <div class="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white  md:py-24 py-16">
     <!-- 背景装饰元素 - 增强效果 -->
     <div class="absolute inset-0 z-0">
       <div class="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-indigo-100/40 blur-3xl"></div>
@@ -10,44 +10,44 @@
 
     <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
       <!-- 标题区域 - 改进设计 -->
-      <div class="mb-16 text-center">
+      <div class="mb-12 md:mb-16 text-center">
         <span
           class="mb-3 inline-block rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-800 shadow-sm">
           电商应用专区
         </span>
         <h2
-          class="mb-6 bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-3xl font-bold text-transparent md:text-4xl lg:text-5xl">
+          class="mb-6 bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-2xl md:text-3xl lg:text-5xl font-bold text-transparent">
           提升电商分享转化率
         </h2>
-        <p class="mx-auto max-w-2xl text-gray-600 md:text-lg">
+        <p class="mx-auto max-w-2xl text-gray-600 text-sm md:text-base lg:text-lg">
           短链接如何为电商平台提供高效的用户体验和更好的营销效果
         </p>
         <div class="mx-auto mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-indigo-300 via-blue-500 to-indigo-600">
         </div>
       </div>
 
-      <div class="lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
+      <div class="flex flex-col lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
         <!-- 左侧内容区域 - 改进设计 -->
-        <div class="col-span-5 mb-16 lg:mb-0">
+        <div class="col-span-5 mb-10 lg:mb-0">
           <!-- 主要内容卡片 - 优化设计 -->
-          <div class="mb-10 transform-gpu transition-all duration-500 hover:scale-[1.01]">
+          <div class="mb-8 md:mb-10 transform-gpu transition-all duration-500 hover:scale-[1.01]">
             <!-- 卡片标题 -->
             <div class="mb-5 flex items-center">
               <div
-                class="mr-4 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white shadow-lg">
+                class="mr-4 flex h-10 md:h-12 w-10 md:w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white shadow-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd"
                     d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
                     clip-rule="evenodd" />
                 </svg>
               </div>
-              <h3 class="text-2xl font-bold tracking-tight text-gray-900">
+              <h3 class="text-xl md:text-2xl font-bold tracking-tight text-gray-900">
                 为电商赋能的短链接方案
               </h3>
             </div>
 
             <!-- 特点列表 - 优化设计 -->
-            <div class="space-y-6">
+            <div class="space-y-4 md:space-y-6">
               <!-- 特点 1: 精准触达 -->
               <div
                 class="feature-card-3d group relative overflow-hidden rounded-xl border border-gray-100 bg-white p-0.5 shadow-md transition-all duration-500 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl">
@@ -58,15 +58,15 @@
 
                 <!-- 内容区 -->
                 <div
-                  class="relative flex rounded-xl bg-white p-5 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-indigo-50">
+                  class="relative flex rounded-xl bg-white p-3 md:p-5 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-indigo-50">
                   <!-- 左侧图标 -->
                   <div
-                    class="feature-icon relative mr-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 transition-all duration-500 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white">
+                    class="feature-icon relative mr-3 md:mr-5 flex h-12 md:h-14 w-12 md:w-14 flex-shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 transition-all duration-500 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white">
                     <div
                       class="icon-pulse absolute inset-0 rounded-xl bg-indigo-600 opacity-0 transition-all duration-700 group-hover:animate-ping group-hover:opacity-30">
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 md:h-6 w-5 md:w-6" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
                     </svg>
@@ -74,21 +74,21 @@
 
                   <!-- 右侧内容 -->
                   <div class="flex-1">
-                    <div class="mb-2 flex items-center">
+                    <div class="mb-2 flex items-center flex-wrap">
                       <h4
-                        class="text-xl font-semibold text-gray-900 transition-all duration-500 group-hover:text-indigo-700">
+                        class="text-lg md:text-xl font-semibold text-gray-900 transition-all duration-500 group-hover:text-indigo-700">
                         精准触达
                       </h4>
                       <div
-                        class="ml-3 flex items-center rounded-full bg-indigo-100 px-2.5 py-1 text-xs font-medium text-indigo-800 transition-all duration-500 group-hover:bg-indigo-700 group-hover:text-white">
+                        class="ml-2 md:ml-3 flex items-center rounded-full bg-indigo-100 px-2 md:px-2.5 py-0.5 md:py-1 text-xs font-medium text-indigo-800 transition-all duration-500 group-hover:bg-indigo-700 group-hover:text-white">
                         核心优势
                       </div>
                     </div>
-                    <p class="text-gray-600 transition-all duration-500 group-hover:text-gray-700">
+                    <p class="text-sm md:text-base text-gray-600 transition-all duration-500 group-hover:text-gray-700">
                       使用短链接引导精准触碰导购，便于跨平台分享传播，大幅提升转化率和用户参与度，让每次点击都更有价值。
                     </p>
                     <div
-                      class="mt-3 flex items-center text-sm text-indigo-600 opacity-0 transition-all duration-500 group-hover:opacity-100">
+                      class="mt-2 md:mt-3 flex items-center text-sm text-indigo-600 opacity-0 transition-all duration-500 group-hover:opacity-100">
                       <span class="font-medium">查看案例</span>
                       <svg xmlns="http://www.w3.org/2000/svg" class="ml-1.5 h-3.5 w-3.5" viewBox="0 0 20 20"
                         fill="currentColor">
@@ -100,7 +100,7 @@
                   </div>
 
                   <!-- 右侧指示器 -->
-                  <div class="ml-2 flex items-center self-center">
+                  <div class="hidden md:flex ml-2 items-center self-center">
                     <div
                       class="h-6 w-1.5 rounded-full bg-indigo-100 transition-all duration-500 group-hover:h-14 group-hover:bg-indigo-600">
                     </div>
@@ -116,35 +116,35 @@
                 </div>
 
                 <div
-                  class="relative flex rounded-xl bg-white p-5 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-blue-50">
+                  class="relative flex rounded-xl bg-white p-3 md:p-5 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-blue-50">
                   <div
-                    class="feature-icon relative mr-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 transition-all duration-500 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white">
+                    class="feature-icon relative mr-3 md:mr-5 flex h-12 md:h-14 w-12 md:w-14 flex-shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 transition-all duration-500 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white">
                     <div
                       class="icon-pulse absolute inset-0 rounded-xl bg-blue-600 opacity-0 transition-all duration-700 group-hover:animate-ping group-hover:opacity-30">
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 md:h-6 w-5 md:w-6" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
                   </div>
 
                   <div class="flex-1">
-                    <div class="mb-2 flex items-center">
+                    <div class="mb-2 flex items-center flex-wrap">
                       <h4
-                        class="text-xl font-semibold text-gray-900 transition-all duration-500 group-hover:text-blue-700">
+                        class="text-lg md:text-xl font-semibold text-gray-900 transition-all duration-500 group-hover:text-blue-700">
                         精准统计
                       </h4>
                       <div
-                        class="ml-3 flex items-center rounded-full bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-800 transition-all duration-500 group-hover:bg-blue-700 group-hover:text-white">
+                        class="ml-2 md:ml-3 flex items-center rounded-full bg-blue-100 px-2 md:px-2.5 py-0.5 md:py-1 text-xs font-medium text-blue-800 transition-all duration-500 group-hover:bg-blue-700 group-hover:text-white">
                         数据驱动
                       </div>
                     </div>
-                    <p class="text-gray-600 transition-all duration-500 group-hover:text-gray-700">
+                    <p class="text-sm md:text-base text-gray-600 transition-all duration-500 group-hover:text-gray-700">
                       分享后台精准识别渠道和引流来源，清晰统计转化路径，支持精细化数据分析，让营销决策更有依据。
                     </p>
                     <div
-                      class="mt-3 flex items-center text-sm text-blue-600 opacity-0 transition-all duration-500 group-hover:opacity-100">
+                      class="mt-2 md:mt-3 flex items-center text-sm text-blue-600 opacity-0 transition-all duration-500 group-hover:opacity-100">
                       <span class="font-medium">查看报表</span>
                       <svg xmlns="http://www.w3.org/2000/svg" class="ml-1.5 h-3.5 w-3.5" viewBox="0 0 20 20"
                         fill="currentColor">
@@ -155,7 +155,7 @@
                     </div>
                   </div>
 
-                  <div class="ml-2 flex items-center self-center">
+                  <div class="hidden md:flex ml-2 items-center self-center">
                     <div
                       class="h-6 w-1.5 rounded-full bg-blue-100 transition-all duration-500 group-hover:h-14 group-hover:bg-blue-600">
                     </div>
@@ -171,35 +171,35 @@
                 </div>
 
                 <div
-                  class="relative flex rounded-xl bg-white p-5 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-purple-50">
+                  class="relative flex rounded-xl bg-white p-3 md:p-5 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-purple-50">
                   <div
-                    class="feature-icon relative mr-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-600 transition-all duration-500 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white">
+                    class="feature-icon relative mr-3 md:mr-5 flex h-12 md:h-14 w-12 md:w-14 flex-shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-600 transition-all duration-500 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white">
                     <div
                       class="icon-pulse absolute inset-0 rounded-xl bg-purple-600 opacity-0 transition-all duration-700 group-hover:animate-ping group-hover:opacity-30">
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 md:h-6 w-5 md:w-6" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                     </svg>
                   </div>
 
                   <div class="flex-1">
-                    <div class="mb-2 flex items-center">
+                    <div class="mb-2 flex items-center flex-wrap">
                       <h4
-                        class="text-xl font-semibold text-gray-900 transition-all duration-500 group-hover:text-purple-700">
+                        class="text-lg md:text-xl font-semibold text-gray-900 transition-all duration-500 group-hover:text-purple-700">
                         优化传播
                       </h4>
                       <div
-                        class="ml-3 flex items-center rounded-full bg-purple-100 px-2.5 py-1 text-xs font-medium text-purple-800 transition-all duration-500 group-hover:bg-purple-700 group-hover:text-white">
+                        class="ml-2 md:ml-3 flex items-center rounded-full bg-purple-100 px-2 md:px-2.5 py-0.5 md:py-1 text-xs font-medium text-purple-800 transition-all duration-500 group-hover:bg-purple-700 group-hover:text-white">
                         品牌增强
                       </div>
                     </div>
-                    <p class="text-gray-600 transition-all duration-500 group-hover:text-gray-700">
+                    <p class="text-sm md:text-base text-gray-600 transition-all duration-500 group-hover:text-gray-700">
                       短链接美观简洁，在有限字符内完整传达信息，提升品牌形象和用户体验，让每次分享都更加专业。
                     </p>
                     <div
-                      class="mt-3 flex items-center text-sm text-purple-600 opacity-0 transition-all duration-500 group-hover:opacity-100">
+                      class="mt-2 md:mt-3 flex items-center text-sm text-purple-600 opacity-0 transition-all duration-500 group-hover:opacity-100">
                       <span class="font-medium">查看示例</span>
                       <svg xmlns="http://www.w3.org/2000/svg" class="ml-1.5 h-3.5 w-3.5" viewBox="0 0 20 20"
                         fill="currentColor">
@@ -210,7 +210,7 @@
                     </div>
                   </div>
 
-                  <div class="ml-2 flex items-center self-center">
+                  <div class="hidden md:flex ml-2 items-center self-center">
                     <div
                       class="h-6 w-1.5 rounded-full bg-purple-100 transition-all duration-500 group-hover:h-14 group-hover:bg-purple-600">
                     </div>
@@ -225,48 +225,48 @@
             <h4 class="mb-4 text-base font-medium text-gray-700">
               适用电商场景
             </h4>
-            <div class="flex flex-wrap gap-3">
+            <div class="flex flex-wrap gap-2 md:gap-3">
               <div
-                class="scene-tag group flex cursor-pointer items-center rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:bg-indigo-100 hover:shadow-md">
+                class="scene-tag group flex cursor-pointer items-center rounded-full border border-indigo-100 bg-indigo-50 px-3 md:px-4 py-1.5 md:py-2 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:bg-indigo-100 hover:shadow-md">
                 <div
-                  class="mr-2 h-2.5 w-2.5 rounded-full bg-indigo-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
+                  class="mr-1.5 md:mr-2 h-2 md:h-2.5 w-2 md:w-2.5 rounded-full bg-indigo-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
                 </div>
-                <span class="text-sm font-medium text-indigo-700">产品推广</span>
+                <span class="text-xs md:text-sm font-medium text-indigo-700">产品推广</span>
               </div>
               <div
-                class="scene-tag group flex cursor-pointer items-center rounded-full border border-blue-100 bg-blue-50 px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:bg-blue-100 hover:shadow-md">
+                class="scene-tag group flex cursor-pointer items-center rounded-full border border-blue-100 bg-blue-50 px-3 md:px-4 py-1.5 md:py-2 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:bg-blue-100 hover:shadow-md">
                 <div
-                  class="mr-2 h-2.5 w-2.5 rounded-full bg-blue-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
+                  class="mr-1.5 md:mr-2 h-2 md:h-2.5 w-2 md:w-2.5 rounded-full bg-blue-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
                 </div>
-                <span class="text-sm font-medium text-blue-700">社交营销</span>
+                <span class="text-xs md:text-sm font-medium text-blue-700">社交营销</span>
               </div>
               <div
-                class="scene-tag group flex cursor-pointer items-center rounded-full border border-green-100 bg-green-50 px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:border-green-200 hover:bg-green-100 hover:shadow-md">
+                class="scene-tag group flex cursor-pointer items-center rounded-full border border-green-100 bg-green-50 px-3 md:px-4 py-1.5 md:py-2 transition-all duration-300 hover:-translate-y-1 hover:border-green-200 hover:bg-green-100 hover:shadow-md">
                 <div
-                  class="mr-2 h-2.5 w-2.5 rounded-full bg-green-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
+                  class="mr-1.5 md:mr-2 h-2 md:h-2.5 w-2 md:w-2.5 rounded-full bg-green-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
                 </div>
-                <span class="text-sm font-medium text-green-700">促销活动</span>
+                <span class="text-xs md:text-sm font-medium text-green-700">促销活动</span>
               </div>
               <div
-                class="scene-tag group flex cursor-pointer items-center rounded-full border border-purple-100 bg-purple-50 px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:border-purple-200 hover:bg-purple-100 hover:shadow-md">
+                class="scene-tag group flex cursor-pointer items-center rounded-full border border-purple-100 bg-purple-50 px-3 md:px-4 py-1.5 md:py-2 transition-all duration-300 hover:-translate-y-1 hover:border-purple-200 hover:bg-purple-100 hover:shadow-md">
                 <div
-                  class="mr-2 h-2.5 w-2.5 rounded-full bg-purple-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
+                  class="mr-1.5 md:mr-2 h-2 md:h-2.5 w-2 md:w-2.5 rounded-full bg-purple-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
                 </div>
-                <span class="text-sm font-medium text-purple-700">会员引流</span>
+                <span class="text-xs md:text-sm font-medium text-purple-700">会员引流</span>
               </div>
               <div
-                class="scene-tag group flex cursor-pointer items-center rounded-full border border-pink-100 bg-pink-50 px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:border-pink-200 hover:bg-pink-100 hover:shadow-md">
+                class="scene-tag group flex cursor-pointer items-center rounded-full border border-pink-100 bg-pink-50 px-3 md:px-4 py-1.5 md:py-2 transition-all duration-300 hover:-translate-y-1 hover:border-pink-200 hover:bg-pink-100 hover:shadow-md">
                 <div
-                  class="mr-2 h-2.5 w-2.5 rounded-full bg-pink-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
+                  class="mr-1.5 md:mr-2 h-2 md:h-2.5 w-2 md:w-2.5 rounded-full bg-pink-500 transition-all duration-300 group-hover:scale-125 group-hover:shadow-sm">
                 </div>
-                <span class="text-sm font-medium text-pink-700">直播带货</span>
+                <span class="text-xs md:text-sm font-medium text-pink-700">直播带货</span>
               </div>
             </div>
           </div>
         </div>
 
         <!-- 右侧可视化区域 - 优化设计 -->
-        <div class="relative col-span-7">
+        <div class="relative col-span-7" :class="{ 'hidden': deviceType.isMobile }">
           <div class="reveal-element relative mx-auto max-w-lg">
             <!-- 3D倾斜的手机模型 - 增强视觉效果 -->
             <div
@@ -459,6 +459,96 @@
             </div>
           </div>
         </div>
+
+        <!-- 移动端简化手机模型 -->
+        <div class="relative mx-auto w-full max-w-xs my-8 lg:hidden">
+          <div
+            class="phone-mobile relative mx-auto w-[220px] h-[440px] rounded-[32px] bg-gray-800 shadow-lg overflow-hidden">
+            <!-- 手机内容简化版 -->
+            <div class="h-full w-full bg-white p-2">
+              <!-- 顶部状态栏 -->
+              <div class="mb-2 flex h-5 w-full items-center justify-between rounded-t-3xl bg-gray-100 px-3">
+                <div class="text-xs font-medium text-gray-500">12:30</div>
+                <div class="flex space-x-1">
+                  <div class="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
+                  <div class="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
+                  <div class="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
+                </div>
+              </div>
+
+              <!-- 简化界面 -->
+              <div class="p-2">
+                <div
+                  class="mb-3 flex h-6 w-full items-center justify-center rounded-lg bg-indigo-600 text-xs font-medium text-white">
+                  商城首页
+                </div>
+
+                <!-- 产品卡片 -->
+                <div class="mb-2 overflow-hidden rounded-lg bg-white shadow-sm">
+                  <div class="h-20 w-full bg-gray-200"></div>
+                  <div class="p-2">
+                    <div class="mb-1 h-3 w-3/4 rounded-full bg-gray-200"></div>
+                    <div class="mb-2 h-2 w-1/2 rounded-full bg-gray-200"></div>
+                    <div class="flex items-center justify-between">
+                      <div class="h-4 w-12 rounded-full bg-red-500"></div>
+                      <div class="h-5 w-5 rounded-full bg-indigo-100"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 分享弹窗简化版 -->
+                <div class="mt-16 rounded-xl bg-white p-3 shadow-lg border border-gray-100">
+                  <div class="mb-2 text-center text-xs font-medium">分享给好友</div>
+                  <div class="grid grid-cols-4 gap-1">
+                    <div v-for="(name, index) in ['微信', '朋友圈', '链接', '图片']" :key="index"
+                      class="flex flex-col items-center">
+                      <div
+                        :class="`mb-1 flex h-8 w-8 items-center justify-center rounded-full ${['bg-green-500', 'bg-blue-500', 'bg-red-500', 'bg-purple-500'][index]} text-white`">
+                      </div>
+                      <div class="text-[10px]">{{ name }}</div>
+                    </div>
+                  </div>
+
+                  <!-- 短链接展示 -->
+                  <div class="mt-3 flex items-center rounded-lg bg-indigo-50 p-2 text-xs">
+                    <div class="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-indigo-700">
+                      timu.link/k8d2f
+                    </div>
+                    <div class="ml-2 rounded bg-indigo-600 px-2 py-0.5 text-white">
+                      复制
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 手机凹槽 -->
+            <div class="absolute top-0 left-1/2 z-30 h-6 w-24 -translate-x-1/2 rounded-b-xl bg-gray-800">
+              <div class="absolute top-1 left-1/2 flex -translate-x-1/2 items-center space-x-3">
+                <div class="h-1 w-1 rounded-full bg-gray-600"></div>
+                <div class="h-1 w-6 rounded-full bg-gray-600"></div>
+                <div class="h-1 w-1 rounded-full bg-gray-600"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 移动端数据指示器 -->
+          <div class="mt-4 mx-auto max-w-[220px] rounded-lg bg-white p-3 shadow border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div class="text-xs font-medium text-gray-700">转化数据</div>
+            </div>
+            <div class="mt-2 space-y-1.5">
+              <div class="flex items-center">
+                <div class="mr-2 h-1.5 w-1.5 rounded-full bg-indigo-500"></div>
+                <div class="text-xs text-gray-600">点击率 +32%</div>
+              </div>
+              <div class="flex items-center">
+                <div class="mr-2 h-1.5 w-1.5 rounded-full bg-green-500"></div>
+                <div class="text-xs text-gray-600">转化提升 24%</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -467,6 +557,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useIntersectionObserver } from "@vueuse/core";
+import { deviceType } from "@/utils/flexible";
 
 // 创建元素引用
 const phoneContainer = ref<HTMLElement | null>(null);
@@ -520,7 +611,7 @@ onMounted(() => {
 
   // 观察需要添加动画的元素
   const animatedElements = document.querySelectorAll(
-    ".feature-card-3d, .scene-tag",
+    ".feature-card-3d, .scene-tag, .phone-mobile",
   );
 
   animatedElements.forEach((el) => {
@@ -530,7 +621,7 @@ onMounted(() => {
   });
 
   // 监听鼠标移动添加3D效果
-  if (phoneContainer.value) {
+  if (phoneContainer.value && !deviceType.value.isMobile) {
     phoneContainer.value.addEventListener("mousemove", handleMouseMove);
   }
 
@@ -635,6 +726,7 @@ const handleMouseMove = (e: MouseEvent) => {
 .feature-card,
 .metric-card,
 .phone-container,
+.phone-mobile,
 .reveal-element {
   transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -656,6 +748,12 @@ const handleMouseMove = (e: MouseEvent) => {
   transform-style: preserve-3d;
   transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   will-change: transform;
+}
+
+.phone-mobile {
+  position: relative;
+  transition: all 0.5s ease;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* 新增样式 */
@@ -710,6 +808,7 @@ const handleMouseMove = (e: MouseEvent) => {
   .feature-card,
   .metric-card,
   .phone-container,
+  .phone-mobile,
   .animate-shimmer::before,
   .animate-popup,
   .share-popup,
@@ -718,6 +817,17 @@ const handleMouseMove = (e: MouseEvent) => {
     transition: none !important;
     transform: none !important;
     opacity: 1 !important;
+  }
+}
+
+/* 移动端特定样式 */
+@media (max-width: 768px) {
+  .feature-card-3d {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .scene-tag {
+    padding: 0.35rem 0.75rem;
   }
 }
 </style>
