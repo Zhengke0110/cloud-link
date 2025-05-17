@@ -9,7 +9,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/home",
     name: "home",
-    component: () => import("@/views/Home"),
+    component: () => import("@/views/home"),
+    meta: { layout: LayoutMenu.BasicLayout }
+  },
+  {
+    path: "/center",
+    name: "center",
+    component: () => import("@/views/center"),
     meta: { layout: LayoutMenu.BasicLayout }
   },
   {
