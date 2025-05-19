@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
     name: "center",
     component: () => import("@/views/center"),
     meta: { layout: LayoutMenu.BasicLayout }
+  }, {
+    path: "/scheme",
+    name: "scheme",
+    component: () => import("@/views/scheme"),
+    meta: { layout: LayoutMenu.BasicLayout }
   },
   {
     path: "/login",
