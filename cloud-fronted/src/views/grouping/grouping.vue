@@ -52,49 +52,21 @@
 
                         <!-- 分组内容 -->
                         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">分组ID</div>
-                                <div
-                                    class="rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium break-all text-gray-800">
-                                    {{ group.id }}
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">账号</div>
-                                <div
-                                    class="rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
-                                    {{ group.accountNo }}
-                                </div>
-                            </div>
+                            <!-- 使用 InfoField 替换原有的分组ID字段 -->
+                            <InfoField label="分组ID" :value="group.id" breakAll />
+
+                            <!-- 使用 InfoField 替换原有的账号字段 -->
+                            <InfoField label="账号" :value="group.accountNo" />
                         </div>
 
                         <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">创建时间</div>
-                                <div
-                                    class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                        fill="currentColor" :class="getIconColor(index, 0)">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    {{ formatDate(group.gmtCreate) }}
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">修改时间</div>
-                                <div
-                                    class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                        fill="currentColor" :class="getIconColor(index, 1)">
-                                        <path fill-rule="evenodd"
-                                            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    {{ formatDate(group.gmtModified) }}
-                                </div>
-                            </div>
+                            <!-- 使用 InfoField 替换原有的创建时间字段 -->
+                            <InfoField label="创建时间" :value="formatDate(group.gmtCreate)" icon="clock"
+                                :iconClass="getIconColor(index, 0)" />
+
+                            <!-- 使用 InfoField 替换原有的修改时间字段 -->
+                            <InfoField label="修改时间" :value="formatDate(group.gmtModified)" icon="update"
+                                :iconClass="getIconColor(index, 1)" />
                         </div>
 
                         <!-- 分组操作按钮 -->
@@ -123,23 +95,10 @@
                     </LinkCard>
                 </div>
 
-                <!-- 无分组数据提示 -->
-                <div v-if="!groupData.length"
-                    class="rounded-xl border border-gray-100 bg-white p-10 text-center shadow-sm">
-                    <div class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z"
-                                clip-rule="evenodd" />
-                            <path d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z" />
-                        </svg>
-                    </div>
-                    <h3 class="mb-1 text-lg font-medium text-gray-900">暂无分组数据</h3>
-                    <p class="mb-4 text-gray-500">
-                        您还没有创建任何分组，点击上方按钮创建新分组
-                    </p>
-                </div>
+                <!-- 替换现有的无分组数据提示 -->
+                <EmptyState v-if="!groupData.length" title="暂无分组数据" description="您还没有创建任何分组，点击上方按钮创建新分组">
+                    <!-- 使用默认文件夹图标 -->
+                </EmptyState>
             </div>
 
             <!-- 功能介绍卡片 -->
@@ -218,12 +177,11 @@
         <BaseModal v-model="showCreateModal" title="创建新分组" id="create-group-modal">
             <!-- 表单内容 -->
             <form @submit.prevent="createGroup" class="space-y-4">
-                <div>
-                    <label for="group-title" class="mb-1 block text-sm font-medium text-gray-700">分组名称</label>
-                    <div class="relative">
-                        <input type="text" id="group-title" v-model="newGroup.title"
-                            class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                            placeholder="请输入分组名称" required />
+                <!-- 替换分组名称字段为FormField组件 -->
+                <FormField id="group-title" label="分组名称" v-model="newGroup.title" placeholder="请输入分组名称"
+                    helpText="为您的分组添加一个易于识别的名称" required>
+                    <!-- 随机生成按钮作为后缀 -->
+                    <template #suffix>
                         <button type="button" v-if="newGroup.title" @click="generateRandomGroupName"
                             class="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-indigo-50 hover:text-indigo-600"
                             title="生成随机名称">
@@ -234,21 +192,12 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </button>
-                    </div>
-                    <p class="mt-1 text-xs text-gray-500">为您的分组添加一个易于识别的名称</p>
-                </div>
+                    </template>
+                </FormField>
 
-                <!-- 提交按钮容器 -->
-                <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                    <button type="button" @click="closeCreateModal"
-                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
-                        取消
-                    </button>
-                    <button type="submit" :disabled="isCreating || !newGroup.title"
-                        class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                        <LoadingSpinner v-if="isCreating" class="text-white" /> {{ isCreating ? "创建中..." : "创建分组" }}
-                    </button>
-                </div>
+                <!-- 替换提交按钮容器为FormActions组件 -->
+                <FormActions submitText="创建分组" loadingText="创建中..." :isLoading="isCreating" :disabled="!newGroup.title"
+                    @cancel="closeCreateModal" />
             </form>
         </BaseModal>
 
@@ -256,12 +205,11 @@
         <BaseModal v-model="showEditModal" title="编辑分组信息" id="edit-group-modal">
             <!-- 表单内容 -->
             <form @submit.prevent="updateGroup" class="space-y-4">
-                <div>
-                    <label for="edit-group-title" class="mb-1 block text-sm font-medium text-gray-700">分组名称</label>
-                    <div class="relative">
-                        <input type="text" id="edit-group-title" v-model="editingGroup.title"
-                            class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                            placeholder="请输入分组名称" required />
+                <!-- 替换分组名称字段为FormField组件 -->
+                <FormField id="edit-group-title" label="分组名称" v-model="editingGroup.title" placeholder="请输入分组名称"
+                    required>
+                    <!-- 随机生成按钮作为后缀 -->
+                    <template #suffix>
                         <button type="button" @click="generateRandomGroupNameForEdit"
                             class="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-indigo-50 hover:text-indigo-600"
                             title="生成随机名称">
@@ -272,25 +220,22 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </button>
-                    </div>
-                    <p class="mt-1 text-xs text-gray-500">
-                        <span>为您的分组添加一个易于识别的名称</span>
-                        <span class="ml-1 text-gray-400">ID: {{ editingGroup.id }}</span>
-                    </p>
-                </div>
+                    </template>
 
-                <!-- 提交按钮容器 -->
-                <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                    <button type="button" @click="closeEditModal"
-                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
-                        取消
-                    </button>
-                    <button type="submit" :disabled="isUpdating || !editingGroup.title"
-                        class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                        <LoadingSpinner v-if="isUpdating" class="h-5 w-5 animate-spin text-white" />
-                        {{ isUpdating ? "更新中..." : "保存修改" }}
-                    </button>
-                </div>
+                    <!-- 使用额外信息插槽显示ID -->
+                    <template #extra>
+                        <span class="ml-1 text-gray-400">ID: {{ editingGroup.id }}</span>
+                    </template>
+
+                    <!-- 帮助文本 -->
+                    <template #help>
+                        <span>为您的分组添加一个易于识别的名称</span>
+                    </template>
+                </FormField>
+
+                <!-- 替换提交按钮容器为FormActions组件 -->
+                <FormActions submitText="保存修改" loadingText="更新中..." :isLoading="isUpdating"
+                    :disabled="!editingGroup.title" @cancel="closeEditModal" />
             </form>
         </BaseModal>
 
@@ -312,9 +257,12 @@ import { Data } from "./config";
 import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
 import BaseModal from "@/components/BaseModal.vue";
-import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import LinkCard from '@/components/LinkCard.vue';
-import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'; // 引入ConfirmDeleteModal组件
+import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue';
+import EmptyState from '@/components/EmptyState.vue';
+import FormField from '@/components/FormField.vue';
+import InfoField from '@/components/InfoField.vue';
+import FormActions from '@/components/FormActions.vue'; // 引入FormActions组件
 // 导入日期工具函数
 import { formatDate } from "@/utils/DateUtils";
 // 导入颜色方案工具

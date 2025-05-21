@@ -90,17 +90,13 @@
 
                         <!-- 链接内容 -->
                         <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">原始链接</div>
-                                <div
-                                    class="rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium break-all text-gray-800">
-                                    {{ getOriginalUrl(link.originalUrl) }}
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">短链接</div>
-                                <div
-                                    class="flex items-center justify-between rounded-lg border border-indigo-100 bg-indigo-50 p-2 text-sm font-medium text-indigo-600">
+                            <!-- 使用InfoField替换原始链接字段 -->
+                            <InfoField label="原始链接" :value="getOriginalUrl(link.originalUrl)" breakAll />
+
+                            <!-- 使用InfoField替换短链接字段 -->
+                            <InfoField label="短链接" valueClass="text-indigo-600" borderClass="border-indigo-100"
+                                bgClass="bg-indigo-50">
+                                <div class="flex items-center justify-between w-full">
                                     <span>{{ `${link.domain}/${link.code}` }}</span>
                                     <button class="rounded p-1 transition-colors hover:bg-indigo-100">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-600"
@@ -111,73 +107,44 @@
                                         </svg>
                                     </button>
                                 </div>
-                            </div>
+                            </InfoField>
                         </div>
 
                         <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">分组</div>
-                                <div
-                                    class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
+                            <!-- 使用InfoField替换分组字段 -->
+                            <InfoField label="分组">
+                                <div class="flex items-center gap-2 w-full">
                                     <span class="h-2 w-2 rounded-full"
                                         :class="getColorDot(getGroupIndex(link.groupId))"></span>
                                     {{ getGroupTitle(link.groupId) }}
                                 </div>
-                            </div>
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">过期时间</div>
-                                <div class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium"
-                                    :class="isExpired(link.expired)
-                                        ? 'text-red-600'
-                                        : 'text-gray-800'
-                                        ">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    {{ formatDate(link.expired) }}
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">状态</div>
-                                <div class="flex items-center gap-2 rounded-lg border p-2 text-sm font-medium" :class="getStatusClass(link.state, isExpired(link.expired))
-                                    ">
-                                    <span class="h-2 w-2 rounded-full" :class="getStatusDot(link.state, isExpired(link.expired))
-                                        "></span>
-                                    {{ getStatusText(link.state, isExpired(link.expired)) }}
-                                </div>
-                            </div>
+                            </InfoField>
+
+                            <!-- 使用InfoField替换过期时间字段 -->
+                            <InfoField label="过期时间" :value="formatDate(link.expired)" icon="clock"
+                                :valueClass="isExpired(link.expired) ? 'text-red-600' : 'text-gray-800'" />
+
+                            <!-- 使用InfoField替换状态字段 -->
+                            <InfoField label="状态" :value="getStatusText(link.state, isExpired(link.expired))"
+                                :borderClass="isExpired(link.expired) ? 'border-red-100' :
+                                    link.state === 'ACTIVE' ? 'border-emerald-100' : 'border-yellow-100'" :bgClass="isExpired(link.expired) ? 'bg-red-50' :
+                                        link.state === 'ACTIVE' ? 'bg-emerald-50' : 'bg-yellow-50'" :valueClass="isExpired(link.expired) ? 'text-red-600' :
+                                            link.state === 'ACTIVE' ? 'text-emerald-600' : 'text-yellow-600'">
+                                <template #icon>
+                                    <span class="h-2 w-2 rounded-full"
+                                        :class="getStatusDot(link.state, isExpired(link.expired))"></span>
+                                </template>
+                            </InfoField>
                         </div>
 
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">创建时间</div>
-                                <div
-                                    class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                        fill="currentColor" :class="getIconColor(getLinkColorIndex(link, index), 0)">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    {{ formatDate(link.gmtCreate) }}
-                                </div>
-                            </div>
-                            <div>
-                                <div class="mb-1 text-xs text-gray-500">修改时间</div>
-                                <div
-                                    class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                        fill="currentColor" :class="getIconColor(getLinkColorIndex(link, index), 1)">
-                                        <path fill-rule="evenodd"
-                                            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    {{ formatDate(link.gmtModified) }}
-                                </div>
-                            </div>
+                            <!-- 使用InfoField替换创建时间字段 -->
+                            <InfoField label="创建时间" :value="formatDate(link.gmtCreate)" icon="clock"
+                                :iconClass="getIconColor(getLinkColorIndex(link, index), 0)" />
+
+                            <!-- 使用InfoField替换修改时间字段 -->
+                            <InfoField label="修改时间" :value="formatDate(link.gmtModified)" icon="update"
+                                :iconClass="getIconColor(getLinkColorIndex(link, index), 1)" />
                         </div>
 
                         <!-- 底部操作按钮 -->
@@ -208,21 +175,18 @@
                     </LinkCard>
                 </div>
 
-                <!-- 无链接数据提示 -->
-                <div v-if="!filteredLinks.length"
-                    class="rounded-xl border border-gray-100 bg-white p-10 text-center shadow-sm">
-                    <div class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" viewBox="0 0 20 20"
+                <!-- 无链接数据提示 - 替换为EmptyState组件 -->
+                <EmptyState v-if="!filteredLinks.length" title="暂无链接数据" description="该分组下没有链接数据，或者您还没有创建任何链接"
+                    iconType="blue">
+                    <template #icon>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fill-rule="evenodd"
-                                d="M12.586 4.586a2 2 0 112.828 2.828l-7 7a2 2 0 01-2.828 0l-7-7a2 2 0 111.414-1.414L9 14.586l3.586-3.586a2 2 0 013.536 0l3.586 3.586a1 1 0 010 1.414l-3.586 3.586a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0zM5 5a1 1 0 100-2 1 1 0 000 2zm14 0a1 1 0 100-2 1 1 0 000 2zM5 19a1 1 0 100-2 1 1 0 000 2zm14 0a1 1 0 100-2 1 1 0 000 2z" />
+                                d="M12.586 4.586a2 2 0 112.828 2.828l-7 7a2 2 0 01-2.828 0l-7-7a2 2 0 111.414-1.414L9 14.586l3.586-3.586a2 2 0 013.536 0l3.586 3.586a1 1 0 010 1.414l-3.586 3.586a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0zM5 5a1 1 0 100-2 1 1 0 000 2zm14 0a1 1 0 100-2 1 1 0 000 2zM5 19a1 1 0 100-2 1 1 0 000 2zm14 0a1 1 0 100-2 1 1 0 000 2z"
+                                clip-rule="evenodd" />
                         </svg>
-                    </div>
-                    <h3 class="mb-1 text-lg font-medium text-gray-900">暂无链接数据</h3>
-                    <p class="mb-4 text-gray-500">
-                        该分组下没有链接数据，或者您还没有创建任何链接
-                    </p>
-                </div>
+                    </template>
+                </EmptyState>
 
                 <!-- 分页区域 -->
                 <div class="mt-6 flex justify-center">
@@ -319,61 +283,35 @@
         <BaseModal v-model="showEditLinkModal" title="更新链接信息" id="edit-link-modal">
             <!-- 表单内容 -->
             <form @submit.prevent="updateLink" class="space-y-4">
-                <div>
-                    <label for="edit-link-title" class="mb-1 block text-sm font-medium text-gray-700">链接标题</label>
-                    <div class="relative">
-                        <input type="text" id="edit-link-title" v-model="editingLink.title"
-                            class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                            placeholder="请输入链接标题" required />
-                    </div>
-                    <p class="mt-1 text-xs text-gray-500">
-                        <span>为您的链接添加一个易于识别的名称</span>
-                    </p>
-                </div>
+                <!-- 替换链接标题字段 -->
+                <FormField id="edit-link-title" label="链接标题" v-model="editingLink.title" placeholder="请输入链接标题"
+                    helpText="为您的链接添加一个易于识别的名称" required />
 
-                <div>
-                    <label for="edit-link-group" class="mb-1 block text-sm font-medium text-gray-700">选择分组</label>
-                    <select id="edit-link-group" v-model="editingLink.groupId"
-                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
-                        <option v-for="group in groupData" :key="group.id" :value="group.id">
-                            {{ group.title }}
-                        </option>
-                    </select>
-                    <p class="mt-1 text-xs text-gray-500">选择该链接所属的分组</p>
-                </div>
+                <!-- 替换选择分组字段 -->
+                <FormField id="edit-link-group" label="选择分组" type="select" v-model="editingLink.groupId"
+                    helpText="选择该链接所属的分组">
+                    <option v-for="group in groupData" :key="group.id" :value="group.id">
+                        {{ group.title }}
+                    </option>
+                </FormField>
 
-                <div>
-                    <label for="edit-link-domain-type" class="mb-1 block text-sm font-medium text-gray-700">域名类型</label>
-                    <select id="edit-link-domain-type" v-model="editingLink.domainType"
-                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
-                        <option value="OFFICIAL">官方域名</option>
-                        <option value="CUSTOM">自定义域名</option>
-                    </select>
-                    <p class="mt-1 text-xs text-gray-500">选择域名类型</p>
-                </div>
+                <!-- 替换域名类型字段 -->
+                <FormField id="edit-link-domain-type" label="域名类型" type="select" v-model="editingLink.domainType"
+                    helpText="选择域名类型">
+                    <option value="OFFICIAL">官方域名</option>
+                    <option value="CUSTOM">自定义域名</option>
+                </FormField>
 
-                <div>
-                    <label for="edit-link-domain-id" class="mb-1 block text-sm font-medium text-gray-700">域名</label>
-                    <select id="edit-link-domain-id" v-model="editingLink.domainId"
-                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
-                        <option :value="1">timu.fun</option>
-                        <!-- 这里可以根据实际域名列表动态生成选项 -->
-                    </select>
-                    <p class="mt-1 text-xs text-gray-500">选择短链接使用的域名</p>
-                </div>
+                <!-- 替换域名字段 -->
+                <FormField id="edit-link-domain-id" label="域名" type="select" v-model="editingLink.domainId"
+                    helpText="选择短链接使用的域名">
+                    <option :value="1">timu.fun</option>
+                    <!-- 这里可以根据实际域名列表动态生成选项 -->
+                </FormField>
 
-                <!-- 提交按钮容器 -->
-                <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                    <button type="button" @click="closeEditLinkModal"
-                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
-                        取消
-                    </button>
-                    <button type="submit" :disabled="isUpdatingLink || !editingLink.title"
-                        class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                        <LoadingSpinner v-if="isUpdatingLink" class="h-5 w-5 animate-spin text-white" />
-                        {{ isUpdatingLink ? "更新中..." : "保存修改" }}
-                    </button>
-                </div>
+                <!-- 使用FormActions组件替换原有的按钮容器 -->
+                <FormActions submitText="保存修改" loadingText="更新中..." :isLoading="isUpdatingLink"
+                    :disabled="!editingLink.title" @cancel="closeEditLinkModal" />
             </form>
         </BaseModal>
 
@@ -395,9 +333,12 @@ import { GroupData, Data } from "./config";
 import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
 import BaseModal from "@/components/BaseModal.vue";
-import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import LinkCard from '@/components/LinkCard.vue';
-import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'; // 引入ConfirmDeleteModal组件
+import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue';
+import EmptyState from '@/components/EmptyState.vue';
+import FormField from '@/components/FormField.vue';
+import InfoField from '@/components/InfoField.vue';
+import FormActions from '@/components/FormActions.vue'; // 引入FormActions组件
 // 导入颜色方案工具
 import {
     getIconColor,
@@ -585,13 +526,6 @@ const getStatusDot = (state: string, expired: boolean) => {
     return "bg-yellow-500";
 };
 
-// 获取状态样式类
-const getStatusClass = (state: string, expired: boolean) => {
-    if (expired) return "text-red-600 bg-red-50 border-red-100";
-    if (state === "ACTIVE")
-        return "text-emerald-600 bg-emerald-50 border-emerald-100";
-    return "text-yellow-600 bg-yellow-50 border-yellow-100";
-};
 
 // 添加页面动画效果
 onMounted(() => {
