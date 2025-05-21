@@ -1,354 +1,342 @@
 <template>
-    <div class="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
-        <!-- 确保背景装饰元素正确放置在顶部 -->
-        <DecorativeBackground />
-
-        <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- 使用PageHeader组件替换原有的标题区域 -->
-            <PageHeader tag="短链接管理" title="管理您的短链接" description="查看、编辑和管理您的所有短链接" />
-
-            <!-- 分组选择器 -->
-            <div class="reveal-element mx-auto mb-8 max-w-6xl delay-300">
-                <div class="rounded-xl bg-white p-4 shadow-md">
-                    <div class="mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">选择分组</h3>
-                    </div>
-
-                    <div class="flex flex-wrap gap-3">
-                        <button @click="selectGroup(null)"
-                            class="rounded-lg px-4 py-2 text-sm transition-all duration-300" :class="selectedGroupId === null
-                                ? 'bg-indigo-600 text-white shadow-md'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                ">
-                            全部分组
-                        </button>
-
-                        <button v-for="group in groupData" :key="group.id" @click="selectGroup(group.id)"
-                            class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all duration-300"
-                            :class="selectedGroupId === group.id
-                                ? getSelectedButtonStyle(group.id)
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                ">
-                            <span class="h-2 w-2 rounded-full" :class="getColorDot(getGroupIndex(group.id))"></span>
-                            {{ group.title }}
-                        </button>
-                    </div>
+    <PageLayout tag="短链接管理" title="管理您的短链接" description="查看、编辑和管理您的所有短链接">
+        <!-- 分组选择器 -->
+        <div class="reveal-element mx-auto mb-8 max-w-6xl delay-300">
+            <div class="rounded-xl bg-white p-4 shadow-md">
+                <div class="mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">选择分组</h3>
                 </div>
-            </div>
 
-            <!-- 链接列表 -->
-            <div class="reveal-element mx-auto max-w-6xl delay-300">
-                <!-- 创建链接按钮 -->
-                <div class="mb-6 flex justify-end">
-                    <button
-                        class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-5 py-2.5 font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        创建新链接
+                <div class="flex flex-wrap gap-3">
+                    <button @click="selectGroup(null)" class="rounded-lg px-4 py-2 text-sm transition-all duration-300"
+                        :class="selectedGroupId === null
+                            ? 'bg-indigo-600 text-white shadow-md'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            ">
+                        全部分组
                     </button>
-                </div>
 
-                <!-- 链接卡片 -->
-                <div class="space-y-4">
-                    <LinkCard v-for="(link, index) in filteredLinks" :key="link.id" :title="link.title"
-                        :colorIndex="getLinkColorIndex(link, index)">
-                        <!-- 顶部操作按钮 -->
-                        <template #header-actions>
-                            <span class="text-sm text-white/80">操作</span>
-                            <div class="flex space-x-1">
-                                <button @click="openEditLinkModal(link)"
-                                    class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-white/20">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path
-                                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                    </svg>
-                                </button>
-                                <button @click="openDeleteConfirmModal(link)"
-                                    class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-red-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                                <button
-                                    class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-white/20">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                                        <path
-                                            d="M3 5a2 2 0 002-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </template>
-
-                        <!-- 链接内容 -->
-                        <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <!-- 使用InfoField替换原始链接字段 -->
-                            <InfoField label="原始链接" :value="getOriginalUrl(link.originalUrl)" breakAll />
-
-                            <!-- 使用InfoField替换短链接字段 -->
-                            <InfoField label="短链接" valueClass="text-indigo-600" borderClass="border-indigo-100"
-                                bgClass="bg-indigo-50">
-                                <div class="flex items-center justify-between w-full">
-                                    <span>{{ `${link.domain}/${link.code}` }}</span>
-                                    <button class="rounded p-1 transition-colors hover:bg-indigo-100">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-600"
-                                            viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                                            <path
-                                                d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </InfoField>
-                        </div>
-
-                        <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                            <!-- 使用InfoField替换分组字段 -->
-                            <InfoField label="分组">
-                                <div class="flex items-center gap-2 w-full">
-                                    <span class="h-2 w-2 rounded-full"
-                                        :class="getColorDot(getGroupIndex(link.groupId))"></span>
-                                    {{ getGroupTitle(link.groupId) }}
-                                </div>
-                            </InfoField>
-
-                            <!-- 使用InfoField替换过期时间字段 -->
-                            <InfoField label="过期时间" :value="formatDate(link.expired)" icon="clock"
-                                :valueClass="isExpired(link.expired) ? 'text-red-600' : 'text-gray-800'" />
-
-                            <!-- 使用InfoField替换状态字段 -->
-                            <InfoField label="状态" :value="getStatusText(link.state, isExpired(link.expired))"
-                                :borderClass="isExpired(link.expired) ? 'border-red-100' :
-                                    link.state === 'ACTIVE' ? 'border-emerald-100' : 'border-yellow-100'" :bgClass="isExpired(link.expired) ? 'bg-red-50' :
-                                        link.state === 'ACTIVE' ? 'bg-emerald-50' : 'bg-yellow-50'" :valueClass="isExpired(link.expired) ? 'text-red-600' :
-                                            link.state === 'ACTIVE' ? 'text-emerald-600' : 'text-yellow-600'">
-                                <template #icon>
-                                    <span class="h-2 w-2 rounded-full"
-                                        :class="getStatusDot(link.state, isExpired(link.expired))"></span>
-                                </template>
-                            </InfoField>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <!-- 使用InfoField替换创建时间字段 -->
-                            <InfoField label="创建时间" :value="formatDate(link.gmtCreate)" icon="clock"
-                                :iconClass="getIconColor(getLinkColorIndex(link, index), 0)" />
-
-                            <!-- 使用InfoField替换修改时间字段 -->
-                            <InfoField label="修改时间" :value="formatDate(link.gmtModified)" icon="update"
-                                :iconClass="getIconColor(getLinkColorIndex(link, index), 1)" />
-                        </div>
-
-                        <!-- 底部操作按钮 -->
-                        <template #footer-actions>
-                            <button
-                                class="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-50">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                    <path fill-rule="evenodd"
-                                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                            <button
-                                class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
-                                :class="getActionButtonBg(getLinkColorIndex(link, index))">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                                    <path
-                                        d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                                </svg>
-                                访问链接
-                            </button>
-                        </template>
-                    </LinkCard>
-                </div>
-
-                <!-- 无链接数据提示 - 替换为EmptyState组件 -->
-                <EmptyState v-if="!filteredLinks.length" title="暂无链接数据" description="该分组下没有链接数据，或者您还没有创建任何链接"
-                    iconType="blue">
-                    <template #icon>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M12.586 4.586a2 2 0 112.828 2.828l-7 7a2 2 0 01-2.828 0l-7-7a2 2 0 111.414-1.414L9 14.586l3.586-3.586a2 2 0 013.536 0l3.586 3.586a1 1 0 010 1.414l-3.586 3.586a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0zM5 5a1 1 0 100-2 1 1 0 000 2zm14 0a1 1 0 100-2 1 1 0 000 2zM5 19a1 1 0 100-2 1 1 0 000 2zm14 0a1 1 0 100-2 1 1 0 000 2z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </template>
-                </EmptyState>
-
-                <!-- 分页区域 -->
-                <div class="mt-6 flex justify-center">
-                    <nav class="flex items-center space-x-1">
-                        <button @click="prevPage" :disabled="currentPage <= 1" :class="[
-                            'rounded-md border p-2',
-                            currentPage <= 1
-                                ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
-                                : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50',
-                        ]">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-
-                        <template v-if="totalPages <= 7">
-                            <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
-                                class="rounded-md border px-3 py-2" :class="page === currentPage
-                                    ? 'border-indigo-500 bg-indigo-500 text-white'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                                    ">
-                                {{ page }}
-                            </button>
-                        </template>
-
-                        <template v-else>
-                            <!-- 显示首页 -->
-                            <button @click="goToPage(1)" class="rounded-md border px-3 py-2" :class="currentPage === 1
-                                ? 'border-indigo-500 bg-indigo-500 text-white'
-                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                                ">
-                                1
-                            </button>
-
-                            <!-- 左省略号 -->
-                            <span v-if="showLeftEllipsis" class="px-2 text-gray-500">...</span>
-
-                            <!-- 中间页码 -->
-                            <button v-for="page in middlePages" :key="page" @click="goToPage(page)"
-                                class="rounded-md border px-3 py-2" :class="page === currentPage
-                                    ? 'border-indigo-500 bg-indigo-500 text-white'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                                    ">
-                                {{ page }}
-                            </button>
-
-                            <!-- 右省略号 -->
-                            <span v-if="showRightEllipsis" class="px-2 text-gray-500">...</span>
-
-                            <!-- 显示尾页 -->
-                            <button @click="goToPage(totalPages)" class="rounded-md border px-3 py-2" :class="currentPage === totalPages
-                                ? 'border-indigo-500 bg-indigo-500 text-white'
-                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                                ">
-                                {{ totalPages }}
-                            </button>
-                        </template>
-
-                        <button @click="nextPage" :disabled="currentPage >= totalPages" :class="[
-                            'rounded-md border p-2',
-                            currentPage >= totalPages
-                                ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
-                                : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50',
-                        ]">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </nav>
-                </div>
-
-                <!-- 页面大小选择器 -->
-                <div class="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600">
-                    <span>每页显示</span>
-                    <select v-model="pageSize" @change="handlePageSizeChange"
-                        class="rounded-md border border-gray-300 bg-white p-1">
-                        <option :value="10">10</option>
-                        <option :value="20">20</option>
-                        <option :value="50">50</option>
-                        <option :value="100">100</option>
-                    </select>
-                    <span>条，总计 {{ totalCount }} 条数据</span>
+                    <button v-for="group in groupData" :key="group.id" @click="selectGroup(group.id)"
+                        class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all duration-300" :class="selectedGroupId === group.id
+                            ? getSelectedButtonStyle(group.id)
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            ">
+                        <span class="h-2 w-2 rounded-full" :class="getColorDot(getGroupIndex(group.id))"></span>
+                        {{ group.title }}
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- 使用 BaseModal 组件重构编辑链接模态框 -->
-        <BaseModal v-model="showEditLinkModal" title="更新链接信息" id="edit-link-modal">
-            <!-- 表单内容 -->
-            <form @submit.prevent="updateLink" class="space-y-4">
-                <!-- 替换链接标题字段 -->
-                <FormField id="edit-link-title" label="链接标题" v-model="editingLink.title" placeholder="请输入链接标题"
-                    helpText="为您的链接添加一个易于识别的名称" required />
+        <!-- 链接列表 -->
+        <div class="reveal-element mx-auto max-w-6xl delay-300">
+            <!-- 创建链接按钮 -->
+            <div class="mb-6 flex justify-end">
+                <button
+                    class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-5 py-2.5 font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    创建新链接
+                </button>
+            </div>
 
-                <!-- 替换选择分组字段 -->
-                <FormField id="edit-link-group" label="选择分组" type="select" v-model="editingLink.groupId"
-                    helpText="选择该链接所属的分组">
-                    <option v-for="group in groupData" :key="group.id" :value="group.id">
-                        {{ group.title }}
-                    </option>
-                </FormField>
+            <!-- 链接卡片 -->
+            <div class="space-y-4">
+                <LinkCard v-for="(link, index) in filteredLinks" :key="link.id" :title="link.title"
+                    :colorIndex="getLinkColorIndex(link, index)">
+                    <!-- 顶部操作按钮 -->
+                    <template #header-actions>
+                        <span class="text-sm text-white/80">操作</span>
+                        <div class="flex space-x-1">
+                            <button @click="openEditLinkModal(link)"
+                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-white/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                </svg>
+                            </button>
+                            <button @click="openDeleteConfirmModal(link)"
+                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-red-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button
+                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-white/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
+                                    <path
+                                        d="M3 5a2 2 0 002-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </template>
 
-                <!-- 替换域名类型字段 -->
-                <FormField id="edit-link-domain-type" label="域名类型" type="select" v-model="editingLink.domainType"
-                    helpText="选择域名类型">
-                    <option value="OFFICIAL">官方域名</option>
-                    <option value="CUSTOM">自定义域名</option>
-                </FormField>
+                    <!-- 链接内容 -->
+                    <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <!-- 使用InfoField替换原始链接字段 -->
+                        <InfoField label="原始链接" :value="getOriginalUrl(link.originalUrl)" breakAll />
 
-                <!-- 替换域名字段 -->
-                <FormField id="edit-link-domain-id" label="域名" type="select" v-model="editingLink.domainId"
-                    helpText="选择短链接使用的域名">
-                    <option :value="1">timu.fun</option>
-                    <!-- 这里可以根据实际域名列表动态生成选项 -->
-                </FormField>
+                        <!-- 使用InfoField替换短链接字段 -->
+                        <InfoField label="短链接" valueClass="text-indigo-600" borderClass="border-indigo-100"
+                            bgClass="bg-indigo-50">
+                            <div class="flex items-center justify-between w-full">
+                                <span>{{ `${link.domain}/${link.code}` }}</span>
+                                <button class="rounded p-1 transition-colors hover:bg-indigo-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-600"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                        <path
+                                            d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </InfoField>
+                    </div>
 
-                <!-- 使用FormActions组件替换原有的按钮容器 -->
-                <FormActions submitText="保存修改" loadingText="更新中..." :isLoading="isUpdatingLink"
-                    :disabled="!editingLink.title" @cancel="closeEditLinkModal" />
-            </form>
-        </BaseModal>
+                    <div class="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <!-- 使用InfoField替换分组字段 -->
+                        <InfoField label="分组">
+                            <div class="flex items-center gap-2 w-full">
+                                <span class="h-2 w-2 rounded-full"
+                                    :class="getColorDot(getGroupIndex(link.groupId))"></span>
+                                {{ getGroupTitle(link.groupId) }}
+                            </div>
+                        </InfoField>
 
-        <!-- 替换原有的删除确认模态框为ConfirmDeleteModal组件 -->
-        <ConfirmDeleteModal v-model="showDeleteConfirmModal" title="确认删除短链接" id="delete-confirm-modal"
-            message="您确定要删除这个短链接吗？此操作无法撤销，删除后该链接将无法访问。" detailsTitle="链接详情" :isLoading="isDeleting"
-            loadingText="正在删除..." @confirm="deleteLink">
-            <template #details>
-                <p class="mt-1 text-sm text-gray-500">标题: {{ deletingLink.title }}</p>
-                <p class="mt-1 text-sm text-gray-500">短链接: {{ deletingLink.domain }}/{{ deletingLink.code }}</p>
-            </template>
-        </ConfirmDeleteModal>
-    </div>
+                        <!-- 使用InfoField替换过期时间字段 -->
+                        <InfoField label="过期时间" :value="formatDate(link.expired)" icon="clock"
+                            :valueClass="isExpired(link.expired) ? 'text-red-600' : 'text-gray-800'" />
+
+                        <!-- 使用InfoField替换状态字段 -->
+                        <InfoField label="状态" :value="getStatusText(link.state, isExpired(link.expired))" :borderClass="isExpired(link.expired) ? 'border-red-100' :
+                            link.state === 'ACTIVE' ? 'border-emerald-100' : 'border-yellow-100'" :bgClass="isExpired(link.expired) ? 'bg-red-50' :
+                                link.state === 'ACTIVE' ? 'bg-emerald-50' : 'bg-yellow-50'" :valueClass="isExpired(link.expired) ? 'text-red-600' :
+                        link.state === 'ACTIVE' ? 'text-emerald-600' : 'text-yellow-600'">
+                            <template #icon>
+                                <span class="h-2 w-2 rounded-full"
+                                    :class="getStatusDot(link.state, isExpired(link.expired))"></span>
+                            </template>
+                        </InfoField>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <!-- 使用InfoField替换创建时间字段 -->
+                        <InfoField label="创建时间" :value="formatDate(link.gmtCreate)" icon="clock"
+                            :iconClass="getIconColor(getLinkColorIndex(link, index), 0)" />
+
+                        <!-- 使用InfoField替换修改时间字段 -->
+                        <InfoField label="修改时间" :value="formatDate(link.gmtModified)" icon="update"
+                            :iconClass="getIconColor(getLinkColorIndex(link, index), 1)" />
+                    </div>
+
+                    <!-- 底部操作按钮 -->
+                    <template #footer-actions>
+                        <button
+                            class="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                <path fill-rule="evenodd"
+                                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <button
+                            class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
+                            :class="getActionButtonBg(getLinkColorIndex(link, index))">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                <path
+                                    d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                            </svg>
+                            访问链接
+                        </button>
+                    </template>
+                </LinkCard>
+            </div>
+
+            <!-- 无链接数据提示 - 替换为EmptyState组件 -->
+            <EmptyState v-if="!filteredLinks.length" title="暂无链接数据" description="该分组下没有链接数据，或者您还没有创建任何链接"
+                iconType="blue">
+                <template #icon>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M12.586 4.586a2 2 0 112.828 2.828l-7 7a2 2 0 01-2.828 0l-7-7a2 2 0 111.414-1.414L9 14.586l3.586-3.586a2 2 0 013.536 0l3.586 3.586a1 1 0 010 1.414l-3.586 3.586a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 0zM5 5a1 1 0 100-2 1 1 0 000 2zm14 0a1 1 0 100-2 1 1 0 000 2zM5 19a1 1 0 100-2 1 1 0 000 2zm14 0a1 1 0 100-2 1 1 0 000 2z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </template>
+            </EmptyState>
+
+            <!-- 分页区域 -->
+            <div class="mt-6 flex justify-center">
+                <nav class="flex items-center space-x-1">
+                    <button @click="prevPage" :disabled="currentPage <= 1" :class="[
+                        'rounded-md border p-2',
+                        currentPage <= 1
+                            ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
+                            : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50',
+                    ]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <template v-if="totalPages <= 7">
+                        <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
+                            class="rounded-md border px-3 py-2" :class="page === currentPage
+                                ? 'border-indigo-500 bg-indigo-500 text-white'
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                ">
+                            {{ page }}
+                        </button>
+                    </template>
+
+                    <template v-else>
+                        <!-- 显示首页 -->
+                        <button @click="goToPage(1)" class="rounded-md border px-3 py-2" :class="currentPage === 1
+                            ? 'border-indigo-500 bg-indigo-500 text-white'
+                            : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                            ">
+                            1
+                        </button>
+
+                        <!-- 左省略号 -->
+                        <span v-if="showLeftEllipsis" class="px-2 text-gray-500">...</span>
+
+                        <!-- 中间页码 -->
+                        <button v-for="page in middlePages" :key="page" @click="goToPage(page)"
+                            class="rounded-md border px-3 py-2" :class="page === currentPage
+                                ? 'border-indigo-500 bg-indigo-500 text-white'
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                ">
+                            {{ page }}
+                        </button>
+
+                        <!-- 右省略号 -->
+                        <span v-if="showRightEllipsis" class="px-2 text-gray-500">...</span>
+
+                        <!-- 显示尾页 -->
+                        <button @click="goToPage(totalPages)" class="rounded-md border px-3 py-2" :class="currentPage === totalPages
+                            ? 'border-indigo-500 bg-indigo-500 text-white'
+                            : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                            ">
+                            {{ totalPages }}
+                        </button>
+                    </template>
+
+                    <button @click="nextPage" :disabled="currentPage >= totalPages" :class="[
+                        'rounded-md border p-2',
+                        currentPage >= totalPages
+                            ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
+                            : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50',
+                    ]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- 页面大小选择器 -->
+            <div class="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600">
+                <span>每页显示</span>
+                <select v-model="pageSize" @change="handlePageSizeChange"
+                    class="rounded-md border border-gray-300 bg-white p-1">
+                    <option :value="10">10</option>
+                    <option :value="20">20</option>
+                    <option :value="50">50</option>
+                    <option :value="100">100</option>
+                </select>
+                <span>条，总计 {{ totalCount }} 条数据</span>
+            </div>
+        </div>
+    </PageLayout>
+
+    <!-- 模态框保持不变 -->
+    <!-- 使用 BaseModal 组件重构编辑链接模态框 -->
+    <BaseModal v-model="showEditLinkModal" title="更新链接信息" id="edit-link-modal">
+        <!-- 表单内容 -->
+        <form @submit.prevent="updateLink" class="space-y-4">
+            <!-- 替换链接标题字段 -->
+            <FormField id="edit-link-title" label="链接标题" v-model="editingLink.title" placeholder="请输入链接标题"
+                helpText="为您的链接添加一个易于识别的名称" required />
+
+            <!-- 替换选择分组字段 -->
+            <FormField id="edit-link-group" label="选择分组" type="select" v-model="editingLink.groupId"
+                helpText="选择该链接所属的分组">
+                <option v-for="group in groupData" :key="group.id" :value="group.id">
+                    {{ group.title }}
+                </option>
+            </FormField>
+
+            <!-- 替换域名类型字段 -->
+            <FormField id="edit-link-domain-type" label="域名类型" type="select" v-model="editingLink.domainType"
+                helpText="选择域名类型">
+                <option value="OFFICIAL">官方域名</option>
+                <option value="CUSTOM">自定义域名</option>
+            </FormField>
+
+            <!-- 替换域名字段 -->
+            <FormField id="edit-link-domain-id" label="域名" type="select" v-model="editingLink.domainId"
+                helpText="选择短链接使用的域名">
+                <option :value="1">timu.fun</option>
+                <!-- 这里可以根据实际域名列表动态生成选项 -->
+            </FormField>
+
+            <!-- 使用FormActions组件替换原有的按钮容器 -->
+            <FormActions submitText="保存修改" loadingText="更新中..." :isLoading="isUpdatingLink"
+                :disabled="!editingLink.title" @cancel="closeEditLinkModal" />
+        </form>
+    </BaseModal>
+
+    <!-- 替换原有的删除确认模态框为ConfirmDeleteModal组件 -->
+    <ConfirmDeleteModal v-model="showDeleteConfirmModal" title="确认删除短链接" id="delete-confirm-modal"
+        message="您确定要删除这个短链接吗？此操作无法撤销，删除后该链接将无法访问。" detailsTitle="链接详情" :isLoading="isDeleting" loadingText="正在删除..."
+        @confirm="deleteLink">
+        <template #details>
+            <p class="mt-1 text-sm text-gray-500">标题: {{ deletingLink.title }}</p>
+            <p class="mt-1 text-sm text-gray-500">短链接: {{ deletingLink.domain }}/{{ deletingLink.code }}</p>
+        </template>
+    </ConfirmDeleteModal>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, reactive } from "vue";
 import { GroupData, Data } from "./config";
-import PageHeader from "@/components/PageHeader";
-import DecorativeBackground from "@/components/DecorativeBackground.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import LinkCard from '@/components/LinkCard.vue';
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue';
 import EmptyState from '@/components/EmptyState.vue';
 import FormField from '@/components/FormField.vue';
 import InfoField from '@/components/InfoField.vue';
-import FormActions from '@/components/FormActions.vue'; // 引入FormActions组件
+import FormActions from '@/components/FormActions.vue';
+import PageLayout from '@/components/PageLayout.vue'; // 引入PageLayout组件
+
 // 导入颜色方案工具
 import {
     getIconColor,
     getActionButtonBg,
     getColorDot,
     getLinkColorIndex,
-    getSelectedButtonStyle as getSchemeButtonStyle // 重命名为 getSchemeButtonStyle 以避免命名冲突
+    getSelectedButtonStyle as getSchemeButtonStyle
 } from "@/utils/ColorSchemeProvider";
 import { formatDate, isDateExpired } from '@/utils/DateUtils';
-import { initPageAnimations } from '@/utils/AnimationUtils'
 
 // 分组数据
 const groupData = ref(GroupData);
@@ -536,9 +524,6 @@ onMounted(() => {
 
     // 初始获取数据
     fetchLinks();
-
-    // 初始化页面动画
-    initPageAnimations();
 });
 
 // 编辑链接模态框状态
@@ -686,7 +671,7 @@ const deleteLink = async () => {
             }
         }
 
-        // 关闭模态框 - 修改为直接设置状态
+// 关闭模态框 - 修改为直接设置状态
         showDeleteConfirmModal.value = false;
 
         // 显示成功提示（这里可以添加一个toast提示）
@@ -700,11 +685,6 @@ const deleteLink = async () => {
 </script>
 
 <style scoped>
-/* 移除重复的噪点图案定义，让它来自组件 */
-/* .noise-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
-} */
-
 /* 卡片效果 */
 .link-card {
     box-shadow:
@@ -719,26 +699,6 @@ const deleteLink = async () => {
         0 6px 8px -2px rgba(0, 0, 0, 0.04);
 }
 
-/* 元素显示动画 */
-.reveal-element {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.reveal-element.delay-300 {
-    transition-delay: 0.3s;
-}
-
-.reveal-element.delay-500 {
-    transition-delay: 0.5s;
-}
-
-.reveal-element.revealed {
-    opacity: 1;
-    transform: translateY(0);
-}
-
 /* 组卡片悬浮效果 */
 .group-card {
     transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
@@ -751,46 +711,11 @@ const deleteLink = async () => {
     z-index: 2;
 }
 
-/* 移动端优化 */
+/* 改善移动端按钮点击区域 */
 @media (max-width: 640px) {
-    .reveal-element {
-        opacity: 0.1;
-    }
-
-    /* 改善移动端按钮点击区域 */
     button {
         min-height: 44px;
     }
-}
-
-/* 修复一些动画问题 */
-@media (prefers-reduced-motion: reduce) {
-    .reveal-element {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-    }
-}
-
-/* 卡片颜色循环显示动画 */
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-/* 让渐变背景有动画效果 */
-[class*="bg-gradient-to-r"] {
-    background-size: 200% 200%;
-    animation: gradientShift 6s ease infinite;
 }
 
 /* 溢出文本处理 */
