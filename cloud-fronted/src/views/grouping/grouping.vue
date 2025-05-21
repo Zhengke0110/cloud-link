@@ -306,7 +306,7 @@
                     </button>
                     <button type="submit" :disabled="isUpdating || !editingGroup.title"
                         class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                        <LoadingSpinner v-if="isUpdating" class="h-5 w-5 animate-spin text-white"/>
+                        <LoadingSpinner v-if="isUpdating" class="h-5 w-5 animate-spin text-white" />
                         {{ isUpdating ? "更新中..." : "保存修改" }}
                     </button>
                 </div>
@@ -371,7 +371,7 @@ import {
     getIconColor,
     getActionButtonBg
 } from "@/utils/ColorSchemeProvider";
-
+import { initPageAnimations } from '@/utils/AnimationUtils'
 
 // 分组数据
 const groupData = ref(Data);
@@ -564,43 +564,10 @@ const deleteGroup = async () => {
 };
 
 // 添加页面动画效果
-onMounted(() => {
-    // 如果浏览器支持，添加页面加载动画
-    const revealElements = document.querySelectorAll(".reveal-element");
-
-    if ("IntersectionObserver" in window) {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("revealed");
-                        observer.unobserve(entry.target);
-                    }
-                });
-            },
-            {
-                threshold: 0.1,
-            },
-        );
-
-        revealElements.forEach((el) => {
-            observer.observe(el);
-        });
-    } else {
-        // 对于不支持 IntersectionObserver 的浏览器，直接显示元素
-        revealElements.forEach((el) => {
-            el.classList.add("revealed");
-        });
-    }
-});
+onMounted(() => initPageAnimations());
 </script>
 
 <style scoped>
-/* 移除重复的噪点图案定义，让它来自组件 */
-
-/* .noise-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
-} */
 
 /* 卡片效果 */
 .feature-card-3d {

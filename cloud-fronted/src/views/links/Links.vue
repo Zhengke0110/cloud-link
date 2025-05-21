@@ -466,6 +466,7 @@ import {
     getSelectedButtonStyle as getSchemeButtonStyle // 重命名为 getSchemeButtonStyle 以避免命名冲突
 } from "@/utils/ColorSchemeProvider";
 import { formatDate } from '@/utils/DateUtils';
+import { initPageAnimations } from '@/utils/AnimationUtils'
 
 // 分组数据
 const groupData = ref(GroupData);
@@ -656,18 +657,6 @@ const getStatusClass = (state: string, expired: boolean) => {
     return "text-yellow-600 bg-yellow-50 border-yellow-100";
 };
 
-
-
-// 移除所有已经抽取到ColorSchemeProvider的函数：
-// - getColorScheme
-// - getHeaderGradient
-// - getBorderGradient
-// - getIconColor
-// - getActionButtonBg
-// - getColorDot
-// - getLinkColorIndex (已在ColorSchemeProvider中重新实现)
-
-
 // 添加页面动画效果
 onMounted(() => {
     // 默认选择第一个分组
@@ -678,33 +667,8 @@ onMounted(() => {
     // 初始获取数据
     fetchLinks();
 
-    // 如果浏览器支持，添加页面加载动画
-    const revealElements = document.querySelectorAll(".reveal-element");
-
-    if ("IntersectionObserver" in window) {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("revealed");
-                        observer.unobserve(entry.target);
-                    }
-                });
-            },
-            {
-                threshold: 0.1,
-            },
-        );
-
-        revealElements.forEach((el) => {
-            observer.observe(el);
-        });
-    } else {
-        // 对于不支持 IntersectionObserver 的浏览器，直接显示元素
-        revealElements.forEach((el) => {
-            el.classList.add("revealed");
-        });
-    }
+    // 初始化页面动画
+    initPageAnimations();
 });
 
 // 编辑链接模态框状态
