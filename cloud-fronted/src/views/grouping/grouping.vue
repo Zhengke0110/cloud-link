@@ -22,124 +22,105 @@
                     </button>
                 </div>
 
-                <!-- 分组卡片 -->
+                <!-- 分组卡片 - 使用LinkCard组件替换 -->
                 <div class="space-y-4 md:space-y-6">
-                    <div v-for="(group, index) in groupData" :key="group.id"
-                        class="group-card group relative overflow-hidden rounded-xl border border-gray-100 bg-white p-0.5 shadow-md transition-all duration-500 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl">
-                        <div class="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                            :class="getBorderGradient(index)"></div>
+                    <LinkCard v-for="(group, index) in groupData" :key="group.id" :title="group.title"
+                        :colorIndex="index">
+                        <!-- 顶部操作按钮 -->
+                        <template #header-actions>
+                            <span class="text-sm text-white/80">操作</span>
+                            <div class="flex space-x-1">
+                                <button @click="openEditModal(group)"
+                                    class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-white/20">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path
+                                            d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                    </svg>
+                                </button>
+                                <button @click="openDeleteConfirmModal(group)"
+                                    class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-red-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </template>
 
-                        <!-- 卡片内容 -->
-                        <div class="relative overflow-hidden rounded-xl bg-white">
-                            <!-- 顶部标题栏 -->
-                            <div class="relative overflow-hidden p-5" :class="getHeaderGradient(index)">
-                                <!-- 装饰圆圈 -->
-                                <div class="absolute -top-10 -right-10 h-24 w-24 rounded-full bg-white/10"></div>
-                                <div class="absolute -bottom-16 -left-8 h-32 w-32 rounded-full bg-white/5"></div>
-
-                                <div class="relative z-10 flex items-center justify-between">
-                                    <h3 class="text-xl font-bold text-white">
-                                        {{ group.title }}
-                                    </h3>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-sm text-white/80">操作</span>
-                                        <div class="flex space-x-1">
-                                            <button @click="openEditModal(group)"
-                                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-white/20">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                    <path
-                                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                                </svg>
-                                            </button>
-                                            <button @click="openDeleteConfirmModal(group)"
-                                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-red-400">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
-                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
+                        <!-- 分组内容 -->
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div>
+                                <div class="mb-1 text-xs text-gray-500">分组ID</div>
+                                <div
+                                    class="rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium break-all text-gray-800">
+                                    {{ group.id }}
                                 </div>
                             </div>
-
-                            <!-- 分组内容 -->
-                            <div class="p-6">
-                                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                    <div>
-                                        <div class="mb-1 text-xs text-gray-500">分组ID</div>
-                                        <div
-                                            class="rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium break-all text-gray-800">
-                                            {{ group.id }}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="mb-1 text-xs text-gray-500">账号</div>
-                                        <div
-                                            class="rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
-                                            {{ group.accountNo }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                                    <div>
-                                        <div class="mb-1 text-xs text-gray-500">创建时间</div>
-                                        <div
-                                            class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                                fill="currentColor" :class="getIconColor(index, 0)">
-                                                <path fill-rule="evenodd"
-                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                            {{ formatDate(group.gmtCreate) }}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="mb-1 text-xs text-gray-500">修改时间</div>
-                                        <div
-                                            class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                                fill="currentColor" :class="getIconColor(index, 1)">
-                                                <path fill-rule="evenodd"
-                                                    d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                            {{ formatDate(group.gmtModified) }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 分组操作按钮 -->
-                                <div class="mt-5 flex justify-end space-x-3">
-                                    <button
-                                        class="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-50">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path
-                                                d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                                            <path
-                                                d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                                        </svg>
-                                    </button>
-                                    <button
-                                        class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
-                                        :class="getActionButtonBg(index)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path
-                                                d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
-                                        </svg>
-                                        管理分组
-                                    </button>
+                            <div>
+                                <div class="mb-1 text-xs text-gray-500">账号</div>
+                                <div
+                                    class="rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
+                                    {{ group.accountNo }}
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div>
+                                <div class="mb-1 text-xs text-gray-500">创建时间</div>
+                                <div
+                                    class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                        fill="currentColor" :class="getIconColor(index, 0)">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    {{ formatDate(group.gmtCreate) }}
+                                </div>
+                            </div>
+                            <div>
+                                <div class="mb-1 text-xs text-gray-500">修改时间</div>
+                                <div
+                                    class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium text-gray-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                        fill="currentColor" :class="getIconColor(index, 1)">
+                                        <path fill-rule="evenodd"
+                                            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    {{ formatDate(group.gmtModified) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 分组操作按钮 -->
+                        <template #footer-actions>
+                            <button
+                                class="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                    <path
+                                        d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                                </svg>
+                            </button>
+                            <button
+                                class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
+                                :class="getActionButtonBg(index)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path
+                                        d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+                                </svg>
+                                管理分组
+                            </button>
+                        </template>
+                    </LinkCard>
                 </div>
 
                 <!-- 无分组数据提示 -->
@@ -362,6 +343,7 @@ import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import LinkCard from '@/components/LinkCard.vue'; // 引入LinkCard组件
 // 导入日期工具函数
 import { formatDate } from "@/utils/DateUtils";
 // 导入颜色方案工具
@@ -568,7 +550,6 @@ onMounted(() => initPageAnimations());
 </script>
 
 <style scoped>
-
 /* 卡片效果 */
 .feature-card-3d {
     box-shadow:
@@ -601,18 +582,6 @@ onMounted(() => initPageAnimations());
 .reveal-element.revealed {
     opacity: 1;
     transform: translateY(0);
-}
-
-/* 组卡片悬浮效果 */
-.group-card {
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    position: relative;
-    z-index: 1;
-}
-
-.group-card:hover {
-    transform: translateY(-0.5rem);
-    z-index: 2;
 }
 
 /* 移动端优化 */

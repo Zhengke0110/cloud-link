@@ -1,0 +1,130 @@
+/* 元素显示动画 */
+.reveal-element {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-element.delay-300 {
+  transition-delay: 0.3s;
+}
+
+.reveal-element.delay-500 {
+  transition-delay: 0.5s;
+}
+
+.reveal-element.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 卡片效果 */
+.feature-card-3d,
+.link-card {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.feature-card-3d:hover,
+.link-card:hover {
+  box-shadow:
+    0 12px 20px -3px rgba(0, 0, 0, 0.07),
+    0 6px 8px -2px rgba(0, 0, 0, 0.04);
+  transform: translateY(-0.25rem);
+}
+
+/* 组卡片悬浮效果 */
+.group-card {
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.group-card:hover {
+  transform: translateY(-0.5rem);
+  z-index: 2;
+}
+
+/* 渐变背景动画 */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 让渐变背景有动画效果 */
+[class*="bg-gradient-to-r"] {
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+}
+
+/* 模态框动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 模态框内容动画 */
+.transform {
+  transition-property: transform, opacity;
+  transition-duration: 0.3s;
+}
+
+/* 移动端优化 */
+@media (max-width: 640px) {
+  .reveal-element {
+    opacity: 0.1;
+  }
+
+  /* 改善移动端按钮点击区域 */
+  button {
+    min-height: 44px;
+  }
+
+  /* 模态框从底部滑入效果 */
+  [role="dialog"] [role="dialog"] {
+    bottom: 0;
+    position: fixed;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  /* 确保模态框内容在移动设备上更易于点击 */
+  input,
+  select,
+  button {
+    font-size: 16px; /* 防止iOS自动缩放 */
+    min-height: 44px; /* 确保触摸友好 */
+  }
+}
+
+/* 修复一些动画问题 */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-element {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  [class*="bg-gradient-to-r"] {
+    animation: none !important;
+  }
+}
+
+/* 溢出文本处理 */
+.break-all {
+  word-break: break-all;
+}
