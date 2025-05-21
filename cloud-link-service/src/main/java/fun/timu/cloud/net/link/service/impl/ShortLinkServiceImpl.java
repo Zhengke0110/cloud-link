@@ -239,7 +239,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         } else if (EventMessageType.SHORT_LINK_DEL_MAPPING.name().equalsIgnoreCase(messageType)) {
 
             // 构建组代码映射对象，准备删除
-            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().id(request.getMappingId()).accountNo(accountNo).groupId(request.getGroupId()).build();
+            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().code(request.getCode()).accountNo(accountNo).groupId(request.getGroupId()).build();
 
             // 执行删除操作并记录删除的行数
             int rows = groupCodeMappingManager.del(groupCodeMappingDO);

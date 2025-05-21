@@ -66,7 +66,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     public int del(GroupCodeMapping groupCodeMappingDO) {
         // 更新数据库中的记录，将删除标志设置为1，表示该记录已被删除
         int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
-                .eq("id", groupCodeMappingDO.getId())
+                .eq("code", groupCodeMappingDO.getCode())
                 .eq("account_no", groupCodeMappingDO.getAccountNo())
                 .eq("group_id", groupCodeMappingDO.getGroupId())
                 .set("del", 1)
