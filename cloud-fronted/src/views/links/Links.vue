@@ -1,12 +1,7 @@
 <template>
     <div class="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
-        <!-- 背景装饰元素 -->
-        <div class="absolute inset-0 z-0">
-            <div class="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-indigo-100/40 blur-3xl"></div>
-            <div class="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-blue-100/30 blur-3xl"></div>
-            <div class="absolute top-1/3 left-1/4 h-48 w-48 rounded-full bg-purple-100/20 blur-3xl"></div>
-            <div class="noise-pattern absolute inset-0 opacity-[0.03]"></div>
-        </div>
+        <!-- 确保背景装饰元素正确放置在顶部 -->
+        <DecorativeBackground />
 
         <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
             <!-- 使用PageHeader组件替换原有的标题区域 -->
@@ -172,8 +167,8 @@
                                         <div class="flex items-center gap-2 rounded-lg border p-2 text-sm font-medium"
                                             :class="getStatusClass(link.state, isExpired(link.expired))
                                                 ">
-                                            <span class="h-2 w-2 rounded-full"
-                                                :class="getStatusDot(link.state, isExpired(link.expired))"></span>
+                                            <span class="h-2 w-2 rounded-full" :class="getStatusDot(link.state, isExpired(link.expired))
+                                                "></span>
                                             {{ getStatusText(link.state, isExpired(link.expired)) }}
                                         </div>
                                     </div>
@@ -263,8 +258,8 @@
                         <button @click="prevPage" :disabled="currentPage <= 1" :class="[
                             'rounded-md border p-2',
                             currentPage <= 1
-                                ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
-                                : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'
+                                ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
+                                : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50',
                         ]">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                 fill="currentColor">
@@ -278,7 +273,8 @@
                             <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
                                 class="rounded-md border px-3 py-2" :class="page === currentPage
                                     ? 'border-indigo-500 bg-indigo-500 text-white'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'">
+                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                    ">
                                 {{ page }}
                             </button>
                         </template>
@@ -287,7 +283,8 @@
                             <!-- 显示首页 -->
                             <button @click="goToPage(1)" class="rounded-md border px-3 py-2" :class="currentPage === 1
                                 ? 'border-indigo-500 bg-indigo-500 text-white'
-                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'">
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                ">
                                 1
                             </button>
 
@@ -298,7 +295,8 @@
                             <button v-for="page in middlePages" :key="page" @click="goToPage(page)"
                                 class="rounded-md border px-3 py-2" :class="page === currentPage
                                     ? 'border-indigo-500 bg-indigo-500 text-white'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'">
+                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                    ">
                                 {{ page }}
                             </button>
 
@@ -308,7 +306,8 @@
                             <!-- 显示尾页 -->
                             <button @click="goToPage(totalPages)" class="rounded-md border px-3 py-2" :class="currentPage === totalPages
                                 ? 'border-indigo-500 bg-indigo-500 text-white'
-                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'">
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                ">
                                 {{ totalPages }}
                             </button>
                         </template>
@@ -316,8 +315,8 @@
                         <button @click="nextPage" :disabled="currentPage >= totalPages" :class="[
                             'rounded-md border p-2',
                             currentPage >= totalPages
-                                ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
-                                : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'
+                                ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
+                                : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50',
                         ]">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                 fill="currentColor">
@@ -349,11 +348,11 @@
             role="dialog" aria-modal="true">
             <div class="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <!-- 背景遮罩 -->
-                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"
+                <div class="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity" aria-hidden="true"
                     @click="closeEditLinkModal"></div>
 
                 <!-- 使模态框居中的技巧 -->
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 
                 <!-- 模态框内容 -->
                 <div class="relative inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
@@ -361,10 +360,10 @@
                     <!-- 手机端顶部拖动条示意 -->
                     <div class="mx-auto my-2 h-1 w-12 rounded-full bg-gray-300 sm:hidden"></div>
 
-                    <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <!-- 标题和关闭按钮 -->
-                        <div class="flex items-center justify-between mb-5">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900" id="edit-link-modal-title">
+                        <div class="mb-5 flex items-center justify-between">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="edit-link-modal-title">
                                 更新链接信息
                             </h3>
                             <button type="button" @click="closeEditLinkModal"
@@ -381,10 +380,10 @@
                         <form @submit.prevent="updateLink" class="space-y-4">
                             <div>
                                 <label for="edit-link-title"
-                                    class="block text-sm font-medium text-gray-700 mb-1">链接标题</label>
+                                    class="mb-1 block text-sm font-medium text-gray-700">链接标题</label>
                                 <div class="relative">
                                     <input type="text" id="edit-link-title" v-model="editingLink.title"
-                                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+                                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
                                         placeholder="请输入链接标题" required />
                                 </div>
                                 <p class="mt-1 text-xs text-gray-500">
@@ -394,9 +393,9 @@
 
                             <div>
                                 <label for="edit-link-group"
-                                    class="block text-sm font-medium text-gray-700 mb-1">选择分组</label>
+                                    class="mb-1 block text-sm font-medium text-gray-700">选择分组</label>
                                 <select id="edit-link-group" v-model="editingLink.groupId"
-                                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
+                                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
                                     <option v-for="group in groupData" :key="group.id" :value="group.id">
                                         {{ group.title }}
                                     </option>
@@ -406,9 +405,9 @@
 
                             <div>
                                 <label for="edit-link-domain-type"
-                                    class="block text-sm font-medium text-gray-700 mb-1">域名类型</label>
+                                    class="mb-1 block text-sm font-medium text-gray-700">域名类型</label>
                                 <select id="edit-link-domain-type" v-model="editingLink.domainType"
-                                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
+                                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
                                     <option value="OFFICIAL">官方域名</option>
                                     <option value="CUSTOM">自定义域名</option>
                                 </select>
@@ -417,9 +416,9 @@
 
                             <div>
                                 <label for="edit-link-domain-id"
-                                    class="block text-sm font-medium text-gray-700 mb-1">域名</label>
+                                    class="mb-1 block text-sm font-medium text-gray-700">域名</label>
                                 <select id="edit-link-domain-id" v-model="editingLink.domainId"
-                                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
+                                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
                                     <option :value="1">timu.fun</option>
                                     <!-- 这里可以根据实际域名列表动态生成选项 -->
                                 </select>
@@ -429,11 +428,11 @@
                             <!-- 提交按钮容器 -->
                             <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                                 <button type="button" @click="closeEditLinkModal"
-                                    class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-300 sm:mt-0 sm:w-auto">
+                                    class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
                                     取消
                                 </button>
                                 <button type="submit" :disabled="isUpdatingLink || !editingLink.title"
-                                    class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed sm:w-auto">
+                                    class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
                                     <svg v-if="isUpdatingLink" class="h-5 w-5 animate-spin text-white"
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
@@ -442,7 +441,7 @@
                                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                         </path>
                                     </svg>
-                                    {{ isUpdatingLink ? '更新中...' : '保存修改' }}
+                                    {{ isUpdatingLink ? "更新中..." : "保存修改" }}
                                 </button>
                             </div>
                         </form>
@@ -456,11 +455,11 @@
             aria-labelledby="delete-confirm-modal" role="dialog" aria-modal="true">
             <div class="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <!-- 背景遮罩 -->
-                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"
+                <div class="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity" aria-hidden="true"
                     @click="closeDeleteConfirmModal"></div>
 
                 <!-- 使模态框居中的技巧 -->
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
 
                 <!-- 模态框内容 -->
                 <div class="relative inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
@@ -479,7 +478,7 @@
                                 </svg>
                             </div>
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900" id="delete-confirm-modal">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="delete-confirm-modal">
                                     确认删除短链接
                                 </h3>
                                 <div class="mt-2">
@@ -488,7 +487,9 @@
                                     </p>
                                     <div class="mt-3 rounded-md bg-gray-50 p-3">
                                         <p class="text-sm font-medium text-gray-700">链接详情：</p>
-                                        <p class="mt-1 text-sm text-gray-500">标题: {{ deletingLink.title }}</p>
+                                        <p class="mt-1 text-sm text-gray-500">
+                                            标题: {{ deletingLink.title }}
+                                        </p>
                                         <p class="mt-1 text-sm text-gray-500">
                                             短链接: {{ deletingLink.domain }}/{{ deletingLink.code }}
                                         </p>
@@ -499,7 +500,7 @@
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                         <button type="button" @click="deleteLink" :disabled="isDeleting"
-                            class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-70 disabled:cursor-not-allowed">
+                            class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:ml-3 sm:w-auto sm:text-sm">
                             <svg v-if="isDeleting" class="mr-2 h-4 w-4 animate-spin text-white"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
@@ -509,7 +510,7 @@
                                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                                 </path>
                             </svg>
-                            {{ isDeleting ? '正在删除...' : '确认删除' }}
+                            {{ isDeleting ? "正在删除..." : "确认删除" }}
                         </button>
                         <button type="button" @click="closeDeleteConfirmModal"
                             class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
@@ -527,6 +528,8 @@ import { ref, computed, onMounted, watch, reactive } from "vue";
 import { GroupData, Data } from "./config";
 // 导入PageHeader组件
 import PageHeader from "@/components/PageHeader";
+// 确保导入语法正确，添加.vue扩展名
+import DecorativeBackground from "@/components/DecorativeBackground.vue";
 
 // 分组数据
 const groupData = ref(GroupData);
@@ -547,7 +550,9 @@ const pageSize = ref(20);
 
 // 分页显示逻辑
 const showLeftEllipsis = computed(() => currentPage.value > 3);
-const showRightEllipsis = computed(() => currentPage.value < totalPages.value - 2);
+const showRightEllipsis = computed(
+    () => currentPage.value < totalPages.value - 2,
+);
 const middlePages = computed(() => {
     const result = [];
     let start, end;
@@ -625,10 +630,10 @@ const fetchLinks = () => {
     const params = {
         groupId: selectedGroupId.value,
         page: currentPage.value,
-        size: pageSize.value
+        size: pageSize.value,
     };
 
-    console.log('请求参数:', params);
+    console.log("请求参数:", params);
 
     // 实际应用中这里应该是API请求
     // axios.post('/api/link/page', params)
@@ -719,7 +724,7 @@ const getLinkColorIndex = (link: any, index: number) => {
         // 使用简单的字符串哈希算法，确保结果更随机
         let hash = 0;
         for (let i = 0; i < idStr.length; i++) {
-            hash = ((hash << 5) - hash) + idStr.charCodeAt(i);
+            hash = (hash << 5) - hash + idStr.charCodeAt(i);
             hash = hash & hash; // 转换为32位整数
         }
         // 取绝对值并对颜色数组长度取模
@@ -932,7 +937,7 @@ const editingLink = reactive({
     title: "",
     groupId: 0,
     domainId: 0,
-    domainType: "OFFICIAL"
+    domainType: "OFFICIAL",
 });
 
 // 打开编辑链接模态框
@@ -947,7 +952,9 @@ const openEditLinkModal = (link: any) => {
     editingLink.domainId = 1;
 
     // 设置域名类型 (示例实现，实际应根据业务逻辑调整)
-    editingLink.domainType = link.domain.includes("timu.fun") ? "OFFICIAL" : "CUSTOM";
+    editingLink.domainType = link.domain.includes("timu.fun")
+        ? "OFFICIAL"
+        : "CUSTOM";
 
     showEditLinkModal.value = true;
 };
@@ -970,16 +977,18 @@ const updateLink = async () => {
             code: editingLink.code,
             title: editingLink.title,
             domainId: editingLink.domainId,
-            domainType: editingLink.domainType
+            domainType: editingLink.domainType,
         };
 
-        console.log('更新链接参数:', params);
+        console.log("更新链接参数:", params);
 
         // 模拟API请求
-        await new Promise(resolve => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 800));
 
         // 更新本地数据
-        const index = linkData.value.findIndex(link => link.id === editingLink.id);
+        const index = linkData.value.findIndex(
+            (link) => link.id === editingLink.id,
+        );
 
         if (index !== -1) {
             // 创建更新后的链接对象
@@ -988,21 +997,21 @@ const updateLink = async () => {
                 title: editingLink.title,
                 groupId: editingLink.groupId,
                 // 如果有其他需要更新的字段，也在这里添加
-                gmtModified: new Date().toISOString()
+                gmtModified: new Date().toISOString(),
             };
 
             // 更新数据
             linkData.value[index] = updatedLink;
-            console.log('链接更新成功:', updatedLink);
+            console.log("链接更新成功:", updatedLink);
         }
 
         // 关闭模态框
         closeEditLinkModal();
 
         // 显示成功提示（这里可以添加一个toast提示）
-        console.log('链接更新成功');
+        console.log("链接更新成功");
     } catch (error) {
-        console.error('更新链接失败:', error);
+        console.error("更新链接失败:", error);
     } finally {
         isUpdatingLink.value = false;
     }
@@ -1013,10 +1022,10 @@ const showDeleteConfirmModal = ref(false);
 const isDeleting = ref(false);
 const deletingLink = reactive({
     id: 0,
-    code: '',
-    title: '',
-    domain: '',
-    groupId: 0
+    code: "",
+    title: "",
+    domain: "",
+    groupId: 0,
 });
 
 // 打开删除确认模态框
@@ -1042,20 +1051,22 @@ const deleteLink = async () => {
         // 构建请求参数
         const params = {
             groupId: deletingLink.groupId,
-            code: deletingLink.code
+            code: deletingLink.code,
         };
 
-        console.log('删除链接参数:', params);
+        console.log("删除链接参数:", params);
 
         // 模拟API请求
-        await new Promise(resolve => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 800));
 
         // 从本地数据中移除该链接
-        const index = linkData.value.findIndex(link => link.id === deletingLink.id);
+        const index = linkData.value.findIndex(
+            (link) => link.id === deletingLink.id,
+        );
 
         if (index !== -1) {
             linkData.value.splice(index, 1);
-            console.log('链接删除成功:', deletingLink);
+            console.log("链接删除成功:", deletingLink);
 
             // 更新总数
             totalCount.value -= 1;
@@ -1071,9 +1082,9 @@ const deleteLink = async () => {
         closeDeleteConfirmModal();
 
         // 显示成功提示（这里可以添加一个toast提示）
-        console.log('链接删除成功');
+        console.log("链接删除成功");
     } catch (error) {
-        console.error('删除链接失败:', error);
+        console.error("删除链接失败:", error);
     } finally {
         isDeleting.value = false;
     }
@@ -1081,10 +1092,10 @@ const deleteLink = async () => {
 </script>
 
 <style scoped>
-/* 背景噪点图案 */
-.noise-pattern {
+/* 移除重复的噪点图案定义，让它来自组件 */
+/* .noise-pattern {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
-}
+} */
 
 /* 卡片效果 */
 .link-card {

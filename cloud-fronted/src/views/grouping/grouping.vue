@@ -1,12 +1,7 @@
 <template>
     <div class="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
-        <!-- 背景装饰元素 -->
-        <div class="absolute inset-0 z-0">
-            <div class="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-indigo-100/40 blur-3xl"></div>
-            <div class="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-blue-100/30 blur-3xl"></div>
-            <div class="absolute top-1/3 left-1/4 h-48 w-48 rounded-full bg-purple-100/20 blur-3xl"></div>
-            <div class="noise-pattern absolute inset-0 opacity-[0.03]"></div>
-        </div>
+        <!-- 确保背景装饰元素正确放置在顶部 -->
+        <DecorativeBackground />
 
         <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
             <!-- 使用PageHeader组件替换原有的标题区域 -->
@@ -481,6 +476,7 @@ import { ref, onMounted, reactive } from "vue";
 import { Data } from "./config";
 // 导入PageHeader组件
 import PageHeader from "@/components/PageHeader";
+import DecorativeBackground from "@/components/DecorativeBackground.vue";
 
 // 分组数据
 const groupData = ref(Data);
@@ -793,10 +789,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 背景噪点图案 */
-.noise-pattern {
+/* 移除重复的噪点图案定义，让它来自组件 */
+
+/* .noise-pattern {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
-}
+} */
 
 /* 卡片效果 */
 .feature-card-3d {
