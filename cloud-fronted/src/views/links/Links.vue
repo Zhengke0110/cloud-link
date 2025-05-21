@@ -478,6 +478,7 @@ import {
     getLinkColorIndex,
     getSelectedButtonStyle as getSchemeButtonStyle // 重命名为 getSchemeButtonStyle 以避免命名冲突
 } from "@/utils/ColorSchemeProvider";
+import { formatDate } from '@/utils/DateUtils';
 
 // 分组数据
 const groupData = ref(GroupData);
@@ -679,21 +680,6 @@ const getStatusClass = (state: string, expired: boolean) => {
 // - getColorDot
 // - getLinkColorIndex (已在ColorSchemeProvider中重新实现)
 
-// 格式化日期
-const formatDate = (dateStr: string) => {
-    try {
-        const date = new Date(dateStr);
-        return date.toLocaleString("zh-CN", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-    } catch (e) {
-        return dateStr;
-    }
-};
 
 // 添加页面动画效果
 onMounted(() => {

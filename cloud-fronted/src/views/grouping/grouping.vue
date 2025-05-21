@@ -255,7 +255,7 @@
                                 <path fill-rule="evenodd"
                                     d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
                                     clip-rule="evenodd" />
-                            </svg>
+                        </svg>
                         </button>
                     </div>
                     <p class="mt-1 text-xs text-gray-500">为您的分组添加一个易于识别的名称</p>
@@ -392,6 +392,8 @@ import { Data } from "./config";
 import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
 import BaseModal from "@/components/BaseModal.vue";
+// 导入日期工具函数
+import { formatDate } from "@/utils/DateUtils";
 // 导入颜色方案工具
 import {
     getHeaderGradient,
@@ -587,22 +589,6 @@ const deleteGroup = async () => {
         console.error("删除分组失败:", error);
     } finally {
         isDeleting.value = false;
-    }
-};
-
-// 格式化日期
-const formatDate = (dateStr: string) => {
-    try {
-        const date = new Date(dateStr);
-        return date.toLocaleString("zh-CN", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-    } catch (e) {
-        return dateStr;
     }
 };
 
