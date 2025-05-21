@@ -1,83 +1,17 @@
 <template>
-    <div class="animate-slideUp mx-auto w-full rounded-2xl bg-white shadow-lg" :class="{
-        'max-w-xs p-5': deviceType.isMobile,
-        'max-w-md p-6': deviceType.isTablet,
-        'max-w-lg p-8': deviceType.isDesktop,
-    }">
-        <div class="mb-6 text-center">
-            <h1 class="font-bold tracking-tight text-indigo-600" :class="{
-                'text-xl': deviceType.isMobile,
-                'text-2xl': deviceType.isTablet,
-                'text-3xl': deviceType.isDesktop,
-            }">
-                创建账号
-            </h1>
-            <p class="mt-2 text-gray-600" :class="{
-                'text-xs': deviceType.isMobile,
-                'text-sm': deviceType.isTablet,
-                'text-base': deviceType.isDesktop,
-            }">
-                请填写以下信息完成注册
-            </p>
-        </div>
-
-        <!-- 通用错误信息 -->
-        <div v-if="errors.general" class="mb-4 rounded-md border border-red-200 bg-red-50 p-3">
-            <p class="text-sm text-red-600" :class="{ 'text-xs': deviceType.isMobile }">
-                {{ errors.general }}
-            </p>
-        </div>
-
+    <auth-container title="创建账号" subtitle="请填写以下信息完成注册" :generalError="errors.general">
         <form @submit.prevent="handleRegister" class="space-y-5" :class="{
             'space-y-3': deviceType.isMobile,
             'space-y-4': deviceType.isTablet,
             'space-y-5': deviceType.isDesktop,
         }">
             <!-- 用户名输入框 -->
-            <div>
-                <label for="username" class="block font-medium text-gray-700" :class="{
-                    'text-xs': deviceType.isMobile,
-                    'text-sm': !deviceType.isMobile,
-                }">用户名</label>
-                <div class="mt-1">
-                    <input type="text" id="username" v-model="registerForm.username" autocomplete="name"
-                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-                        :class="{
-                            'border-red-500': errors.username,
-                            'py-1.5 text-xs': deviceType.isMobile,
-                            'py-2 text-sm': !deviceType.isMobile,
-                        }" placeholder="请输入您的用户名" />
-                    <p v-if="errors.username" class="mt-1 text-red-600" :class="{
-                        'text-xs': deviceType.isMobile,
-                        'text-sm': !deviceType.isMobile,
-                    }">
-                        {{ errors.username }}
-                    </p>
-                </div>
-            </div>
+            <form-input id="username" label="用户名" v-model="registerForm.username" placeholder="请输入您的用户名"
+                autocomplete="name" :error="errors.username" />
 
             <!-- 手机号输入框 -->
-            <div>
-                <label for="phone" class="block font-medium text-gray-700" :class="{
-                    'text-xs': deviceType.isMobile,
-                    'text-sm': !deviceType.isMobile,
-                }">手机号码</label>
-                <div class="mt-1">
-                    <input type="text" id="phone" v-model="registerForm.phone" autocomplete="tel"
-                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-                        :class="{
-                            'border-red-500': errors.phone,
-                            'py-1.5 text-xs': deviceType.isMobile,
-                            'py-2 text-sm': !deviceType.isMobile,
-                        }" placeholder="请输入手机号码" />
-                    <p v-if="errors.phone" class="mt-1 text-red-600" :class="{
-                        'text-xs': deviceType.isMobile,
-                        'text-sm': !deviceType.isMobile,
-                    }">
-                        {{ errors.phone }}
-                    </p>
-                </div>
-            </div>
+            <form-input id="phone" label="手机号码" v-model="registerForm.phone" placeholder="请输入手机号码" autocomplete="tel"
+                :error="errors.phone" />
 
             <!-- 图片验证码 -->
             <div>
@@ -108,6 +42,7 @@
                     {{ errors.imageCaptcha }}
                 </p>
             </div>
+
             <!-- 手机验证码输入框 -->
             <div>
                 <label for="code" class="block font-medium text-gray-700" :class="{
@@ -138,60 +73,14 @@
                     {{ errors.code }}
                 </p>
             </div>
+
             <!-- 邮箱输入框 -->
-            <div>
-                <label for="email" class="block font-medium text-gray-700" :class="{
-                    'text-xs': deviceType.isMobile,
-                    'text-sm': !deviceType.isMobile,
-                }">电子邮箱</label>
-                <div class="mt-1">
-                    <input type="email" id="email" v-model="registerForm.mail" autocomplete="email"
-                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-                        :class="{
-                            'border-red-500': errors.mail,
-                            'py-1.5 text-xs': deviceType.isMobile,
-                            'py-2 text-sm': !deviceType.isMobile,
-                        }" placeholder="请输入电子邮箱" />
-                    <p v-if="errors.mail" class="mt-1 text-red-600" :class="{
-                        'text-xs': deviceType.isMobile,
-                        'text-sm': !deviceType.isMobile,
-                    }">
-                        {{ errors.mail }}
-                    </p>
-                </div>
-            </div>
+            <form-input id="email" label="电子邮箱" v-model="registerForm.mail" placeholder="请输入电子邮箱" type="email"
+                autocomplete="email" :error="errors.mail" />
 
             <!-- 密码输入框 -->
-            <div>
-                <label for="password" class="block font-medium text-gray-700" :class="{
-                    'text-xs': deviceType.isMobile,
-                    'text-sm': !deviceType.isMobile,
-                }">密码</label>
-                <div class="relative mt-1">
-                    <input :type="showPassword ? 'text' : 'password'" id="password" v-model="registerForm.pwd"
-                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-                        :class="{
-                            'border-red-500': errors.pwd,
-                            'py-1.5 text-xs': deviceType.isMobile,
-                            'py-2 text-sm': !deviceType.isMobile,
-                        }" placeholder="请设置您的密码" />
-                    <button type="button" @click="showPassword = !showPassword"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500">
-                        <i :class="[
-                            showPassword
-                                ? 'icon-[material-symbols--visibility-off-outline]'
-                                : 'icon-[material-symbols--visibility-outline]',
-                            deviceType.isMobile ? 'size-4' : 'size-5',
-                        ]"></i>
-                    </button>
-                    <p v-if="errors.pwd" class="mt-1 text-red-600" :class="{
-                        'text-xs': deviceType.isMobile,
-                        'text-sm': !deviceType.isMobile,
-                    }">
-                        {{ errors.pwd }}
-                    </p>
-                </div>
-            </div>
+            <password-input id="password" label="密码" v-model="registerForm.pwd" placeholder="请设置您的密码"
+                :error="errors.pwd" />
 
             <div class="flex items-center">
                 <input id="agree-terms" type="checkbox" v-model="registerForm.agreeTerms"
@@ -211,41 +100,30 @@
             </div>
 
             <div>
-                <button type="submit"
-                    class="flex w-full justify-center rounded-md border border-transparent px-4 font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    :class="{
-                        'py-1.5 text-xs': deviceType.isMobile,
-                        'py-2 text-sm': !deviceType.isMobile,
-                        'bg-indigo-600 hover:bg-indigo-700': registerForm.agreeTerms,
-                        'bg-indigo-400 cursor-not-allowed': !registerForm.agreeTerms,
-                    }" :disabled="loading || !registerForm.agreeTerms">
-                    <span v-if="loading" class="inline-flex items-center">
-                        <i class="icon-[eos-icons--loading] mr-2 animate-spin" :class="{
-                            'size-3': deviceType.isMobile,
-                            'size-4': !deviceType.isMobile,
-                        }"></i>
-                        注册中...
-                    </span>
-                    <span v-else>立即注册</span>
-                </button>
+                <submit-button text="立即注册" loadingText="注册中..." :loading="loading"
+                    :disabled="!registerForm.agreeTerms" />
             </div>
         </form>
-    </div>
+    </auth-container>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { deviceType } from "@/utils/flexible";
+import { isValidPhone, isValidEmail, isValidPassword, isValidVerificationCode } from "@/utils/formValidation";
 import {
     AccountRegister,
     GetCaptcha,
     SendCodeByPhone,
 } from "@/services/account";
+import AuthContainer from "./components/AuthContainer.vue";
+import FormInput from "./components/FormInput.vue";
+import PasswordInput from "./components/PasswordInput.vue";
+import SubmitButton from "./components/SubmitButton.vue";
 
 const router = useRouter();
 const loading = ref(false);
-const showPassword = ref(false);
 const cooldown = ref(0);
 
 // 图片验证码相关
@@ -287,7 +165,7 @@ const sendVerificationCode = async () => {
         errors.phone = "请先填写手机号";
         return;
     }
-    if (!/^1[3-9]\d{9}$/.test(registerForm.phone)) {
+    if (!isValidPhone(registerForm.phone)) {
         errors.phone = "请输入有效的手机号码";
         return;
     }
@@ -351,7 +229,7 @@ const validateForm = () => {
     if (!registerForm.phone) {
         errors.phone = "请输入手机号码";
         isValid = false;
-    } else if (!/^1[3-9]\d{9}$/.test(registerForm.phone)) {
+    } else if (!isValidPhone(registerForm.phone)) {
         errors.phone = "请输入有效的手机号码";
         isValid = false;
     }
@@ -360,7 +238,7 @@ const validateForm = () => {
     if (!registerForm.mail) {
         errors.mail = "请输入电子邮箱";
         isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerForm.mail)) {
+    } else if (!isValidEmail(registerForm.mail)) {
         errors.mail = "请输入有效的电子邮箱";
         isValid = false;
     }
@@ -369,7 +247,7 @@ const validateForm = () => {
     if (!registerForm.pwd) {
         errors.pwd = "请设置密码";
         isValid = false;
-    } else if (registerForm.pwd.length < 6) {
+    } else if (!isValidPassword(registerForm.pwd)) {
         errors.pwd = "密码长度不能少于6个字符";
         isValid = false;
     }
@@ -378,10 +256,7 @@ const validateForm = () => {
     if (!registerForm.code) {
         errors.code = "请输入手机验证码";
         isValid = false;
-    } else if (
-        registerForm.code.length !== 6 ||
-        !/^\d+$/.test(registerForm.code)
-    ) {
+    } else if (!isValidVerificationCode(registerForm.code)) {
         errors.code = "请输入6位数字验证码";
         isValid = false;
     }

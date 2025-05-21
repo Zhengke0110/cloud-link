@@ -1,90 +1,16 @@
 <template>
-    <div class="animate-slideUp mx-auto w-full rounded-2xl bg-white shadow-lg" :class="{
-        'max-w-xs p-6': deviceType.isMobile,
-        'max-w-md p-6': deviceType.isTablet,
-        'max-w-lg p-8': deviceType.isDesktop,
-    }">
-        <div class="mb-8 text-center">
-            <h1 class="font-bold tracking-tight text-indigo-600" :class="{
-                'text-xl': deviceType.isMobile,
-                'text-2xl': deviceType.isTablet,
-                'text-3xl': deviceType.isDesktop,
-            }">
-                欢迎回来
-            </h1>
-            <p class="mt-2 text-gray-600" :class="{
-                'text-xs': deviceType.isMobile,
-                'text-sm': deviceType.isTablet,
-                'text-base': deviceType.isDesktop,
-            }">
-                请输入您的账号信息进行登录
-            </p>
-        </div>
-
-        <!-- 通用错误信息 -->
-        <div v-if="errors.general" class="mb-4 rounded-md border border-red-200 bg-red-50 p-3">
-            <p class="text-sm text-red-600">{{ errors.general }}</p>
-        </div>
-
+    <auth-container title="欢迎回来" subtitle="请输入您的账号信息进行登录" :generalError="errors.general">
         <form @submit.prevent="handleLogin" class="space-y-6" :class="{
             'space-y-4': deviceType.isMobile,
             'space-y-5': deviceType.isTablet,
             'space-y-6': deviceType.isDesktop,
         }">
             <!-- 手机号输入框 -->
-            <div>
-                <label for="phone" class="block font-medium text-gray-700" :class="{
-                    'text-xs': deviceType.isMobile,
-                    'text-sm': !deviceType.isMobile,
-                }">手机号码</label>
-                <div class="mt-1">
-                    <input type="text" id="phone" v-model="loginForm.phone" autocomplete="tel"
-                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-                        :class="{
-                            'border-red-500': errors.phone,
-                            'py-1.5 text-xs': deviceType.isMobile,
-                            'py-2 text-sm': !deviceType.isMobile,
-                        }" placeholder="请输入手机号码" />
-                    <p v-if="errors.phone" class="mt-1 text-red-600" :class="{
-                        'text-xs': deviceType.isMobile,
-                        'text-sm': !deviceType.isMobile,
-                    }">
-                        {{ errors.phone }}
-                    </p>
-                </div>
-            </div>
+            <form-input id="phone" label="手机号码" v-model="loginForm.phone" placeholder="请输入手机号码" autocomplete="tel"
+                :error="errors.phone" />
 
             <!-- 密码输入框 -->
-            <div>
-                <label for="password" class="block font-medium text-gray-700" :class="{
-                    'text-xs': deviceType.isMobile,
-                    'text-sm': !deviceType.isMobile,
-                }">密码</label>
-                <div class="relative mt-1">
-                    <input :type="showPassword ? 'text' : 'password'" id="password" v-model="loginForm.pwd"
-                        class="block w-full appearance-none rounded-md border border-gray-300 px-3 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none"
-                        :class="{
-                            'border-red-500': errors.pwd,
-                            'py-1.5 text-xs': deviceType.isMobile,
-                            'py-2 text-sm': !deviceType.isMobile,
-                        }" placeholder="请输入密码" />
-                    <button type="button" @click="showPassword = !showPassword"
-                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500">
-                        <i :class="[
-                            showPassword
-                                ? 'icon-[material-symbols--visibility-off-outline]'
-                                : 'icon-[material-symbols--visibility-outline]',
-                            deviceType.isMobile ? 'size-4' : 'size-5',
-                        ]"></i>
-                    </button>
-                    <p v-if="errors.pwd" class="mt-1 text-red-600" :class="{
-                        'text-xs': deviceType.isMobile,
-                        'text-sm': !deviceType.isMobile,
-                    }">
-                        {{ errors.pwd }}
-                    </p>
-                </div>
-            </div>
+            <password-input id="password" label="密码" v-model="loginForm.pwd" placeholder="请输入密码" :error="errors.pwd" />
 
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
@@ -108,24 +34,10 @@
             </div>
 
             <div>
-                <button type="submit"
-                    class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
-                    :class="{
-                        'py-1.5 text-xs': deviceType.isMobile,
-                        'py-2 text-sm': !deviceType.isMobile,
-                    }" :disabled="loading">
-                    <span v-if="loading" class="inline-flex items-center">
-                        <i class="icon-[eos-icons--loading] mr-2 animate-spin" :class="{
-                            'size-3': deviceType.isMobile,
-                            'size-4': !deviceType.isMobile,
-                        }"></i>
-                        登录中...
-                    </span>
-                    <span v-else>登录</span>
-                </button>
+                <submit-button text="登录" loadingText="登录中..." :loading="loading" />
             </div>
         </form>
-    </div>
+    </auth-container>
 </template>
 
 <script setup lang="ts">
@@ -133,10 +45,14 @@ import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { deviceType } from "@/utils/flexible";
 import { AccountLogin } from "@/services/account";
+import { isValidPhone, isValidPassword } from "@/utils/formValidation";
+import AuthContainer from "./components/AuthContainer.vue";
+import FormInput from "./components/FormInput.vue";
+import PasswordInput from "./components/PasswordInput.vue";
+import SubmitButton from "./components/SubmitButton.vue";
 
 const router = useRouter();
 const loading = ref(false);
-const showPassword = ref(false);
 
 const loginForm = reactive({
     phone: "",
@@ -178,7 +94,7 @@ const validateForm = () => {
     if (!loginForm.phone) {
         errors.phone = "请输入手机号码";
         isValid = false;
-    } else if (!/^1[3-9]\d{9}$/.test(loginForm.phone)) {
+    } else if (!isValidPhone(loginForm.phone)) {
         errors.phone = "请输入有效的手机号码";
         isValid = false;
     } else {
@@ -189,7 +105,7 @@ const validateForm = () => {
     if (!loginForm.pwd) {
         errors.pwd = "请输入密码";
         isValid = false;
-    } else if (loginForm.pwd.length < 6) {
+    } else if (!isValidPassword(loginForm.pwd)) {
         errors.pwd = "密码长度不能少于6个字符";
         isValid = false;
     } else {
@@ -240,21 +156,3 @@ const handleLogin = async () => {
     }
 };
 </script>
-
-<style scoped>
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-slideUp {
-    animation: slideUp 0.8s ease-out forwards;
-}
-</style>
