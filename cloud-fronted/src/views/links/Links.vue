@@ -398,14 +398,7 @@
                     </button>
                     <button type="submit" :disabled="isUpdatingLink || !editingLink.title"
                         class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                        <svg v-if="isUpdatingLink" class="h-5 w-5 animate-spin text-white"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                            </circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
+                        <LoadingSpinner v-if="isUpdatingLink" class="h-5 w-5 animate-spin text-white" />
                         {{ isUpdatingLink ? "更新中..." : "保存修改" }}
                     </button>
                 </div>
@@ -443,14 +436,7 @@
             <template #separateFooter>
                 <button type="button" @click="deleteLink" :disabled="isDeleting"
                     class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:ml-3 sm:w-auto sm:text-sm">
-                    <svg v-if="isDeleting" class="mr-2 h-4 w-4 animate-spin text-white"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                        </circle>
-                        <path class="opacity-75" fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                        </path>
-                    </svg>
+                    <LoadingSpinner v-if="isDeleting" size="mr-2 h-4 w-4" class="text-white" />
                     {{ isDeleting ? "正在删除..." : "确认删除" }}
                 </button>
                 <button type="button" @click="closeDeleteConfirmModal"
@@ -468,6 +454,7 @@ import { GroupData, Data } from "./config";
 import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
 import BaseModal from "@/components/BaseModal.vue";
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
 // 导入颜色方案工具
 import {
     getHeaderGradient,
@@ -1018,21 +1005,6 @@ const deleteLink = async () => {
         position: fixed;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
-    }
-}
-
-/* 删除按钮动画 */
-.animate-spin {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
     }
 }
 </style>

@@ -234,11 +234,7 @@
 
         <!-- 创建分组模态框 -->
         <!-- 使用 BaseModal 组件重构创建分组模态框 -->
-        <BaseModal 
-            v-model="showCreateModal" 
-            title="创建新分组" 
-            id="create-group-modal"
-        >
+        <BaseModal v-model="showCreateModal" title="创建新分组" id="create-group-modal">
             <!-- 表单内容 -->
             <form @submit.prevent="createGroup" class="space-y-4">
                 <div>
@@ -255,7 +251,7 @@
                                 <path fill-rule="evenodd"
                                     d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
                                     clip-rule="evenodd" />
-                        </svg>
+                            </svg>
                         </button>
                     </div>
                     <p class="mt-1 text-xs text-gray-500">为您的分组添加一个易于识别的名称</p>
@@ -269,26 +265,14 @@
                     </button>
                     <button type="submit" :disabled="isCreating || !newGroup.title"
                         class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                        <svg v-if="isCreating" class="h-5 w-5 animate-spin text-white"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                            </circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-                        {{ isCreating ? "创建中..." : "创建分组" }}
+                        <LoadingSpinner v-if="isCreating" class="text-white" /> {{ isCreating ? "创建中..." : "创建分组" }}
                     </button>
                 </div>
             </form>
         </BaseModal>
 
         <!-- 使用 BaseModal 组件重构编辑分组模态框 -->
-        <BaseModal 
-            v-model="showEditModal" 
-            title="编辑分组信息" 
-            id="edit-group-modal"
-        >
+        <BaseModal v-model="showEditModal" title="编辑分组信息" id="edit-group-modal">
             <!-- 表单内容 -->
             <form @submit.prevent="updateGroup" class="space-y-4">
                 <div>
@@ -300,11 +284,12 @@
                         <button type="button" @click="generateRandomGroupNameForEdit"
                             class="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-indigo-50 hover:text-indigo-600"
                             title="生成随机名称">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
                                 <path fill-rule="evenodd"
                                     d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
                                     clip-rule="evenodd" />
-                        </svg>
+                            </svg>
                         </button>
                     </div>
                     <p class="mt-1 text-xs text-gray-500">
@@ -321,13 +306,7 @@
                     </button>
                     <button type="submit" :disabled="isUpdating || !editingGroup.title"
                         class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                        <svg v-if="isUpdating" class="h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" 
-                            fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
+                        <LoadingSpinner v-if="isUpdating" class="h-5 w-5 animate-spin text-white"/>
                         {{ isUpdating ? "更新中..." : "保存修改" }}
                     </button>
                 </div>
@@ -335,12 +314,8 @@
         </BaseModal>
 
         <!-- 使用 BaseModal 组件重构删除确认模态框 -->
-        <BaseModal 
-            v-model="showDeleteConfirmModal" 
-            title="确认删除分组" 
-            id="delete-group-modal"
-            content-padding="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
-        >
+        <BaseModal v-model="showDeleteConfirmModal" title="确认删除分组" id="delete-group-modal"
+            content-padding="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div class="sm:flex sm:items-start">
                 <div
                     class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -368,13 +343,7 @@
             <template #separateFooter>
                 <button type="button" @click="deleteGroup" :disabled="isDeleting"
                     class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:ml-3 sm:w-auto sm:text-sm">
-                    <svg v-if="isDeleting" class="mr-2 h-4 w-4 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" 
-                        fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" 
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                        </path>
-                    </svg>
+                    <LoadingSpinner v-if="isDeleting" size="mr-2 h-4 w-4" class="text-white" />
                     {{ isDeleting ? "正在删除..." : "确认删除" }}
                 </button>
                 <button type="button" @click="closeDeleteConfirmModal"
@@ -392,6 +361,7 @@ import { Data } from "./config";
 import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
 import BaseModal from "@/components/BaseModal.vue";
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
 // 导入日期工具函数
 import { formatDate } from "@/utils/DateUtils";
 // 导入颜色方案工具
@@ -401,6 +371,7 @@ import {
     getIconColor,
     getActionButtonBg
 } from "@/utils/ColorSchemeProvider";
+
 
 // 分组数据
 const groupData = ref(Data);
@@ -755,20 +726,5 @@ onMounted(() => {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
-}
-
-/* 加载动画 */
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.animate-spin {
-    animation: spin 1s linear infinite;
 }
 </style>
