@@ -98,16 +98,97 @@
                                     <p class="mt-1 text-xs text-gray-500">最多50个字符</p>
                                 </div>
 
+                                <!-- 分组选择 - 新增 -->
+                                <div>
+                                    <label for="groupId"
+                                        class="block text-sm font-medium text-gray-700 mb-1">选择分组</label>
+                                    <div class="relative">
+                                        <select id="groupId" v-model="linkForm.groupId"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 appearance-none bg-white">
+                                            <option v-for="group in groupData" :key="group.id" :value="group.id">
+                                                {{ group.title }}
+                                            </option>
+                                        </select>
+                                        <div
+                                            class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                                fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">选择要归属的分组</p>
+                                </div>
+
                                 <!-- 过期时间选择 -->
                                 <div>
                                     <label for="expired" class="block text-sm font-medium text-gray-700 mb-1">过期时间
                                         (选填)</label>
-                                    <div class="relative">
-                                        <input type="datetime-local" id="expired" v-model="linkForm.expired"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                                            :min="minDateTime" />
+                                    
+                                    <!-- 预设过期时间选项 -->
+                                    <div class="mb-3 flex flex-wrap gap-2">
+                                        <button type="button" @click="setPresetExpiry(1)" 
+                                            class="px-3 py-1.5 text-xs rounded-full border transition-colors duration-200"
+                                            :class="presetExpiry === 1 ? 'bg-indigo-50 border-indigo-300 text-indigo-700' : 'border-gray-300 text-gray-600'">
+                                            1天后
+                                        </button>
+                                        <button type="button" @click="setPresetExpiry(7)" 
+                                            class="px-3 py-1.5 text-xs rounded-full border transition-colors duration-200"
+                                            :class="presetExpiry === 7 ? 'bg-indigo-50 border-indigo-300 text-indigo-700' : 'border-gray-300 text-gray-600'">
+                                            1周后
+                                        </button>
+                                        <button type="button" @click="setPresetExpiry(30)" 
+                                            class="px-3 py-1.5 text-xs rounded-full border transition-colors duration-200"
+                                            :class="presetExpiry === 30 ? 'bg-indigo-50 border-indigo-300 text-indigo-700' : 'border-gray-300 text-gray-600'">
+                                            1个月后
+                                        </button>
+                                        <button type="button" @click="setPresetExpiry(0)" 
+                                            class="px-3 py-1.5 text-xs rounded-full border transition-colors duration-200"
+                                            :class="presetExpiry === 0 ? 'bg-indigo-50 border-indigo-300 text-indigo-700' : 'border-gray-300 text-gray-600'">
+                                            自定义
+                                        </button>
                                     </div>
-                                    <p class="mt-1 text-xs text-gray-500">如果不设置，链接将永不过期</p>
+                                    
+                                    <!-- 日期时间选择器 -->
+                                    <div v-if="presetExpiry === 0" class="relative">
+                                        <div class="flex flex-col sm:flex-row gap-2">
+                                            <!-- 日期选择器 -->
+                                            <div class="flex-grow relative">
+                                                <input type="date" 
+                                                    v-model="expiryDate" 
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+                                                    :min="minDate" />
+                                                <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- 时间选择器 -->
+                                            <div class="flex-grow relative">
+                                                <input type="time" 
+                                                    v-model="expiryTime" 
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200" />
+                                                <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 日期预览 -->
+                                    <div v-if="formattedExpiryDate" class="mt-2 text-xs bg-indigo-50 text-indigo-700 rounded-md p-2 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span>链接将于 <strong>{{ formattedExpiryDate }}</strong> 过期</span>
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">{{ formattedExpiryDate ? '设置后，链接在过期时间后将不可访问' : '如果不设置，链接将永不过期' }}</p>
                                 </div>
 
                                 <!-- 提交按钮 -->
@@ -277,19 +358,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue';
-import { deviceType } from '@/utils/flexible';
+import { ref, reactive, onMounted, computed, watch } from 'vue';
 import { useClipboard } from '@vueuse/core';
+import { GroupData } from './config'; // 引入GroupData
 
 // 使用 useClipboard
 const { copy, copied, isSupported: isClipboardSupported } = useClipboard();
 
-// 表单数据
+// 引入分组数据
+const groupData = ref(GroupData);
+
+// 表单数据，使用第一个分组的ID作为默认值
 const linkForm = reactive({
     originalUrl: '',
     title: '',
     expired: '',
-    groupId: 1922447496037048321,
+    groupId: groupData.value.length > 0 ? groupData.value[0].id : 0,
     domainId: 1,
     domainType: 'OFFICIAL'
 });
@@ -300,10 +384,21 @@ const shortLinkResult = ref<any>(null);
 const urlError = ref('');
 const errorMessage = ref('');
 
+// 过期时间相关
+const presetExpiry = ref(0); // 0 表示自定义，其他数字表示天数
+const expiryDate = ref('');
+const expiryTime = ref('');
+
 // 最早可选日期时间（当前时间）
 const minDateTime = computed(() => {
     const now = new Date();
     return now.toISOString().slice(0, 16); // 格式: YYYY-MM-DDTHH:MM
+});
+
+// 计算最早可选日期（当前日期）
+const minDate = computed(() => {
+    const now = new Date();
+    return now.toISOString().split('T')[0]; // 格式: YYYY-MM-DD
 });
 
 // URL 验证
@@ -330,6 +425,101 @@ const isFormValid = computed(() => {
     return linkForm.originalUrl && !urlError.value;
 });
 
+// 基于选择器值计算linkForm.expired
+watch([expiryDate, expiryTime], () => {
+    if (expiryDate.value) {
+        // 如果只选择了日期没选择时间，默认设为当天23:59:59
+        const time = expiryTime.value || '23:59:59';
+        linkForm.expired = `${expiryDate.value}T${time}`;
+    } else {
+        linkForm.expired = '';
+    }
+}, { immediate: true });
+
+// 设置预设过期时间
+const setPresetExpiry = (days: number) => {
+    presetExpiry.value = days;
+    
+    if (days === 0) {
+        // 自定义，不做处理，由用户自行选择
+        return;
+    }
+    
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    
+    // 设置为当天23:59:59
+    date.setHours(23, 59, 59);
+    
+    // 更新日期和时间字段
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    expiryDate.value = `${year}-${month}-${day}`;
+    expiryTime.value = `${hours}:${minutes}`;
+    
+    // 直接设置linkForm.expired，确保格式正确
+    linkForm.expired = formatDateTime(date.toISOString());
+};
+
+// 格式化的过期日期用于显示
+const formattedExpiryDate = computed(() => {
+    if (!linkForm.expired) return '';
+    
+    try {
+        // 支持多种输入格式（ISO或已格式化的字符串）
+        let date;
+        if (linkForm.expired.includes('T')) {
+            // ISO格式
+            date = new Date(linkForm.expired);
+        } else {
+            // 已格式化字符串，尝试解析
+            const parts = linkForm.expired.split(/[- :]/);
+            date = new Date(
+                parseInt(parts[0]), 
+                parseInt(parts[1])-1, 
+                parseInt(parts[2]), 
+                parseInt(parts[3]), 
+                parseInt(parts[4]), 
+                parseInt(parts[5])
+            );
+        }
+        
+        if (isNaN(date.getTime())) return '';
+        
+        return new Intl.DateTimeFormat('zh-CN', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            weekday: 'long'
+        }).format(date);
+    } catch (e) {
+        return '';
+    }
+});
+
+// 格式化日期时间显示
+const formatDateTime = (dateStr: string) => {
+    try {
+        const date = new Date(dateStr);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    } catch (e) {
+        return dateStr;
+    }
+};
+
 // 创建短链接
 const createShortLink = async () => {
     if (!isFormValid.value) return;
@@ -348,8 +538,9 @@ const createShortLink = async () => {
             expired: linkForm.expired || null
         };
 
-        // TODO: 调用后端API创建短链接
-        console.log('准备发送的数据:', requestData);
+        // 添加当前选中分组名称到控制台日志以便调试
+        const selectedGroup = groupData.value.find(g => g.id === linkForm.groupId);
+        console.log('准备发送的数据:', requestData, '选择的分组:', selectedGroup?.title);
 
         // 模拟API请求延迟
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -380,23 +571,6 @@ const generateRandomString = (length: number) => {
         result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
-};
-
-// 格式化日期时间显示
-const formatDateTime = (dateStr: string) => {
-    try {
-        const date = new Date(dateStr);
-        return date.toLocaleString('zh-CN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-    } catch (e) {
-        return dateStr;
-    }
 };
 
 // 复制到剪贴板
@@ -433,6 +607,10 @@ const resetForm = () => {
     linkForm.originalUrl = '';
     linkForm.title = '';
     linkForm.expired = '';
+    expiryDate.value = '';
+    expiryTime.value = '';
+    presetExpiry.value = 0;
+    // 保持当前选择的分组不变
     shortLinkResult.value = null;
     urlError.value = '';
     errorMessage.value = '';
@@ -535,6 +713,18 @@ onMounted(() => {
     input[type="datetime-local"] {
         min-height: 44px;
     }
+    
+    input[type="date"], input[type="time"] {
+        min-height: 48px;
+        font-size: 16px; /* 避免iOS上缩放 */
+    }
+    
+    /* 优化预设按钮在小屏幕上的显示 */
+    button[type="button"] {
+        min-width: calc(50% - 0.5rem);
+        justify-content: center;
+        display: flex;
+    }
 }
 
 /* 修复一些动画问题 */
@@ -544,5 +734,18 @@ onMounted(() => {
         transform: none !important;
         transition: none !important;
     }
+}
+
+/* 美化日期选择器 */
+input[type="date"], input[type="time"] {
+    /* 移除浏览器默认的样式 */
+    -webkit-appearance: none;
+    /* 确保日期选择器的箭头不影响布局 */
+    padding-right: 2.5rem !important;
+}
+
+/* 优化选择列表的触摸区域 */
+select, button {
+    touch-action: manipulation;
 }
 </style>
