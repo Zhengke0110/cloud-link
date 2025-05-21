@@ -17,8 +17,8 @@
                     <div class="flex flex-wrap gap-3">
                         <button @click="selectGroup(null)"
                             class="rounded-lg px-4 py-2 text-sm transition-all duration-300" :class="selectedGroupId === null
-                                ? 'bg-indigo-600 text-white shadow-md'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    ? 'bg-indigo-600 text-white shadow-md'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 ">
                             全部分组
                         </button>
@@ -26,8 +26,8 @@
                         <button v-for="group in groupData" :key="group.id" @click="selectGroup(group.id)"
                             class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all duration-300"
                             :class="selectedGroupId === group.id
-                                ? getSelectedButtonStyle(group.id)
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    ? getSelectedButtonStyle(group.id)
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 ">
                             <span class="h-2 w-2 rounded-full" :class="getColorDot(getGroupIndex(group.id))"></span>
                             {{ group.title }}
@@ -150,8 +150,8 @@
                                         <div class="mb-1 text-xs text-gray-500">过期时间</div>
                                         <div class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium"
                                             :class="isExpired(link.expired)
-                                                ? 'text-red-600'
-                                                : 'text-gray-800'
+                                                    ? 'text-red-600'
+                                                    : 'text-gray-800'
                                                 ">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
                                                 fill="currentColor">
@@ -272,8 +272,8 @@
                         <template v-if="totalPages <= 7">
                             <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
                                 class="rounded-md border px-3 py-2" :class="page === currentPage
-                                    ? 'border-indigo-500 bg-indigo-500 text-white'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                        ? 'border-indigo-500 bg-indigo-500 text-white'
+                                        : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
                                     ">
                                 {{ page }}
                             </button>
@@ -282,8 +282,8 @@
                         <template v-else>
                             <!-- 显示首页 -->
                             <button @click="goToPage(1)" class="rounded-md border px-3 py-2" :class="currentPage === 1
-                                ? 'border-indigo-500 bg-indigo-500 text-white'
-                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                    ? 'border-indigo-500 bg-indigo-500 text-white'
+                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
                                 ">
                                 1
                             </button>
@@ -294,8 +294,8 @@
                             <!-- 中间页码 -->
                             <button v-for="page in middlePages" :key="page" @click="goToPage(page)"
                                 class="rounded-md border px-3 py-2" :class="page === currentPage
-                                    ? 'border-indigo-500 bg-indigo-500 text-white'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                        ? 'border-indigo-500 bg-indigo-500 text-white'
+                                        : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
                                     ">
                                 {{ page }}
                             </button>
@@ -305,8 +305,8 @@
 
                             <!-- 显示尾页 -->
                             <button @click="goToPage(totalPages)" class="rounded-md border px-3 py-2" :class="currentPage === totalPages
-                                ? 'border-indigo-500 bg-indigo-500 text-white'
-                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                    ? 'border-indigo-500 bg-indigo-500 text-white'
+                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
                                 ">
                                 {{ totalPages }}
                             </button>
@@ -526,10 +526,17 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, reactive } from "vue";
 import { GroupData, Data } from "./config";
-// 导入PageHeader组件
 import PageHeader from "@/components/PageHeader";
-// 确保导入语法正确，添加.vue扩展名
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
+// 导入颜色方案工具
+import {
+    getHeaderGradient,
+    getBorderGradient,
+    getIconColor,
+    getActionButtonBg,
+    getColorDot,
+    getLinkColorIndex,
+} from "@/utils/ColorSchemeProvider";
 
 // 分组数据
 const groupData = ref(GroupData);
@@ -714,164 +721,20 @@ const getStatusClass = (state: string, expired: boolean) => {
     return "text-yellow-600 bg-yellow-50 border-yellow-100";
 };
 
-// 获取链接的唯一颜色索引 - 修复实现
-const getLinkColorIndex = (link: any, index: number) => {
-    // 确保我们有一个稳定且唯一的索引值
-    // 方法1: 使用链接ID (确保它是数字)
-    if (link && link.id) {
-        // 处理可能是字符串的ID
-        const idStr = String(link.id);
-        // 使用简单的字符串哈希算法，确保结果更随机
-        let hash = 0;
-        for (let i = 0; i < idStr.length; i++) {
-            hash = (hash << 5) - hash + idStr.charCodeAt(i);
-            hash = hash & hash; // 转换为32位整数
-        }
-        // 取绝对值并对颜色数组长度取模
-        return Math.abs(hash) % colorSchemes.length;
-    }
-    // 方法2: 回退到索引，如果没有ID (不太可能)
-    return index % colorSchemes.length;
-};
-
-// 使用更多的颜色方案以确保差异明显
-const colorSchemes = [
-    {
-        header: "bg-gradient-to-r from-indigo-600 via-blue-700 to-indigo-600",
-        border: "bg-gradient-to-br from-indigo-500 via-purple-500 to-blue-500",
-        icon1: "text-indigo-500",
-        icon2: "text-blue-500",
-        button: "bg-indigo-600 hover:bg-indigo-700",
-        dot: "bg-indigo-500",
-    },
-    {
-        header: "bg-gradient-to-r from-rose-500 via-pink-600 to-rose-500",
-        border: "bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-500",
-        icon1: "text-rose-500",
-        icon2: "text-pink-500",
-        button: "bg-rose-600 hover:bg-rose-700",
-        dot: "bg-rose-500",
-    },
-    {
-        header: "bg-gradient-to-r from-amber-500 via-orange-600 to-amber-500",
-        border: "bg-gradient-to-br from-amber-500 via-orange-600 to-yellow-500",
-        icon1: "text-amber-500",
-        icon2: "text-orange-500",
-        button: "bg-amber-600 hover:bg-amber-700",
-        dot: "bg-amber-500",
-    },
-    {
-        header: "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-500",
-        border: "bg-gradient-to-br from-emerald-500 via-teal-600 to-green-500",
-        icon1: "text-emerald-500",
-        icon2: "text-teal-500",
-        button: "bg-emerald-600 hover:bg-emerald-700",
-        dot: "bg-emerald-500",
-    },
-    {
-        header: "bg-gradient-to-r from-purple-500 via-violet-600 to-purple-500",
-        border: "bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-500",
-        icon1: "text-purple-500",
-        icon2: "text-violet-500",
-        button: "bg-purple-600 hover:bg-purple-700",
-        dot: "bg-purple-500",
-    },
-    {
-        header: "bg-gradient-to-r from-cyan-500 via-sky-600 to-cyan-500",
-        border: "bg-gradient-to-br from-cyan-500 via-sky-600 to-blue-500",
-        icon1: "text-cyan-500",
-        icon2: "text-sky-500",
-        button: "bg-cyan-600 hover:bg-cyan-700",
-        dot: "bg-cyan-500",
-    },
-    // 增加更多颜色方案，类似grouping组件
-    {
-        header: "bg-gradient-to-r from-pink-500 via-red-600 to-pink-500",
-        border: "bg-gradient-to-br from-pink-500 via-red-500 to-rose-500",
-        icon1: "text-pink-500",
-        icon2: "text-red-500",
-        button: "bg-pink-600 hover:bg-pink-700",
-        dot: "bg-pink-500",
-    },
-    {
-        header: "bg-gradient-to-r from-blue-500 via-indigo-600 to-blue-500",
-        border: "bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500",
-        icon1: "text-blue-500",
-        icon2: "text-indigo-500",
-        button: "bg-blue-600 hover:bg-blue-700",
-        dot: "bg-blue-500",
-    },
-    {
-        header: "bg-gradient-to-r from-green-500 via-emerald-600 to-green-500",
-        border: "bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500",
-        icon1: "text-green-500",
-        icon2: "text-emerald-500",
-        button: "bg-green-600 hover:bg-green-700",
-        dot: "bg-green-500",
-    },
-    {
-        header: "bg-gradient-to-r from-yellow-500 via-amber-600 to-yellow-500",
-        border: "bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500",
-        icon1: "text-yellow-600",
-        icon2: "text-amber-500",
-        button: "bg-yellow-600 hover:bg-yellow-700",
-        dot: "bg-yellow-500",
-    },
-    {
-        header: "bg-gradient-to-r from-fuchsia-600 via-pink-700 to-fuchsia-600",
-        border: "bg-gradient-to-br from-fuchsia-500 via-pink-600 to-purple-600",
-        icon1: "text-fuchsia-500",
-        icon2: "text-pink-500",
-        button: "bg-fuchsia-600 hover:bg-fuchsia-700",
-        dot: "bg-fuchsia-500",
-    },
-    {
-        header: "bg-gradient-to-r from-lime-500 via-green-600 to-lime-500",
-        border: "bg-gradient-to-br from-lime-500 via-green-500 to-emerald-500",
-        icon1: "text-lime-600",
-        icon2: "text-green-500",
-        button: "bg-lime-600 hover:bg-lime-700",
-        dot: "bg-lime-500",
-    },
-];
-
-// 获取颜色方案函数
-const getColorScheme = (index: number) => {
-    return colorSchemes[index % colorSchemes.length];
-};
-
-// 获取标题栏渐变背景
-const getHeaderGradient = (index: number) => {
-    return getColorScheme(index).header;
-};
-
-// 获取卡片边框渐变
-const getBorderGradient = (index: number) => {
-    return getColorScheme(index).border;
-};
-
-// 获取图标颜色
-const getIconColor = (index: number, iconIndex: number) => {
-    const scheme = getColorScheme(index);
-    return iconIndex === 0 ? scheme.icon1 : scheme.icon2;
-};
-
-// 获取操作按钮背景色
-const getActionButtonBg = (index: number) => {
-    return getColorScheme(index).button;
-};
-
 // 获取分组选中状态按钮样式
 const getSelectedButtonStyle = (groupId: number) => {
     const index = getGroupIndex(groupId);
-    const bgColor = getColorScheme(index).button;
-    return `${bgColor} text-white shadow-md`;
+    return getSelectedButtonStyle(index);
 };
 
-// 获取颜色点
-const getColorDot = (index: number) => {
-    return getColorScheme(index).dot;
-};
+// 移除所有已经抽取到ColorSchemeProvider的函数：
+// - getColorScheme
+// - getHeaderGradient
+// - getBorderGradient
+// - getIconColor
+// - getActionButtonBg
+// - getColorDot
+// - getLinkColorIndex (已在ColorSchemeProvider中重新实现)
 
 // 格式化日期
 const formatDate = (dateStr: string) => {

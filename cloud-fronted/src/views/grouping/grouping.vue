@@ -124,7 +124,6 @@
                                                 d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                                             <path
                                                 d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                                        </svg>
                                     </button>
                                     <button
                                         class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
@@ -474,9 +473,15 @@
 <script setup lang="ts">
 import { ref, onMounted, reactive } from "vue";
 import { Data } from "./config";
-// 导入PageHeader组件
 import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
+// 导入颜色方案工具
+import {
+  getHeaderGradient,
+  getBorderGradient,
+  getIconColor,
+  getActionButtonBg
+} from "@/utils/ColorSchemeProvider";
 
 // 分组数据
 const groupData = ref(Data);
@@ -666,78 +671,6 @@ const deleteGroup = async () => {
     } finally {
         isDeleting.value = false;
     }
-};
-
-// 颜色方案数组，每个组的颜色都不一样
-const colorSchemes = [
-    {
-        header: "bg-gradient-to-r from-indigo-600 via-blue-700 to-indigo-600",
-        border: "bg-gradient-to-br from-indigo-500 via-purple-500 to-blue-500",
-        icon1: "text-indigo-500",
-        icon2: "text-blue-500",
-        button: "bg-indigo-600 hover:bg-indigo-700",
-    },
-    {
-        header: "bg-gradient-to-r from-rose-500 via-pink-600 to-rose-500",
-        border: "bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-500",
-        icon1: "text-rose-500",
-        icon2: "text-pink-500",
-        button: "bg-rose-600 hover:bg-rose-700",
-    },
-    {
-        header: "bg-gradient-to-r from-amber-500 via-orange-600 to-amber-500",
-        border: "bg-gradient-to-br from-amber-500 via-orange-600 to-yellow-500",
-        icon1: "text-amber-500",
-        icon2: "text-orange-500",
-        button: "bg-amber-600 hover:bg-amber-700",
-    },
-    {
-        header: "bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-500",
-        border: "bg-gradient-to-br from-emerald-500 via-teal-600 to-green-500",
-        icon1: "text-emerald-500",
-        icon2: "text-teal-500",
-        button: "bg-emerald-600 hover:bg-emerald-700",
-    },
-    {
-        header: "bg-gradient-to-r from-purple-500 via-violet-600 to-purple-500",
-        border: "bg-gradient-to-br from-purple-500 via-violet-600 to-indigo-500",
-        icon1: "text-purple-500",
-        icon2: "text-violet-500",
-        button: "bg-purple-600 hover:bg-purple-700",
-    },
-    {
-        header: "bg-gradient-to-r from-cyan-500 via-sky-600 to-cyan-500",
-        border: "bg-gradient-to-br from-cyan-500 via-sky-600 to-blue-500",
-        icon1: "text-cyan-500",
-        icon2: "text-sky-500",
-        button: "bg-cyan-600 hover:bg-cyan-700",
-    },
-];
-
-// 获取颜色方案函数
-const getColorScheme = (index: number) => {
-    return colorSchemes[index % colorSchemes.length];
-};
-
-// 获取标题栏渐变背景
-const getHeaderGradient = (index: number) => {
-    return getColorScheme(index).header;
-};
-
-// 获取卡片边框渐变
-const getBorderGradient = (index: number) => {
-    return getColorScheme(index).border;
-};
-
-// 获取图标颜色
-const getIconColor = (index: number, iconIndex: number) => {
-    const scheme = getColorScheme(index);
-    return iconIndex === 0 ? scheme.icon1 : scheme.icon2;
-};
-
-// 获取操作按钮背景色
-const getActionButtonBg = (index: number) => {
-    return getColorScheme(index).button;
 };
 
 // 格式化日期
