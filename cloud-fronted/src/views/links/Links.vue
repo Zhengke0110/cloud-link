@@ -17,8 +17,8 @@
                     <div class="flex flex-wrap gap-3">
                         <button @click="selectGroup(null)"
                             class="rounded-lg px-4 py-2 text-sm transition-all duration-300" :class="selectedGroupId === null
-                                    ? 'bg-indigo-600 text-white shadow-md'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                ? 'bg-indigo-600 text-white shadow-md'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 ">
                             全部分组
                         </button>
@@ -26,8 +26,8 @@
                         <button v-for="group in groupData" :key="group.id" @click="selectGroup(group.id)"
                             class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all duration-300"
                             :class="selectedGroupId === group.id
-                                    ? getSelectedButtonStyle(group.id)
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                ? getSelectedButtonStyle(group.id)
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 ">
                             <span class="h-2 w-2 rounded-full" :class="getColorDot(getGroupIndex(group.id))"></span>
                             {{ group.title }}
@@ -150,8 +150,8 @@
                                         <div class="mb-1 text-xs text-gray-500">过期时间</div>
                                         <div class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 p-2 text-sm font-medium"
                                             :class="isExpired(link.expired)
-                                                    ? 'text-red-600'
-                                                    : 'text-gray-800'
+                                                ? 'text-red-600'
+                                                : 'text-gray-800'
                                                 ">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
                                                 fill="currentColor">
@@ -272,8 +272,8 @@
                         <template v-if="totalPages <= 7">
                             <button v-for="page in totalPages" :key="page" @click="goToPage(page)"
                                 class="rounded-md border px-3 py-2" :class="page === currentPage
-                                        ? 'border-indigo-500 bg-indigo-500 text-white'
-                                        : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                    ? 'border-indigo-500 bg-indigo-500 text-white'
+                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
                                     ">
                                 {{ page }}
                             </button>
@@ -282,8 +282,8 @@
                         <template v-else>
                             <!-- 显示首页 -->
                             <button @click="goToPage(1)" class="rounded-md border px-3 py-2" :class="currentPage === 1
-                                    ? 'border-indigo-500 bg-indigo-500 text-white'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                ? 'border-indigo-500 bg-indigo-500 text-white'
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
                                 ">
                                 1
                             </button>
@@ -294,8 +294,8 @@
                             <!-- 中间页码 -->
                             <button v-for="page in middlePages" :key="page" @click="goToPage(page)"
                                 class="rounded-md border px-3 py-2" :class="page === currentPage
-                                        ? 'border-indigo-500 bg-indigo-500 text-white'
-                                        : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                    ? 'border-indigo-500 bg-indigo-500 text-white'
+                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
                                     ">
                                 {{ page }}
                             </button>
@@ -305,8 +305,8 @@
 
                             <!-- 显示尾页 -->
                             <button @click="goToPage(totalPages)" class="rounded-md border px-3 py-2" :class="currentPage === totalPages
-                                    ? 'border-indigo-500 bg-indigo-500 text-white'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                                ? 'border-indigo-500 bg-indigo-500 text-white'
+                                : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
                                 ">
                                 {{ totalPages }}
                             </button>
@@ -343,183 +343,122 @@
             </div>
         </div>
 
-        <!-- 编辑链接模态框 -->
-        <div v-if="showEditLinkModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="edit-link-modal-title"
-            role="dialog" aria-modal="true">
-            <div class="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <!-- 背景遮罩 -->
-                <div class="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity" aria-hidden="true"
-                    @click="closeEditLinkModal"></div>
+        <!-- 使用 BaseModal 组件重构编辑链接模态框 -->
+        <BaseModal v-model="showEditLinkModal" title="更新链接信息" id="edit-link-modal">
+            <!-- 表单内容 -->
+            <form @submit.prevent="updateLink" class="space-y-4">
+                <div>
+                    <label for="edit-link-title" class="mb-1 block text-sm font-medium text-gray-700">链接标题</label>
+                    <div class="relative">
+                        <input type="text" id="edit-link-title" v-model="editingLink.title"
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                            placeholder="请输入链接标题" required />
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">
+                        <span>为您的链接添加一个易于识别的名称</span>
+                    </p>
+                </div>
 
-                <!-- 使模态框居中的技巧 -->
-                <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
+                <div>
+                    <label for="edit-link-group" class="mb-1 block text-sm font-medium text-gray-700">选择分组</label>
+                    <select id="edit-link-group" v-model="editingLink.groupId"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
+                        <option v-for="group in groupData" :key="group.id" :value="group.id">
+                            {{ group.title }}
+                        </option>
+                    </select>
+                    <p class="mt-1 text-xs text-gray-500">选择该链接所属的分组</p>
+                </div>
 
-                <!-- 模态框内容 -->
-                <div class="relative inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
-                    @click.stop>
-                    <!-- 手机端顶部拖动条示意 -->
-                    <div class="mx-auto my-2 h-1 w-12 rounded-full bg-gray-300 sm:hidden"></div>
+                <div>
+                    <label for="edit-link-domain-type" class="mb-1 block text-sm font-medium text-gray-700">域名类型</label>
+                    <select id="edit-link-domain-type" v-model="editingLink.domainType"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
+                        <option value="OFFICIAL">官方域名</option>
+                        <option value="CUSTOM">自定义域名</option>
+                    </select>
+                    <p class="mt-1 text-xs text-gray-500">选择域名类型</p>
+                </div>
 
-                    <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <!-- 标题和关闭按钮 -->
-                        <div class="mb-5 flex items-center justify-between">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="edit-link-modal-title">
-                                更新链接信息
-                            </h3>
-                            <button type="button" @click="closeEditLinkModal"
-                                class="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                <div>
+                    <label for="edit-link-domain-id" class="mb-1 block text-sm font-medium text-gray-700">域名</label>
+                    <select id="edit-link-domain-id" v-model="editingLink.domainId"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
+                        <option :value="1">timu.fun</option>
+                        <!-- 这里可以根据实际域名列表动态生成选项 -->
+                    </select>
+                    <p class="mt-1 text-xs text-gray-500">选择短链接使用的域名</p>
+                </div>
+
+                <!-- 提交按钮容器 -->
+                <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    <button type="button" @click="closeEditLinkModal"
+                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                        取消
+                    </button>
+                    <button type="submit" :disabled="isUpdatingLink || !editingLink.title"
+                        class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
+                        <svg v-if="isUpdatingLink" class="h-5 w-5 animate-spin text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        {{ isUpdatingLink ? "更新中..." : "保存修改" }}
+                    </button>
+                </div>
+            </form>
+        </BaseModal>
+
+        <!-- 使用 BaseModal 组件重构删除确认模态框 -->
+        <BaseModal v-model="showDeleteConfirmModal" title="确认删除短链接" id="delete-confirm-modal"
+            content-padding="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+                <div
+                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500">
+                            您确定要删除这个短链接吗？此操作无法撤销，删除后该链接将无法访问。
+                        </p>
+                        <div class="mt-3 rounded-md bg-gray-50 p-3">
+                            <p class="text-sm font-medium text-gray-700">链接详情：</p>
+                            <p class="mt-1 text-sm text-gray-500">标题: {{ deletingLink.title }}</p>
+                            <p class="mt-1 text-sm text-gray-500">短链接: {{ deletingLink.domain }}/{{ deletingLink.code }}
+                            </p>
                         </div>
-
-                        <!-- 表单内容 -->
-                        <form @submit.prevent="updateLink" class="space-y-4">
-                            <div>
-                                <label for="edit-link-title"
-                                    class="mb-1 block text-sm font-medium text-gray-700">链接标题</label>
-                                <div class="relative">
-                                    <input type="text" id="edit-link-title" v-model="editingLink.title"
-                                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                                        placeholder="请输入链接标题" required />
-                                </div>
-                                <p class="mt-1 text-xs text-gray-500">
-                                    <span>为您的链接添加一个易于识别的名称</span>
-                                </p>
-                            </div>
-
-                            <div>
-                                <label for="edit-link-group"
-                                    class="mb-1 block text-sm font-medium text-gray-700">选择分组</label>
-                                <select id="edit-link-group" v-model="editingLink.groupId"
-                                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
-                                    <option v-for="group in groupData" :key="group.id" :value="group.id">
-                                        {{ group.title }}
-                                    </option>
-                                </select>
-                                <p class="mt-1 text-xs text-gray-500">选择该链接所属的分组</p>
-                            </div>
-
-                            <div>
-                                <label for="edit-link-domain-type"
-                                    class="mb-1 block text-sm font-medium text-gray-700">域名类型</label>
-                                <select id="edit-link-domain-type" v-model="editingLink.domainType"
-                                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
-                                    <option value="OFFICIAL">官方域名</option>
-                                    <option value="CUSTOM">自定义域名</option>
-                                </select>
-                                <p class="mt-1 text-xs text-gray-500">选择域名类型</p>
-                            </div>
-
-                            <div>
-                                <label for="edit-link-domain-id"
-                                    class="mb-1 block text-sm font-medium text-gray-700">域名</label>
-                                <select id="edit-link-domain-id" v-model="editingLink.domainId"
-                                    class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
-                                    <option :value="1">timu.fun</option>
-                                    <!-- 这里可以根据实际域名列表动态生成选项 -->
-                                </select>
-                                <p class="mt-1 text-xs text-gray-500">选择短链接使用的域名</p>
-                            </div>
-
-                            <!-- 提交按钮容器 -->
-                            <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                                <button type="button" @click="closeEditLinkModal"
-                                    class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
-                                    取消
-                                </button>
-                                <button type="submit" :disabled="isUpdatingLink || !editingLink.title"
-                                    class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                                    <svg v-if="isUpdatingLink" class="h-5 w-5 animate-spin text-white"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                    {{ isUpdatingLink ? "更新中..." : "保存修改" }}
-                                </button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 删除确认模态框 -->
-        <div v-if="showDeleteConfirmModal" class="fixed inset-0 z-50 overflow-y-auto"
-            aria-labelledby="delete-confirm-modal" role="dialog" aria-modal="true">
-            <div class="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <!-- 背景遮罩 -->
-                <div class="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity" aria-hidden="true"
-                    @click="closeDeleteConfirmModal"></div>
-
-                <!-- 使模态框居中的技巧 -->
-                <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
-
-                <!-- 模态框内容 -->
-                <div class="relative inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
-                    @click.stop>
-                    <!-- 手机端顶部拖动条示意 -->
-                    <div class="mx-auto my-2 h-1 w-12 rounded-full bg-gray-300 sm:hidden"></div>
-
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                </svg>
-                            </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="delete-confirm-modal">
-                                    确认删除短链接
-                                </h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500">
-                                        您确定要删除这个短链接吗？此操作无法撤销，删除后该链接将无法访问。
-                                    </p>
-                                    <div class="mt-3 rounded-md bg-gray-50 p-3">
-                                        <p class="text-sm font-medium text-gray-700">链接详情：</p>
-                                        <p class="mt-1 text-sm text-gray-500">
-                                            标题: {{ deletingLink.title }}
-                                        </p>
-                                        <p class="mt-1 text-sm text-gray-500">
-                                            短链接: {{ deletingLink.domain }}/{{ deletingLink.code }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                        <button type="button" @click="deleteLink" :disabled="isDeleting"
-                            class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:ml-3 sm:w-auto sm:text-sm">
-                            <svg v-if="isDeleting" class="mr-2 h-4 w-4 animate-spin text-white"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4">
-                                </circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            {{ isDeleting ? "正在删除..." : "确认删除" }}
-                        </button>
-                        <button type="button" @click="closeDeleteConfirmModal"
-                            class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                            取消
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <!-- 使用分离的页脚插槽 -->
+            <template #separateFooter>
+                <button type="button" @click="deleteLink" :disabled="isDeleting"
+                    class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:ml-3 sm:w-auto sm:text-sm">
+                    <svg v-if="isDeleting" class="mr-2 h-4 w-4 animate-spin text-white"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    {{ isDeleting ? "正在删除..." : "确认删除" }}
+                </button>
+                <button type="button" @click="closeDeleteConfirmModal"
+                    class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    取消
+                </button>
+            </template>
+        </BaseModal>
     </div>
 </template>
 
@@ -528,6 +467,7 @@ import { ref, computed, onMounted, watch, reactive } from "vue";
 import { GroupData, Data } from "./config";
 import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
+import BaseModal from "@/components/BaseModal.vue";
 // 导入颜色方案工具
 import {
     getHeaderGradient,
@@ -536,6 +476,7 @@ import {
     getActionButtonBg,
     getColorDot,
     getLinkColorIndex,
+    getSelectedButtonStyle as getSchemeButtonStyle // 重命名为 getSchemeButtonStyle 以避免命名冲突
 } from "@/utils/ColorSchemeProvider";
 
 // 分组数据
@@ -680,6 +621,12 @@ const getGroupIndex = (groupId: number) => {
     return index >= 0 ? index : 0;
 };
 
+// 获取分组选中状态按钮样式 - 重命名并修复了递归调用问题
+const getSelectedButtonStyle = (groupId: number) => {
+    const index = getGroupIndex(groupId);
+    return getSchemeButtonStyle(index);
+};
+
 // 处理原始URL显示
 const getOriginalUrl = (url: string) => {
     // 假设URL格式可能需要处理
@@ -721,11 +668,7 @@ const getStatusClass = (state: string, expired: boolean) => {
     return "text-yellow-600 bg-yellow-50 border-yellow-100";
 };
 
-// 获取分组选中状态按钮样式
-const getSelectedButtonStyle = (groupId: number) => {
-    const index = getGroupIndex(groupId);
-    return getSelectedButtonStyle(index);
-};
+
 
 // 移除所有已经抽取到ColorSchemeProvider的函数：
 // - getColorScheme

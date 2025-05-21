@@ -124,6 +124,7 @@
                                                 d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                                             <path
                                                 d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                                        </svg>
                                     </button>
                                     <button
                                         class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
@@ -232,241 +233,156 @@
         </div>
 
         <!-- 创建分组模态框 -->
-        <div v-if="showCreateModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title"
-            role="dialog" aria-modal="true">
-            <div class="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <!-- 背景遮罩 -->
-                <div class="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity" aria-hidden="true"
-                    @click="closeCreateModal"></div>
-
-                <!-- 使模态框居中的技巧 -->
-                <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
-
-                <!-- 模态框内容 -->
-                <div class="relative inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
-                    @click.stop>
-                    <!-- 手机端顶部拖动条示意 -->
-                    <div class="mx-auto my-2 h-1 w-12 rounded-full bg-gray-300 sm:hidden"></div>
-
-                    <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <!-- 标题和关闭按钮 -->
-                        <div class="mb-5 flex items-center justify-between">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                创建新分组
-                            </h3>
-                            <button type="button" @click="closeCreateModal"
-                                class="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- 表单内容 -->
-                        <form @submit.prevent="createGroup" class="space-y-4">
-                            <div>
-                                <label for="group-title"
-                                    class="mb-1 block text-sm font-medium text-gray-700">分组名称</label>
-                                <div class="relative">
-                                    <input type="text" id="group-title" v-model="newGroup.title"
-                                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                                        placeholder="请输入分组名称" required />
-                                    <button type="button" v-if="newGroup.title" @click="generateRandomGroupName"
-                                        class="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-indigo-50 hover:text-indigo-600"
-                                        title="生成随机名称">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                <p class="mt-1 text-xs text-gray-500">
-                                    为您的分组添加一个易于识别的名称
-                                </p>
-                            </div>
-
-                            <!-- 提交按钮容器 -->
-                            <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                                <button type="button" @click="closeCreateModal"
-                                    class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
-                                    取消
-                                </button>
-                                <button type="submit" :disabled="isCreating || !newGroup.title"
-                                    class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                                    <svg v-if="isCreating" class="h-5 w-5 animate-spin text-white"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                    {{ isCreating ? "创建中..." : "创建分组" }}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 编辑分组模态框 -->
-        <div v-if="showEditModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="edit-modal-title"
-            role="dialog" aria-modal="true">
-            <div class="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <!-- 背景遮罩 -->
-                <div class="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity" aria-hidden="true"
-                    @click="closeEditModal"></div>
-
-                <!-- 使模态框居中的技巧 -->
-                <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
-
-                <!-- 模态框内容 -->
-                <div class="relative inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
-                    @click.stop>
-                    <!-- 手机端顶部拖动条示意 -->
-                    <div class="mx-auto my-2 h-1 w-12 rounded-full bg-gray-300 sm:hidden"></div>
-
-                    <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <!-- 标题和关闭按钮 -->
-                        <div class="mb-5 flex items-center justify-between">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="edit-modal-title">
-                                编辑分组信息
-                            </h3>
-                            <button type="button" @click="closeEditModal"
-                                class="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- 表单内容 -->
-                        <form @submit.prevent="updateGroup" class="space-y-4">
-                            <div>
-                                <label for="edit-group-title"
-                                    class="mb-1 block text-sm font-medium text-gray-700">分组名称</label>
-                                <div class="relative">
-                                    <input type="text" id="edit-group-title" v-model="editingGroup.title"
-                                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                                        placeholder="请输入分组名称" required />
-                                    <button type="button" @click="generateRandomGroupNameForEdit"
-                                        class="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-indigo-50 hover:text-indigo-600"
-                                        title="生成随机名称">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                            fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                <p class="mt-1 text-xs text-gray-500">
-                                    <span>为您的分组添加一个易于识别的名称</span>
-                                    <span class="ml-1 text-gray-400">ID: {{ editingGroup.id }}</span>
-                                </p>
-                            </div>
-
-                            <!-- 提交按钮容器 -->
-                            <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                                <button type="button" @click="closeEditModal"
-                                    class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
-                                    取消
-                                </button>
-                                <button type="submit" :disabled="isUpdating || !editingGroup.title"
-                                    class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
-                                    <svg v-if="isUpdating" class="h-5 w-5 animate-spin text-white"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                    {{ isUpdating ? "更新中..." : "保存修改" }}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 删除分组确认模态框 -->
-        <div v-if="showDeleteConfirmModal" class="fixed inset-0 z-50 overflow-y-auto"
-            aria-labelledby="delete-confirm-modal" role="dialog" aria-modal="true">
-            <div class="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <!-- 背景遮罩 -->
-                <div class="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity" aria-hidden="true"
-                    @click="closeDeleteConfirmModal"></div>
-
-                <!-- 使模态框居中的技巧 -->
-                <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
-
-                <!-- 模态框内容 -->
-                <div class="relative inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:align-middle"
-                    @click.stop>
-                    <!-- 手机端顶部拖动条示意 -->
-                    <div class="mx-auto my-2 h-1 w-12 rounded-full bg-gray-300 sm:hidden"></div>
-
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                </svg>
-                            </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="delete-confirm-modal">
-                                    确认删除分组
-                                </h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500">
-                                        您确定要删除这个分组吗？此操作无法撤销，删除后该分组中的所有链接将移至默认分组。
-                                    </p>
-                                    <div class="mt-3 rounded-md bg-gray-50 p-3">
-                                        <p class="text-sm font-medium text-gray-700">分组详情：</p>
-                                        <p class="mt-1 text-sm text-gray-500">
-                                            名称: {{ deletingGroup.title }}
-                                        </p>
-                                        <p class="mt-1 text-sm text-gray-500">
-                                            ID: {{ deletingGroup.id }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                        <button type="button" @click="deleteGroup" :disabled="isDeleting"
-                            class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:ml-3 sm:w-auto sm:text-sm">
-                            <svg v-if="isDeleting" class="mr-2 h-4 w-4 animate-spin text-white"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
+        <!-- 使用 BaseModal 组件重构创建分组模态框 -->
+        <BaseModal 
+            v-model="showCreateModal" 
+            title="创建新分组" 
+            id="create-group-modal"
+        >
+            <!-- 表单内容 -->
+            <form @submit.prevent="createGroup" class="space-y-4">
+                <div>
+                    <label for="group-title" class="mb-1 block text-sm font-medium text-gray-700">分组名称</label>
+                    <div class="relative">
+                        <input type="text" id="group-title" v-model="newGroup.title"
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                            placeholder="请输入分组名称" required />
+                        <button type="button" v-if="newGroup.title" @click="generateRandomGroupName"
+                            class="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-indigo-50 hover:text-indigo-600"
+                            title="生成随机名称">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                                    clip-rule="evenodd" />
                             </svg>
-                            {{ isDeleting ? "正在删除..." : "确认删除" }}
                         </button>
-                        <button type="button" @click="closeDeleteConfirmModal"
-                            class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                            取消
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">为您的分组添加一个易于识别的名称</p>
+                </div>
+
+                <!-- 提交按钮容器 -->
+                <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    <button type="button" @click="closeCreateModal"
+                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                        取消
+                    </button>
+                    <button type="submit" :disabled="isCreating || !newGroup.title"
+                        class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
+                        <svg v-if="isCreating" class="h-5 w-5 animate-spin text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        {{ isCreating ? "创建中..." : "创建分组" }}
+                    </button>
+                </div>
+            </form>
+        </BaseModal>
+
+        <!-- 使用 BaseModal 组件重构编辑分组模态框 -->
+        <BaseModal 
+            v-model="showEditModal" 
+            title="编辑分组信息" 
+            id="edit-group-modal"
+        >
+            <!-- 表单内容 -->
+            <form @submit.prevent="updateGroup" class="space-y-4">
+                <div>
+                    <label for="edit-group-title" class="mb-1 block text-sm font-medium text-gray-700">分组名称</label>
+                    <div class="relative">
+                        <input type="text" id="edit-group-title" v-model="editingGroup.title"
+                            class="w-full rounded-lg border border-gray-300 px-4 py-3 text-base transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                            placeholder="请输入分组名称" required />
+                        <button type="button" @click="generateRandomGroupNameForEdit"
+                            class="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-indigo-50 hover:text-indigo-600"
+                            title="生成随机名称">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                                    clip-rule="evenodd" />
+                        </svg>
                         </button>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">
+                        <span>为您的分组添加一个易于识别的名称</span>
+                        <span class="ml-1 text-gray-400">ID: {{ editingGroup.id }}</span>
+                    </p>
+                </div>
+
+                <!-- 提交按钮容器 -->
+                <div class="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    <button type="button" @click="closeEditModal"
+                        class="mt-2 w-full rounded-lg border border-gray-300 px-4 py-3 text-center text-base font-medium text-gray-700 transition-colors duration-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                        取消
+                    </button>
+                    <button type="submit" :disabled="isUpdating || !editingGroup.title"
+                        class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 text-base font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto">
+                        <svg v-if="isUpdating" class="h-5 w-5 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" 
+                            fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        {{ isUpdating ? "更新中..." : "保存修改" }}
+                    </button>
+                </div>
+            </form>
+        </BaseModal>
+
+        <!-- 使用 BaseModal 组件重构删除确认模态框 -->
+        <BaseModal 
+            v-model="showDeleteConfirmModal" 
+            title="确认删除分组" 
+            id="delete-group-modal"
+            content-padding="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4"
+        >
+            <div class="sm:flex sm:items-start">
+                <div
+                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500">
+                            您确定要删除这个分组吗？此操作无法撤销，删除后该分组中的所有链接将移至默认分组。
+                        </p>
+                        <div class="mt-3 rounded-md bg-gray-50 p-3">
+                            <p class="text-sm font-medium text-gray-700">分组详情：</p>
+                            <p class="mt-1 text-sm text-gray-500">名称: {{ deletingGroup.title }}</p>
+                            <p class="mt-1 text-sm text-gray-500">ID: {{ deletingGroup.id }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <!-- 使用分离的页脚插槽 -->
+            <template #separateFooter>
+                <button type="button" @click="deleteGroup" :disabled="isDeleting"
+                    class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:ml-3 sm:w-auto sm:text-sm">
+                    <svg v-if="isDeleting" class="mr-2 h-4 w-4 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" 
+                        fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" 
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    {{ isDeleting ? "正在删除..." : "确认删除" }}
+                </button>
+                <button type="button" @click="closeDeleteConfirmModal"
+                    class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    取消
+                </button>
+            </template>
+        </BaseModal>
     </div>
 </template>
 
@@ -475,12 +391,13 @@ import { ref, onMounted, reactive } from "vue";
 import { Data } from "./config";
 import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
+import BaseModal from "@/components/BaseModal.vue";
 // 导入颜色方案工具
 import {
-  getHeaderGradient,
-  getBorderGradient,
-  getIconColor,
-  getActionButtonBg
+    getHeaderGradient,
+    getBorderGradient,
+    getIconColor,
+    getActionButtonBg
 } from "@/utils/ColorSchemeProvider";
 
 // 分组数据
