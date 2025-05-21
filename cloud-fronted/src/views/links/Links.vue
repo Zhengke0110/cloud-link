@@ -377,46 +377,15 @@
             </form>
         </BaseModal>
 
-        <!-- 使用 BaseModal 组件重构删除确认模态框 -->
-        <BaseModal v-model="showDeleteConfirmModal" title="确认删除短链接" id="delete-confirm-modal"
-            content-padding="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-                <div
-                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                </div>
-                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <div class="mt-2">
-                        <p class="text-sm text-gray-500">
-                            您确定要删除这个短链接吗？此操作无法撤销，删除后该链接将无法访问。
-                        </p>
-                        <div class="mt-3 rounded-md bg-gray-50 p-3">
-                            <p class="text-sm font-medium text-gray-700">链接详情：</p>
-                            <p class="mt-1 text-sm text-gray-500">标题: {{ deletingLink.title }}</p>
-                            <p class="mt-1 text-sm text-gray-500">短链接: {{ deletingLink.domain }}/{{ deletingLink.code }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 使用分离的页脚插槽 -->
-            <template #separateFooter>
-                <button type="button" @click="deleteLink" :disabled="isDeleting"
-                    class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:ml-3 sm:w-auto sm:text-sm">
-                    <LoadingSpinner v-if="isDeleting" size="mr-2 h-4 w-4" class="text-white" />
-                    {{ isDeleting ? "正在删除..." : "确认删除" }}
-                </button>
-                <button type="button" @click="closeDeleteConfirmModal"
-                    class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                    取消
-                </button>
+        <!-- 替换原有的删除确认模态框为ConfirmDeleteModal组件 -->
+        <ConfirmDeleteModal v-model="showDeleteConfirmModal" title="确认删除短链接" id="delete-confirm-modal"
+            message="您确定要删除这个短链接吗？此操作无法撤销，删除后该链接将无法访问。" detailsTitle="链接详情" :isLoading="isDeleting"
+            loadingText="正在删除..." @confirm="deleteLink">
+            <template #details>
+                <p class="mt-1 text-sm text-gray-500">标题: {{ deletingLink.title }}</p>
+                <p class="mt-1 text-sm text-gray-500">短链接: {{ deletingLink.domain }}/{{ deletingLink.code }}</p>
             </template>
-        </BaseModal>
+        </ConfirmDeleteModal>
     </div>
 </template>
 
@@ -427,18 +396,17 @@ import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
-import LinkCard from '@/components/LinkCard.vue'; // 引入LinkCard组件
+import LinkCard from '@/components/LinkCard.vue';
+import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'; // 引入ConfirmDeleteModal组件
 // 导入颜色方案工具
 import {
-    getHeaderGradient,
-    getBorderGradient,
     getIconColor,
     getActionButtonBg,
     getColorDot,
     getLinkColorIndex,
     getSelectedButtonStyle as getSchemeButtonStyle // 重命名为 getSchemeButtonStyle 以避免命名冲突
 } from "@/utils/ColorSchemeProvider";
-import { formatDate } from '@/utils/DateUtils';
+import { formatDate, isDateExpired } from '@/utils/DateUtils';
 import { initPageAnimations } from '@/utils/AnimationUtils'
 
 // 分组数据
@@ -600,12 +568,7 @@ const getOriginalUrl = (url: string) => {
 
 // 检查链接是否过期
 const isExpired = (dateStr: string) => {
-    try {
-        const expireDate = new Date(dateStr);
-        return expireDate < new Date();
-    } catch (e) {
-        return false;
-    }
+    return isDateExpired(dateStr);
 };
 
 // 获取链接状态文本
@@ -754,11 +717,6 @@ const openDeleteConfirmModal = (link: any) => {
     showDeleteConfirmModal.value = true;
 };
 
-// 关闭删除确认模态框
-const closeDeleteConfirmModal = () => {
-    showDeleteConfirmModal.value = false;
-};
-
 // 删除链接
 const deleteLink = async () => {
     isDeleting.value = true;
@@ -794,8 +752,8 @@ const deleteLink = async () => {
             }
         }
 
-        // 关闭模态框
-        closeDeleteConfirmModal();
+        // 关闭模态框 - 修改为直接设置状态
+        showDeleteConfirmModal.value = false;
 
         // 显示成功提示（这里可以添加一个toast提示）
         console.log("链接删除成功");

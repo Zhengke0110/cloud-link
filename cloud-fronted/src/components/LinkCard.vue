@@ -44,7 +44,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import {
     getHeaderGradient,
     getBorderGradient,
@@ -53,7 +52,7 @@ import {
 } from "@/utils/ColorSchemeProvider";
 
 // 组件属性定义
-const props = defineProps({
+defineProps({
     // 卡片标题
     title: {
         type: String,

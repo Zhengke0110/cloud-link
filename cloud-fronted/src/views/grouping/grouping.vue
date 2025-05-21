@@ -294,45 +294,15 @@
             </form>
         </BaseModal>
 
-        <!-- 使用 BaseModal 组件重构删除确认模态框 -->
-        <BaseModal v-model="showDeleteConfirmModal" title="确认删除分组" id="delete-group-modal"
-            content-padding="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-                <div
-                    class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                </div>
-                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <div class="mt-2">
-                        <p class="text-sm text-gray-500">
-                            您确定要删除这个分组吗？此操作无法撤销，删除后该分组中的所有链接将移至默认分组。
-                        </p>
-                        <div class="mt-3 rounded-md bg-gray-50 p-3">
-                            <p class="text-sm font-medium text-gray-700">分组详情：</p>
-                            <p class="mt-1 text-sm text-gray-500">名称: {{ deletingGroup.title }}</p>
-                            <p class="mt-1 text-sm text-gray-500">ID: {{ deletingGroup.id }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 使用分离的页脚插槽 -->
-            <template #separateFooter>
-                <button type="button" @click="deleteGroup" :disabled="isDeleting"
-                    class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-70 sm:ml-3 sm:w-auto sm:text-sm">
-                    <LoadingSpinner v-if="isDeleting" size="mr-2 h-4 w-4" class="text-white" />
-                    {{ isDeleting ? "正在删除..." : "确认删除" }}
-                </button>
-                <button type="button" @click="closeDeleteConfirmModal"
-                    class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                    取消
-                </button>
+        <!-- 替换为ConfirmDeleteModal组件 -->
+        <ConfirmDeleteModal v-model="showDeleteConfirmModal" title="确认删除分组" id="delete-group-modal"
+            message="您确定要删除这个分组吗？此操作无法撤销，删除后该分组中的所有链接将移至默认分组。" detailsTitle="分组详情" :isLoading="isDeleting"
+            loadingText="正在删除..." @confirm="deleteGroup">
+            <template #details>
+                <p class="mt-1 text-sm text-gray-500">名称: {{ deletingGroup.title }}</p>
+                <p class="mt-1 text-sm text-gray-500">ID: {{ deletingGroup.id }}</p>
             </template>
-        </BaseModal>
+        </ConfirmDeleteModal>
     </div>
 </template>
 
@@ -343,13 +313,12 @@ import PageHeader from "@/components/PageHeader";
 import DecorativeBackground from "@/components/DecorativeBackground.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
-import LinkCard from '@/components/LinkCard.vue'; // 引入LinkCard组件
+import LinkCard from '@/components/LinkCard.vue';
+import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue'; // 引入ConfirmDeleteModal组件
 // 导入日期工具函数
 import { formatDate } from "@/utils/DateUtils";
 // 导入颜色方案工具
 import {
-    getHeaderGradient,
-    getBorderGradient,
     getIconColor,
     getActionButtonBg
 } from "@/utils/ColorSchemeProvider";
@@ -411,10 +380,6 @@ const openDeleteConfirmModal = (group: any) => {
     showDeleteConfirmModal.value = true;
 };
 
-// 关闭删除确认模态框
-const closeDeleteConfirmModal = () => {
-    showDeleteConfirmModal.value = false;
-};
 
 // 生成随机分组名称 (创建)
 const generateRandomGroupName = () => {
@@ -533,8 +498,8 @@ const deleteGroup = async () => {
             console.log("分组删除成功:", deletingGroup);
         }
 
-        // 关闭模态框
-        closeDeleteConfirmModal();
+        // 关闭模态框 - 修改为直接设置状态变量
+        showDeleteConfirmModal.value = false;
 
         // 显示成功提示（这里可以添加一个toast提示）
         console.log("分组删除成功");
@@ -544,6 +509,7 @@ const deleteGroup = async () => {
         isDeleting.value = false;
     }
 };
+
 
 // 添加页面动画效果
 onMounted(() => initPageAnimations());
