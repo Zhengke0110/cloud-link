@@ -9,23 +9,8 @@
         </div>
 
         <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- 标题区域 -->
-            <div class="reveal-element mb-12 text-center md:mb-16">
-                <span
-                    class="mb-3 inline-block rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-800 shadow-sm">
-                    短链接管理
-                </span>
-                <h2
-                    class="mb-6 bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-2xl font-bold text-transparent md:text-3xl lg:text-5xl">
-                    管理您的短链接
-                </h2>
-                <p class="mx-auto max-w-2xl text-sm text-gray-600 md:text-base lg:text-lg">
-                    查看、编辑和管理您的所有短链接
-                </p>
-                <div
-                    class="mx-auto mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-indigo-300 via-blue-500 to-indigo-600">
-                </div>
-            </div>
+            <!-- 使用PageHeader组件替换原有的标题区域 -->
+            <PageHeader tag="短链接管理" title="管理您的短链接" description="查看、编辑和管理您的所有短链接" />
 
             <!-- 分组选择器 -->
             <div class="reveal-element mx-auto mb-8 max-w-6xl delay-300">
@@ -540,6 +525,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, reactive } from "vue";
 import { GroupData, Data } from "./config";
+// 导入PageHeader组件
+import PageHeader from "@/components/PageHeader";
 
 // 分组数据
 const groupData = ref(GroupData);
