@@ -51,32 +51,15 @@
                     <template #header-actions>
                         <span class="text-sm text-white/80">操作</span>
                         <div class="flex space-x-1">
-                            <button @click="openEditLinkModal(link)"
-                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-white/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                </svg>
-                            </button>
-                            <button @click="openDeleteConfirmModal(link)"
-                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-red-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
-                            <button
-                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-white/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                                    <path
-                                        d="M3 5a2 2 0 002-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z" />
-                                </svg>
-                            </button>
+                            <!-- 替换为IconActionButton组件 -->
+                            <IconActionButton icon="edit" @click="openEditLinkModal(link)" title="编辑链接" />
+
+                            <!-- 替换为IconActionButton组件，并设置为危险类型 -->
+                            <IconActionButton icon="delete" type="danger" @click="openDeleteConfirmModal(link)"
+                                title="删除链接" />
+
+                            <!-- 替换为IconActionButton组件 -->
+                            <IconActionButton icon="share" title="分享链接" />
                         </div>
                     </template>
 
@@ -90,14 +73,9 @@
                             bgClass="bg-indigo-50">
                             <div class="flex items-center justify-between w-full">
                                 <span>{{ `${link.domain}/${link.code}` }}</span>
-                                <button class="rounded p-1 transition-colors hover:bg-indigo-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-600"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                                        <path
-                                            d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-                                    </svg>
-                                </button>
+                                <!-- 替换为IconActionButton组件，使用light变体 -->
+                                <IconActionButton icon="copy" variant="light" size="sm" title="复制链接"
+                                    customClass="text-indigo-600 hover:bg-indigo-100" />
                             </div>
                         </InfoField>
                     </div>
@@ -120,7 +98,7 @@
                         <InfoField label="状态" :value="getStatusText(link.state, isExpired(link.expired))" :borderClass="isExpired(link.expired) ? 'border-red-100' :
                             link.state === 'ACTIVE' ? 'border-emerald-100' : 'border-yellow-100'" :bgClass="isExpired(link.expired) ? 'bg-red-50' :
                                 link.state === 'ACTIVE' ? 'bg-emerald-50' : 'bg-yellow-50'" :valueClass="isExpired(link.expired) ? 'text-red-600' :
-                        link.state === 'ACTIVE' ? 'text-emerald-600' : 'text-yellow-600'">
+                                    link.state === 'ACTIVE' ? 'text-emerald-600' : 'text-yellow-600'">
                             <template #icon>
                                 <span class="h-2 w-2 rounded-full"
                                     :class="getStatusDot(link.state, isExpired(link.expired))"></span>
@@ -140,16 +118,10 @@
 
                     <!-- 底部操作按钮 -->
                     <template #footer-actions>
-                        <button
-                            class="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-50">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                <path fill-rule="evenodd"
-                                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </button>
+                        <!-- 替换为IconActionButton组件，使用light变体 -->
+                        <IconActionButton icon="view" variant="light" customClass="border border-gray-300"
+                            title="查看详情" />
+
                         <button
                             class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
                             :class="getActionButtonBg(getLinkColorIndex(link, index))">
@@ -326,7 +298,8 @@ import EmptyState from '@/components/EmptyState.vue';
 import FormField from '@/components/FormField.vue';
 import InfoField from '@/components/InfoField.vue';
 import FormActions from '@/components/FormActions.vue';
-import PageLayout from '@/components/PageLayout.vue'; // 引入PageLayout组件
+import PageLayout from '@/components/PageLayout.vue';
+import IconActionButton from '@/components/IconActionButton.vue';
 
 // 导入颜色方案工具
 import {
@@ -337,6 +310,9 @@ import {
     getSelectedButtonStyle as getSchemeButtonStyle
 } from "@/utils/ColorSchemeProvider";
 import { formatDate, isDateExpired } from '@/utils/DateUtils';
+
+// 导入模态框状态管理Hook
+import { useModal } from "@/composables/useModal";
 
 // 分组数据
 const groupData = ref(GroupData);
@@ -526,47 +502,60 @@ onMounted(() => {
     fetchLinks();
 });
 
-// 编辑链接模态框状态
-const showEditLinkModal = ref(false);
-const isUpdatingLink = ref(false);
-const editingLink = reactive({
+// 使用模态框状态管理Hook - 编辑链接模态框
+const editLinkModal = useModal({
     id: 0,
     code: "",
     title: "",
     groupId: 0,
     domainId: 0,
-    domainType: "OFFICIAL",
+    domainType: "OFFICIAL"
 });
+
+// 使用模态框状态管理Hook - 删除确认模态框
+const deleteLinkModal = useModal({
+    id: 0,
+    code: "",
+    title: "",
+    domain: "",
+    groupId: 0
+});
+
+// 重命名以保持API兼容性
+const showEditLinkModal = editLinkModal.isVisible;
+const isUpdatingLink = editLinkModal.isLoading;
+const editingLink = editLinkModal.formData;
+
+const showDeleteConfirmModal = deleteLinkModal.isVisible;
+const isDeleting = deleteLinkModal.isLoading;
+const deletingLink = deleteLinkModal.formData;
 
 // 打开编辑链接模态框
 const openEditLinkModal = (link: any) => {
-    editingLink.id = link.id;
-    editingLink.code = link.code;
-    editingLink.title = link.title;
-    editingLink.groupId = link.groupId;
+    // 设置域名类型
+    const domainType = link.domain.includes("timu.fun") ? "OFFICIAL" : "CUSTOM";
 
-    // 从域名中提取domainId (示例实现，实际应根据域名结构调整)
-    // 假设link.domain是域名字符串，这里简单地设置成1作为示例
-    editingLink.domainId = 1;
-
-    // 设置域名类型 (示例实现，实际应根据业务逻辑调整)
-    editingLink.domainType = link.domain.includes("timu.fun")
-        ? "OFFICIAL"
-        : "CUSTOM";
-
-    showEditLinkModal.value = true;
+    // 打开模态框并传入数据
+    editLinkModal.open({
+        id: link.id,
+        code: link.code,
+        title: link.title,
+        groupId: link.groupId,
+        domainId: 1, // 从域名中提取domainId (示例)
+        domainType
+    });
 };
 
 // 关闭编辑链接模态框
 const closeEditLinkModal = () => {
-    showEditLinkModal.value = false;
+    editLinkModal.close();
 };
 
 // 更新链接
 const updateLink = async () => {
     if (!editingLink.title) return;
 
-    isUpdatingLink.value = true;
+    editLinkModal.startLoading();
 
     try {
         // 构建请求参数
@@ -611,34 +600,24 @@ const updateLink = async () => {
     } catch (error) {
         console.error("更新链接失败:", error);
     } finally {
-        isUpdatingLink.value = false;
+        editLinkModal.endLoading();
     }
 };
 
-// 删除链接相关状态
-const showDeleteConfirmModal = ref(false);
-const isDeleting = ref(false);
-const deletingLink = reactive({
-    id: 0,
-    code: "",
-    title: "",
-    domain: "",
-    groupId: 0,
-});
-
 // 打开删除确认模态框
 const openDeleteConfirmModal = (link: any) => {
-    deletingLink.id = link.id;
-    deletingLink.code = link.code;
-    deletingLink.title = link.title;
-    deletingLink.domain = link.domain;
-    deletingLink.groupId = link.groupId;
-    showDeleteConfirmModal.value = true;
+    deleteLinkModal.open({
+        id: link.id,
+        code: link.code,
+        title: link.title,
+        domain: link.domain,
+        groupId: link.groupId
+    });
 };
 
 // 删除链接
 const deleteLink = async () => {
-    isDeleting.value = true;
+    deleteLinkModal.startLoading();
 
     try {
         // 构建请求参数
@@ -671,21 +650,20 @@ const deleteLink = async () => {
             }
         }
 
-// 关闭模态框 - 修改为直接设置状态
-        showDeleteConfirmModal.value = false;
+        // 关闭模态框
+        deleteLinkModal.close();
 
         // 显示成功提示（这里可以添加一个toast提示）
         console.log("链接删除成功");
     } catch (error) {
         console.error("删除链接失败:", error);
     } finally {
-        isDeleting.value = false;
+        deleteLinkModal.endLoading();
     }
 };
 </script>
 
 <style scoped>
-/* 卡片效果 */
 .link-card {
     box-shadow:
         0 4px 6px -1px rgba(0, 0, 0, 0.05),

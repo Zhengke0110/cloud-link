@@ -22,23 +22,12 @@
                     <template #header-actions>
                         <span class="text-sm text-white/80">操作</span>
                         <div class="flex space-x-1">
-                            <button @click="openEditModal(group)"
-                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-white/20">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path
-                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                </svg>
-                            </button>
-                            <button @click="openDeleteConfirmModal(group)"
-                                class="rounded-full bg-white/10 p-1.5 text-white transition-colors hover:bg-red-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                    fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </button>
+                            <!-- 替换为IconActionButton组件 -->
+                            <IconActionButton icon="edit" @click="openEditModal(group)" title="编辑分组" />
+
+                            <!-- 替换为IconActionButton组件，并设置为危险类型 -->
+                            <IconActionButton icon="delete" type="danger" @click="openDeleteConfirmModal(group)"
+                                title="删除分组" />
                         </div>
                     </template>
 
@@ -63,16 +52,10 @@
 
                     <!-- 分组操作按钮 -->
                     <template #footer-actions>
-                        <button
-                            class="flex items-center gap-1.5 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors duration-300 hover:bg-gray-50">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path
-                                    d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                                <path
-                                    d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                            </svg>
-                        </button>
+                        <!-- 替换为IconActionButton组件，使用light变体 -->
+                        <IconActionButton icon="share" variant="light" customClass="border border-gray-300"
+                            title="分享分组" />
+
                         <button
                             class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
                             :class="getActionButtonBg(index)">
@@ -250,66 +233,79 @@ import EmptyState from "@/components/EmptyState.vue";
 import FormField from "@/components/FormField.vue";
 import InfoField from "@/components/InfoField.vue";
 import FormActions from "@/components/FormActions.vue";
-import PageLayout from "@/components/PageLayout.vue"; // 引入PageLayout组件
+import PageLayout from "@/components/PageLayout.vue";
+import IconActionButton from '@/components/IconActionButton.vue'; // 引入IconActionButton组件
 // 导入日期工具函数
 import { formatDate } from "@/utils/DateUtils";
 // 导入颜色方案工具
 import { getIconColor, getActionButtonBg } from "@/utils/ColorSchemeProvider";
+// 导入模态框状态管理Hook
+import { useModal } from "@/composables/useModal";
 
 // 分组数据
 const groupData = ref(Data);
 
-// 创建分组模态框状态
-const showCreateModal = ref(false);
-const isCreating = ref(false);
-const newGroup = reactive({
-    title: "",
+// 使用模态框状态管理Hook - 创建分组模态框
+const createGroupModal = useModal({
+    title: ""
 });
 
-// 编辑分组模态框状态
-const showEditModal = ref(false);
-const isUpdating = ref(false);
-const editingGroup = reactive({
+// 使用模态框状态管理Hook - 编辑分组模态框
+const editGroupModal = useModal({
     id: 0,
-    title: "",
+    title: ""
 });
 
-// 删除分组相关状态
-const showDeleteConfirmModal = ref(false);
-const isDeleting = ref(false);
-const deletingGroup = reactive({
+// 使用模态框状态管理Hook - 删除确认模态框
+const deleteGroupModal = useModal({
     id: 0,
-    title: "",
+    title: ""
 });
+
+// 重命名以保持API兼容性
+const showCreateModal = createGroupModal.isVisible;
+const isCreating = createGroupModal.isLoading;
+const newGroup = createGroupModal.formData;
+
+const showEditModal = editGroupModal.isVisible;
+const isUpdating = editGroupModal.isLoading;
+const editingGroup = editGroupModal.formData;
+
+const showDeleteConfirmModal = deleteGroupModal.isVisible;
+const isDeleting = deleteGroupModal.isLoading;
+const deletingGroup = deleteGroupModal.formData;
 
 // 打开创建模态框
 const openCreateModal = () => {
-    newGroup.title = `我是测试分组-${generateRandomNumber(1, 100)}`;
-    showCreateModal.value = true;
+    // 设置初始随机名称并打开模态框
+    const randomName = `我是测试分组-${generateRandomNumber(1, 100)}`;
+    createGroupModal.open({ title: randomName });
 };
 
 // 关闭创建模态框
 const closeCreateModal = () => {
-    showCreateModal.value = false;
+    createGroupModal.close();
 };
 
 // 打开编辑模态框
 const openEditModal = (group: any) => {
-    editingGroup.id = group.id;
-    editingGroup.title = group.title;
-    showEditModal.value = true;
+    editGroupModal.open({
+        id: group.id,
+        title: group.title
+    });
 };
 
 // 关闭编辑模态框
 const closeEditModal = () => {
-    showEditModal.value = false;
+    editGroupModal.close();
 };
 
 // 打开删除确认模态框
 const openDeleteConfirmModal = (group: any) => {
-    deletingGroup.id = group.id;
-    deletingGroup.title = group.title;
-    showDeleteConfirmModal.value = true;
+    deleteGroupModal.open({
+        id: group.id,
+        title: group.title
+    });
 };
 
 // 生成随机分组名称 (创建)
@@ -331,7 +327,7 @@ const generateRandomNumber = (min: number, max: number) => {
 const createGroup = async () => {
     if (!newGroup.title) return;
 
-    isCreating.value = true;
+    createGroupModal.startLoading();
 
     try {
         // 模拟API请求
@@ -349,18 +345,19 @@ const createGroup = async () => {
         // 将新分组添加到数据中
         groupData.value = [newGroupData, ...groupData.value];
         console.log("分组数据:", groupData.value);
+
         // 关闭模态框
         closeCreateModal();
 
         // 重置表单
-        newGroup.title = "";
+        createGroupModal.resetForm();
 
         // 显示成功提示（这里可以添加一个toast提示）
         console.log("分组创建成功");
     } catch (error) {
         console.error("创建分组失败:", error);
     } finally {
-        isCreating.value = false;
+        createGroupModal.endLoading();
     }
 };
 
@@ -368,7 +365,7 @@ const createGroup = async () => {
 const updateGroup = async () => {
     if (!editingGroup.title) return;
 
-    isUpdating.value = true;
+    editGroupModal.startLoading();
 
     try {
         // 模拟API请求
@@ -400,13 +397,13 @@ const updateGroup = async () => {
     } catch (error) {
         console.error("更新分组失败:", error);
     } finally {
-        isUpdating.value = false;
+        editGroupModal.endLoading();
     }
 };
 
 // 删除分组
 const deleteGroup = async () => {
-    isDeleting.value = true;
+    deleteGroupModal.startLoading();
 
     try {
         // 构建请求参数 - 这里可能需要根据API要求调整
@@ -429,15 +426,15 @@ const deleteGroup = async () => {
             console.log("分组删除成功:", deletingGroup);
         }
 
-        // 关闭模态框 - 修改为直接设置状态变量
-        showDeleteConfirmModal.value = false;
+        // 关闭模态框
+        deleteGroupModal.close();
 
         // 显示成功提示（这里可以添加一个toast提示）
         console.log("分组删除成功");
     } catch (error) {
         console.error("删除分组失败:", error);
     } finally {
-        isDeleting.value = false;
+        deleteGroupModal.endLoading();
     }
 };
 
