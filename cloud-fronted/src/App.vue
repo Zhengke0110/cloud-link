@@ -2,6 +2,8 @@
 import BasicLayout from "@/layouts/BasicLayout.vue";
 import { LayoutMenu } from "@/config";
 import { useRoute } from "vue-router";
+import Toast from '@/components/Toast.vue';
+
 const route = useRoute();
 
 </script>
@@ -17,6 +19,9 @@ const route = useRoute();
       </transition>
     </router-view>
   </template>
+
+  <!-- 添加优化后的Toast组件 -->
+  <Toast />
 </template>
 
 <style>

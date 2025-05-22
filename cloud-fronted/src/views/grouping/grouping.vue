@@ -234,16 +234,21 @@ import FormField from "@/components/FormField.vue";
 import InfoField from "@/components/InfoField.vue";
 import FormActions from "@/components/FormActions.vue";
 import PageLayout from "@/components/PageLayout.vue";
-import IconActionButton from '@/components/IconActionButton.vue'; // 引入IconActionButton组件
+import IconActionButton from '@/components/IconActionButton.vue';
 // 导入日期工具函数
 import { formatDate } from "@/utils/DateUtils";
 // 导入颜色方案工具
 import { getIconColor, getActionButtonBg } from "@/utils/ColorSchemeProvider";
 // 导入模态框状态管理Hook
 import { useModal } from "@/composables/useModal";
+// 导入Toast通知系统
+import { useToast } from "@/composables/useToast";
 
 // 分组数据
 const groupData = ref(Data);
+
+// 初始化Toast
+const toast = useToast();
 
 // 使用模态框状态管理Hook - 创建分组模态框
 const createGroupModal = useModal({
@@ -352,10 +357,12 @@ const createGroup = async () => {
         // 重置表单
         createGroupModal.resetForm();
 
-        // 显示成功提示（这里可以添加一个toast提示）
-        console.log("分组创建成功");
+        // 使用Toast通知替换console.log
+        toast.success("分组创建成功", { title: "操作成功" });
     } catch (error) {
         console.error("创建分组失败:", error);
+        // 显示错误通知
+        toast.error("创建分组失败，请重试", { title: "操作失败" });
     } finally {
         createGroupModal.endLoading();
     }
@@ -392,10 +399,12 @@ const updateGroup = async () => {
         // 关闭模态框
         closeEditModal();
 
-        // 显示成功提示（这里可以添加一个toast提示）
-        console.log("分组更新成功");
+        // 使用Toast通知替换console.log
+        toast.success("分组更新成功", { title: "操作成功" });
     } catch (error) {
         console.error("更新分组失败:", error);
+        // 显示错误通知
+        toast.error("更新分组失败，请重试", { title: "操作失败" });
     } finally {
         editGroupModal.endLoading();
     }
@@ -429,10 +438,12 @@ const deleteGroup = async () => {
         // 关闭模态框
         deleteGroupModal.close();
 
-        // 显示成功提示（这里可以添加一个toast提示）
-        console.log("分组删除成功");
+        // 使用Toast通知替换console.log
+        toast.success("分组删除成功", { title: "操作成功" });
     } catch (error) {
         console.error("删除分组失败:", error);
+        // 显示错误通知
+        toast.error("删除分组失败，请重试", { title: "操作失败" });
     } finally {
         deleteGroupModal.endLoading();
     }

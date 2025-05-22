@@ -313,12 +313,17 @@ import { formatDate, isDateExpired } from '@/utils/DateUtils';
 
 // 导入模态框状态管理Hook
 import { useModal } from "@/composables/useModal";
+// 导入Toast通知系统
+import { useToast } from "@/composables/useToast";
 
 // 分组数据
 const groupData = ref(GroupData);
 
 // 链接数据
 const linkData = ref(Data.current_data);
+
+// 初始化Toast
+const toast = useToast();
 
 // 分页信息 - 从API获取
 const totalPages = ref(Data.total_page);
@@ -418,25 +423,38 @@ const fetchLinks = () => {
 
     console.log("请求参数:", params);
 
-    // 实际应用中这里应该是API请求
-    // axios.post('/api/link/page', params)
-    //   .then(response => {
-    //     const result = response.data.data;
-    //     linkData.value = result.current_data;
-    //     totalPages.value = result.total_page;
-    //     totalCount.value = result.total_record;
-    //   })
-    //   .catch(error => {
-    //     console.error('获取链接数据失败:', error);
-    //   });
+    // 显示加载中通知
+    const loadingToastId = toast.info("正在加载链接数据...", {
+        duration: 0, // 不自动关闭
+        title: "加载中"
+    });
 
     // 模拟API调用 - 仅用于演示
     setTimeout(() => {
-        // 假设这是从API获取的数据
-        linkData.value = Data.current_data;
-        totalPages.value = Data.total_page;
-        totalCount.value = Data.total_record;
-    }, 300);
+        try {
+            // 假设这是从API获取的数据
+            linkData.value = Data.current_data;
+            totalPages.value = Data.total_page;
+            totalCount.value = Data.total_record;
+
+            // 移除加载中通知
+            toast.removeToast(loadingToastId);
+
+            // 显示成功通知
+            toast.success("链接数据加载成功", {
+                title: "数据已更新",
+                duration: 2000
+            });
+        } catch (error) {
+            // 移除加载中通知
+            toast.removeToast(loadingToastId);
+
+            // 显示错误通知
+            toast.error("加载链接数据失败，请重试", {
+                title: "加载失败"
+            });
+        }
+    }, 800);
 };
 
 // 监听分组变化，重新获取数据
@@ -595,10 +613,12 @@ const updateLink = async () => {
         // 关闭模态框
         closeEditLinkModal();
 
-        // 显示成功提示（这里可以添加一个toast提示）
-        console.log("链接更新成功");
+        // 使用Toast通知替换console.log
+        toast.success("链接更新成功", { title: "操作成功" });
     } catch (error) {
         console.error("更新链接失败:", error);
+        // 显示错误通知
+        toast.error("更新链接失败，请重试", { title: "操作失败" });
     } finally {
         editLinkModal.endLoading();
     }
@@ -653,10 +673,12 @@ const deleteLink = async () => {
         // 关闭模态框
         deleteLinkModal.close();
 
-        // 显示成功提示（这里可以添加一个toast提示）
-        console.log("链接删除成功");
+        // 使用Toast通知替换console.log
+        toast.success("链接删除成功", { title: "操作成功" });
     } catch (error) {
         console.error("删除链接失败:", error);
+        // 显示错误通知
+        toast.error("删除链接失败，请重试", { title: "操作失败" });
     } finally {
         deleteLinkModal.endLoading();
     }
