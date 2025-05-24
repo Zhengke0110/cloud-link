@@ -30,12 +30,12 @@ const routes: RouteRecordRaw[] = [
   }, {
     path: "/links",
     name: "links",
-    component: () => import("@/views/links"),
+    component: () => import("@/views/links/links"),
     meta: { layout: LayoutMenu.BasicLayout }
   }, {
     path: "/grouping",
     name: "grouping",
-    component: () => import("@/views/grouping"),
+    component: () => import("@/views/links/grouping"),
     meta: { layout: LayoutMenu.BasicLayout }
   },
   {

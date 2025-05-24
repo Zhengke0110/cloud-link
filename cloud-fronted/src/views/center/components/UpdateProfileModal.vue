@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, defineProps, defineEmits } from 'vue';
+import { ref, reactive, watch } from 'vue';
 
 // 定义 props 和 emits
 const props = defineProps({

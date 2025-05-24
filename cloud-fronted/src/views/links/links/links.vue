@@ -8,14 +8,6 @@
                 </div>
 
                 <div class="flex flex-wrap gap-3">
-                    <button @click="selectGroup(null)" class="rounded-lg px-4 py-2 text-sm transition-all duration-300"
-                        :class="selectedGroupId === null
-                            ? 'bg-indigo-600 text-white shadow-md'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            ">
-                        全部分组
-                    </button>
-
                     <button v-for="group in groupData" :key="group.id" @click="selectGroup(group.id)"
                         class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all duration-300" :class="selectedGroupId === group.id
                             ? getSelectedButtonStyle(group.id)
@@ -289,11 +281,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, reactive } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { GroupData, Data } from "./config";
 import BaseModal from "@/components/BaseModal.vue";
 import LinkCard from '@/components/LinkCard.vue';
-import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue';
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
 import EmptyState from '@/components/EmptyState.vue';
 import FormField from '@/components/FormField.vue';
 import InfoField from '@/components/InfoField.vue';

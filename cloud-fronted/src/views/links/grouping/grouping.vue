@@ -224,11 +224,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted } from "vue";
 import { Data } from "./config";
 import BaseModal from "@/components/BaseModal.vue";
 import LinkCard from "@/components/LinkCard.vue";
-import ConfirmDeleteModal from "@/components/ConfirmDeleteModal.vue";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal.vue";
 import EmptyState from "@/components/EmptyState.vue";
 import FormField from "@/components/FormField.vue";
 import InfoField from "@/components/InfoField.vue";
