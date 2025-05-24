@@ -281,14 +281,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { GroupData, Data } from "./config";
 import BaseModal from "@/components/BaseModal.vue";
 import LinkCard from '../components/LinkCard.vue';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
 import EmptyState from '@/components/EmptyState.vue';
 import FormField from '@/components/Form/FormField.vue';
-import InfoField from '@/components/InfoField.vue';
+import InfoField from '@/components/Form/InfoField.vue';
 import FormActions from '@/components/Form/FormActions.vue';
 import PageLayout from '@/components/PageLayout.vue';
 import IconActionButton from '../components/IconActionButton.vue';
@@ -449,11 +449,6 @@ const fetchLinks = () => {
     }, 800);
 };
 
-// 监听分组变化，重新获取数据
-watch([selectedGroupId, currentPage, pageSize], () => {
-    // 依赖变化时不需要重复调用，因为各个处理函数中已经调用了fetchLinks
-});
-
 // 获取分组标题
 const getGroupTitle = (groupId: number) => {
     const group = groupData.value.find((g) => g.id === groupId);
@@ -466,7 +461,7 @@ const getGroupIndex = (groupId: number) => {
     return index >= 0 ? index : 0;
 };
 
-// 获取分组选中状态按钮样式 - 重命名并修复了递归调用问题
+// 获取分组选中状态按钮样式
 const getSelectedButtonStyle = (groupId: number) => {
     const index = getGroupIndex(groupId);
     return getSchemeButtonStyle(index);
@@ -500,8 +495,6 @@ const getStatusDot = (state: string, expired: boolean) => {
     return "bg-yellow-500";
 };
 
-
-// 添加页面动画效果
 onMounted(() => {
     // 默认选择第一个分组
     if (groupData.value.length > 0) {
@@ -605,7 +598,7 @@ const updateLink = async () => {
         // 关闭模态框
         closeEditLinkModal();
 
-        // 使用Toast通知替换console.log
+        // 使用Toast通知
         toast.success("链接更新成功", { title: "操作成功" });
     } catch (error) {
         console.error("更新链接失败:", error);
@@ -665,7 +658,7 @@ const deleteLink = async () => {
         // 关闭模态框
         deleteLinkModal.close();
 
-        // 使用Toast通知替换console.log
+        // 使用Toast通知
         toast.success("链接删除成功", { title: "操作成功" });
     } catch (error) {
         console.error("删除链接失败:", error);

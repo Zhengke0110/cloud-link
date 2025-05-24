@@ -231,7 +231,7 @@ import LinkCard from "../components/LinkCard.vue";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal.vue";
 import EmptyState from "@/components/EmptyState.vue";
 import FormField from "@/components/Form/FormField.vue";
-import InfoField from "@/components/InfoField.vue";
+import InfoField from "@/components/Form/InfoField.vue";
 import FormActions from "@/components/Form/FormActions.vue";
 import PageLayout from "@/components/PageLayout.vue";
 import IconActionButton from '../components/IconActionButton.vue';
