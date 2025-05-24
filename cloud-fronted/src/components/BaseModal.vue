@@ -11,22 +11,23 @@
             class="absolute inset-0 backdrop-blur-effect" />
         </div>
 
-        <div class="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
-          <!-- 模态框内容使用GsapAnimation - 添加focusable属性 -->
+        <!-- 调整移动端容器的内边距和宽度 -->
+        <div class="flex min-h-full items-center justify-center p-2 sm:p-4 text-center sm:items-center ">
+          <!-- 模态框内容使用GsapAnimation - 增加移动端的最大宽度 -->
           <GsapAnimation :from="{ y: 10, opacity: 0, scale: 0.98 }" :to="{ y: 0, opacity: 1, scale: 1 }"
             :duration="0.18" ease="power2.out"
-            class="modal-content relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl sm:my-8 sm:w-full sm:max-w-lg"
+            class="modal-content relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl w-full sm:my-8 sm:w-full sm:max-w-lg"
             :class="[contentPadding]" ref="modalContentRef">
             <!-- 添加可聚焦元素，并使用tabindex使其可接收焦点 -->
             <div tabindex="-1" ref="focusableElementRef" class="outline-none">
-              <!-- 标题与关闭按钮 -->
-              <div v-if="title" class="flex items-center justify-between pb-3 sm:px-6 sm:py-4">
+              <!-- 标题与关闭按钮 - 优化移动端间距 -->
+              <div v-if="title" class="flex items-center justify-between pb-2 px-4 sm:pb-3 sm:px-6 sm:py-4">
                 <h3 class="text-lg font-medium leading-6 text-gray-900">{{ title }}</h3>
                 <button type="button"
                   class="modal-close-btn rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
                   @click="emit('update:modelValue', false)">
                   <span class="sr-only">关闭</span>
-                  <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                  <svg class="h-5 w-5 sm:h-6 sm:w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
@@ -38,8 +39,9 @@
                 <slot></slot>
               </div>
 
-              <!-- 分离的页脚，用于按钮等操作 -->
-              <div v-if="$slots.separateFooter" class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+              <!-- 分离的页脚，优化移动端间距 -->
+              <div v-if="$slots.separateFooter"
+                class="bg-gray-50 px-3 py-2  sm:py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <slot name="separateFooter"></slot>
               </div>
             </div>
@@ -134,6 +136,10 @@ onUnmounted(() => {
 <style scoped>
 .modal-content {
   will-change: transform, opacity;
+  /* 优化移动端的边距和宽度 */
+  margin-left: auto;
+  margin-right: auto;
+  max-width: calc(100% - 1rem);
 }
 
 /* 分离背景模糊效果，解决闪烁问题 */
@@ -141,6 +147,22 @@ onUnmounted(() => {
   backdrop-filter: blur(0px);
   /* 初始值由GsapAnimation控制 */
   -webkit-backdrop-filter: blur(0px);
+}
+
+/* 移动端优化 */
+@media (max-width: 640px) {
+
+  /* 减少移动端的内边距，让内容区域更大 */
+  .modal-content {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  /* 调整标题区域在移动端的大小 */
+  h3 {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
