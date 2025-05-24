@@ -61,7 +61,7 @@ export const TrafficData = {
             "dayUsed": 0,
             "totalLimit": null,
             "accountNo": 1744504211685,
-            "outTradeNo": "kDID7MX3hEy1VPvXhR95G1bU45ZOBcPr",
+            "outTradeNo": "kDID7MX3hEy1VPvXhR95G1bU45ZOBcPx",
             "level": "SECOND",
             "expiredDate": "2025-05-21T16:00:00.000+00:00",
             "pluginType": "SHORT_LINK",
@@ -72,12 +72,12 @@ export const TrafficData = {
             "dayUsed": 0,
             "totalLimit": null,
             "accountNo": 1744504211685,
-            "outTradeNo": "kDID7MX3hEy1VPvXhR95G1bU45ZOBcPr",
+            "outTradeNo": "kDID7MX3hEy1VPvXhR95G1bU45ZOBcPy",
             "level": "SECOND",
             "expiredDate": "2025-05-21T16:00:00.000+00:00",
             "pluginType": "SHORT_LINK",
             "productId": 2
         }
     ],
-    "total_record": 1
+    "total_record": 3
 }
