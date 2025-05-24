@@ -1,44 +1,36 @@
 <template>
-    <div class="relative overflow-hidden bg-gradient-to-b from-gray-50 via-white to-gray-50 py-10 md:py-14">
-        <!-- 背景装饰效果优化 -->
-        <div class="absolute inset-0 z-0 opacity-20">
-            <DecorativeBackground />
-        </div>
-
-        <!-- 添加微妙的顶部装饰线条 -->
+    <div class="relative overflow-hidden bg-gradient-to-b from-gray-50 via-white to-gray-50 py-12 md:py-16">
+        <!-- 顶部装饰线条 -->
         <div
-            class="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-indigo-400 via-blue-500 to-indigo-400 opacity-80">
+            class="absolute left-0 right-0 top-0 h-1.5 bg-gradient-to-r from-indigo-400 via-blue-500 to-indigo-400 opacity-85 shadow-sm animate-gradient">
         </div>
 
         <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- 页面标题区域 (整合PageHeader) -->
-            <div v-if="title" class="reveal-element mb-8 text-center md:mb-10">
+            <!-- 页面标题区域 -->
+            <div v-if="title" class="reveal-element mb-10 text-center md:mb-12">
                 <!-- 顶部标签 -->
                 <span v-if="tag"
-                    class="mb-3 inline-block rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-800 shadow-sm">
+                    class="mb-4 inline-block rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-800 shadow-sm uppercase tracking-wider hover:bg-indigo-100 transform transition duration-200 hover:-translate-y-0.5">
                     {{ tag }}
                 </span>
 
                 <!-- 标题部分 -->
                 <h2
-                    class="mb-4 bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-2xl font-bold text-transparent md:text-3xl lg:text-5xl">
+                    class="mb-5 text-2xl font-bold md:text-3xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600 transition-all duration-300 ease-in-out hover:scale-101">
                     {{ title }}
                 </h2>
 
-                <!-- 分隔装饰 - 增加了一个小分隔符来增强间距感 -->
-                <div
-                    class="mx-auto mb-4 h-1 w-16 rounded-full bg-gradient-to-r from-indigo-300 via-blue-500 to-indigo-600 opacity-70">
-                </div>
+                <!-- 分隔装饰 - 简化但保留自定义样式类 -->
+                <div class="separator mx-auto mb-5"></div>
 
-                <!-- 描述文本 - 增加了顶部外边距和最大宽度控制 -->
-                <p v-if="description" class="mx-auto max-w-2xl text-sm text-gray-600 md:text-base lg:text-lg">
+                <!-- 描述文本 -->
+                <p v-if="description"
+                    class="mx-auto max-w-2xl text-sm text-gray-600 md:text-base lg:text-lg leading-relaxed tracking-wide">
                     {{ description }}
                 </p>
 
                 <!-- 底部装饰线条 -->
-                <div
-                    class="mx-auto mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-indigo-300 via-blue-500 to-indigo-600">
-                </div>
+                <div class="bottom-separator mx-auto mt-6"></div>
             </div>
 
             <!-- 页面内容区域 -->
@@ -48,7 +40,6 @@
 </template>
 
 <script setup lang="ts">
-import DecorativeBackground from '@/components/DecorativeBackground.vue';
 import { onMounted } from 'vue';
 import { initPageAnimations } from '@/utils/AnimationUtils';
 
@@ -85,50 +76,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 元素显示动画 */
-:deep(.reveal-element) {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-:deep(.reveal-element.delay-300) {
-    transition-delay: 0.3s;
-}
-
-:deep(.reveal-element.delay-500) {
-    transition-delay: 0.5s;
-}
-
-:deep(.reveal-element.revealed) {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* 移动端优化 */
-@media (max-width: 640px) {
-    :deep(.reveal-element) {
-        opacity: 0.1;
-    }
-}
-
-/* 修复一些动画问题 */
-@media (prefers-reduced-motion: reduce) {
-    :deep(.reveal-element) {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-    }
-}
-
-/* 让渐变背景有动画效果 */
-[class*="bg-gradient-to-r"],
-[class*="bg-gradient-to-b"] {
-    background-size: 200% 200%;
-    animation: gradientShift 12s ease infinite;
-}
-
-/* 更平滑的渐变切换 */
+/* 保留自定义动画定义 */
 @keyframes gradientShift {
     0% {
         background-position: 0% 50%;
@@ -143,54 +91,132 @@ onMounted(() => {
     }
 }
 
-/* 更紧凑的间距处理 */
-:deep(.space-y-4) {
-    margin-top: 0.75rem;
-}
+@keyframes pulseGlow {
 
-:deep(.mb-8) {
-    margin-bottom: 1.5rem;
-}
-
-:deep(.py-3) {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-}
-
-/* 添加微妙的阴影效果增强视觉层次 */
-:deep(.rounded-lg),
-:deep(.rounded-xl) {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-/* 响应式调整 */
-@media (min-width: 768px) {
-    :deep(.space-y-4) {
-        margin-top: 1rem;
+    0%,
+    100% {
+        opacity: 0.7;
     }
 
-    :deep(.mb-8) {
-        margin-bottom: 2rem;
+    50% {
+        opacity: 0.9;
     }
 }
 
-/* 从PageHeader组件整合的样式 */
-/* 添加标题悬停效果 */
-h2 {
-    position: relative;
-    transition: transform 0.3s ease;
+/* Tailwind 不支持的动画类 */
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
 }
 
-h2:hover {
+/* 为hover:scale-101添加自定义值 */
+.hover\:scale-101:hover {
     transform: scale(1.01);
+    text-shadow: 0 0 10px rgba(79, 70, 229, 0.25);
 }
 
-/* 分隔线动画效果 */
-div.h-1 {
-    transition: width 0.3s ease;
+/* 分隔符样式保留自定义类 */
+.separator {
+    height: 3px;
+    width: 60px;
+    background: linear-gradient(90deg, #8b5cf6, #3b82f6, #8b5cf6);
+    border-radius: 3px;
+    opacity: 0.8;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: pulseGlow 3s infinite;
 }
 
-div.h-1:hover {
-    width: 32px;
+.separator:hover {
+    width: 80px;
+}
+
+.bottom-separator {
+    height: 2px;
+    width: 120px;
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.3), rgba(59, 130, 246, 0.5), rgba(139, 92, 246, 0.3));
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.bottom-separator:hover {
+    width: 140px;
+    opacity: 0.8;
+}
+
+/* 元素显示动画优化 - 保留深度选择器 */
+:deep(.reveal-element) {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+        opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+
+:deep(.reveal-element.revealed) {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 延迟类 */
+:deep(.reveal-element.delay-300) {
+    transition-delay: 0.3s;
+}
+
+:deep(.reveal-element.delay-500) {
+    transition-delay: 0.5s;
+}
+
+:deep(.reveal-element.delay-700) {
+    transition-delay: 0.7s;
+}
+
+/* 卡片元素的hover效果 */
+:deep([class*="rounded-"]) {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+:deep([class*="rounded-"]:hover) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+}
+
+/* 保留无障碍性调整 */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    ::before,
+    ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    :deep(.reveal-element),
+    .separator,
+    .bottom-separator {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* 移动端优化 */
+@media (max-width: 640px) {
+    :deep(.reveal-element) {
+        opacity: 0.5;
+        transform: translateY(10px);
+    }
+
+    .separator {
+        height: 2px;
+        width: 50px;
+    }
+
+    .bottom-separator {
+        height: 1.5px;
+        width: 100px;
+    }
 }
 </style>
