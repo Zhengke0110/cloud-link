@@ -1,208 +1,167 @@
 <template>
   <Teleport to="body">
-    <div 
-      v-if="modelValue" 
-      :id="id"
-      class="fixed inset-0 z-50 overflow-y-auto" 
-      :aria-labelledby="ariaLabelledby" 
-      role="dialog" 
-      aria-modal="true"
-    >
-      <div class="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <Transition enter-active-class="duration-150 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100"
+      leave-active-class="duration-100 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
+      <div v-if="modelValue" class="fixed inset-0 z-50 overflow-y-auto" :id="id" ref="modalContainerRef">
         <!-- 背景遮罩 -->
-        <div class="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity" aria-hidden="true" @click="closeOnMaskClick && close()"></div>
+        <div class="fixed inset-0 bg-black/40 transition-opacity" aria-hidden="true" ref="backdropRef">
+          <!-- 模糊效果背景使用GsapAnimation -->
+          <GsapAnimation animation="fadeIn" :from="{ backdropFilter: 'blur(0px)', opacity: 0 }"
+            :to="{ backdropFilter: 'blur(4px)', opacity: 1 }" :duration="0.2" ease="power1.out"
+            class="absolute inset-0 backdrop-blur-effect" />
+        </div>
 
-        <!-- 使模态框居中的技巧 -->
-        <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
+          <!-- 模态框内容使用GsapAnimation - 添加focusable属性 -->
+          <GsapAnimation :from="{ y: 10, opacity: 0, scale: 0.98 }" :to="{ y: 0, opacity: 1, scale: 1 }"
+            :duration="0.18" ease="power2.out"
+            class="modal-content relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl sm:my-8 sm:w-full sm:max-w-lg"
+            :class="[contentPadding]" ref="modalContentRef">
+            <!-- 添加可聚焦元素，并使用tabindex使其可接收焦点 -->
+            <div tabindex="-1" ref="focusableElementRef" class="outline-none">
+              <!-- 标题与关闭按钮 -->
+              <div v-if="title" class="flex items-center justify-between pb-3 sm:px-6 sm:py-4">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ title }}</h3>
+                <button type="button"
+                  class="modal-close-btn rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
+                  @click="emit('update:modelValue', false)">
+                  <span class="sr-only">关闭</span>
+                  <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-        <!-- 模态框内容 -->
-        <div 
-          class="relative inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle"
-          :class="[width, 'sm:w-full']"
-          @click.stop
-        >
-          <!-- 手机端顶部拖动条示意 -->
-          <div class="mx-auto my-2 h-1 w-12 rounded-full bg-gray-300 sm:hidden"></div>
+              <!-- 模态框主内容 -->
+              <div>
+                <slot></slot>
+              </div>
 
-          <div :class="contentPadding">
-            <!-- 标题和关闭按钮 -->
-            <div v-if="title || showClose" class="mb-5 flex items-center justify-between">
-              <h3 v-if="title" class="text-lg leading-6 font-medium text-gray-900" :id="titleId">
-                {{ title }}
-              </h3>
-              <div v-else class="flex-grow"></div>
-              <button 
-                v-if="showClose" 
-                type="button" 
-                @click="close"
-                class="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
-                aria-label="关闭"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <!-- 分离的页脚，用于按钮等操作 -->
+              <div v-if="$slots.separateFooter" class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <slot name="separateFooter"></slot>
+              </div>
             </div>
-
-            <!-- 插槽内容 -->
-            <div class="modal-body">
-              <slot></slot>
-            </div>
-            
-            <!-- 底部按钮 -->
-            <div v-if="$slots.footer" :class="[footerClass, {'mt-5': !footerClass}]">
-              <slot name="footer"></slot>
-            </div>
-          </div>
-
-          <!-- 独立的底部区域 (当需要不同背景色时) -->
-          <div v-if="$slots.separateFooter" :class="separateFooterClass">
-            <slot name="separateFooter"></slot>
-          </div>
+          </GsapAnimation>
         </div>
       </div>
-    </div>
+    </Transition>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { ref, onMounted, onUnmounted, watch } from 'vue';
+import GsapAnimation from '@/components/GsapAnimation.vue';
 
+// 组件属性
 const props = defineProps({
+  // 控制模态框显示/隐藏
   modelValue: {
     type: Boolean,
+    required: true,
     default: false
   },
+  // 模态框ID 
+  id: {
+    type: String,
+    default: 'modal'
+  },
+  // 模态框标题
   title: {
     type: String,
     default: ''
   },
-  // 明确添加 id 作为 prop
-  id: {
-    type: String,
-    default: () => `modal-${Math.random().toString(36).substr(2, 9)}`
-  },
-  showClose: {
-    type: Boolean,
-    default: true
-  },
-  closeOnMaskClick: {
-    type: Boolean,
-    default: true
-  },
-  width: {
-    type: String,
-    default: 'sm:max-w-lg'
-  },
+  // 内容区域的 padding 类
   contentPadding: {
     type: String,
-    default: 'px-4 pt-5 pb-4 sm:p-6 sm:pb-4'
-  },
-  footerClass: {
-    type: String,
-    default: ''
-  },
-  separateFooterClass: {
-    type: String,
-    default: 'bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6'
+    default: 'p-6'
   }
 });
 
-const emit = defineEmits(['update:modelValue', 'close']);
+const emit = defineEmits(['update:modelValue']);
 
-// 为标题元素生成ID (用于无障碍访问)
-const titleId = computed(() => `${props.id}-title`);
+// 引用DOM元素 - 添加一个可聚焦元素的引用
+const modalContentRef = ref<InstanceType<typeof GsapAnimation> | null>(null);
+const modalContainerRef = ref<HTMLElement | null>(null);
+const focusableElementRef = ref<HTMLElement | null>(null);
 
-// 为 aria-labelledby 属性提供值
-const ariaLabelledby = computed(() => props.title ? titleId.value : undefined);
-
-// 关闭模态框
-const close = () => {
-  emit('update:modelValue', false);
-  emit('close');
-};
-
-// 处理ESC键关闭
-const handleEscKey = (e: KeyboardEvent) => {
-  if (e.key === 'Escape' && props.modelValue) {
-    close();
+// 键盘事件处理 - ESC键关闭模态框
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (props.modelValue && e.key === 'Escape') {
+    emit('update:modelValue', false);
   }
 };
 
-// 挂载和卸载事件监听器
+// 焦点管理 - 修复focus方法
+const setupFocusTrap = () => {
+  // 使用focusableElementRef而不是modalContentRef
+  if (focusableElementRef.value) {
+    focusableElementRef.value.focus();
+  }
+};
+
+// 监听模态框显示来初始化焦点处理
+watch(() => props.modelValue, (newVal) => {
+  if (newVal) {
+    // 短暂延迟以确保DOM已更新
+    setTimeout(() => {
+      setupFocusTrap();
+    }, 20);
+  }
+});
+
+// 生命周期钩子
 onMounted(() => {
-  document.addEventListener('keydown', handleEscKey);
+  document.addEventListener('keydown', handleKeyDown);
+
+  // 防止模态框打开时文档滚动
+  watch(() => props.modelValue, (value) => {
+    if (value) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, { immediate: true });
 });
 
 onUnmounted(() => {
-  document.removeEventListener('keydown', handleEscKey);
+  document.removeEventListener('keydown', handleKeyDown);
+  document.body.style.overflow = ''; // 确保移除时恢复滚动
 });
-
-// 当模态框打开时，禁止背景滚动
-const originalOverflow = ref('');
-const lockScroll = () => {
-  originalOverflow.value = document.body.style.overflow;
-  document.body.style.overflow = 'hidden';
-};
-
-const unlockScroll = () => {
-  document.body.style.overflow = originalOverflow.value;
-};
-
-// 监听模态框开关状态
-const isOpen = computed(() => props.modelValue);
-
-// 监听模态框状态变化，控制滚动锁定
-import { watch } from 'vue';
-
-watch(isOpen, (val) => {
-  if (val) {
-    lockScroll();
-  } else {
-    unlockScroll();
-  }
-}, { immediate: true });
 </script>
 
 <style scoped>
-/* 模态框动画 */
-.fixed {
-  animation: fadeIn 0.3s ease-in-out;
+.modal-content {
+  will-change: transform, opacity;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* 分离背景模糊效果，解决闪烁问题 */
+.backdrop-blur-effect {
+  backdrop-filter: blur(0px);
+  /* 初始值由GsapAnimation控制 */
+  -webkit-backdrop-filter: blur(0px);
 }
 
-/* 模态框内容动画 */
-.transform {
-  animation: slideIn 0.3s ease-in-out;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
+@media (prefers-reduced-motion: reduce) {
+  .modal-content {
+    transition: none !important;
   }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+
+  .backdrop-blur-effect {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    opacity: 1 !important;
   }
 }
 
-/* 模态框移动端优化 */
-@media (max-width: 640px) {
-  /* 确保模态框内容在移动设备上更易于点击 */
-  input,
-  select,
-  button {
-    font-size: 16px; /* 防止iOS自动缩放 */
-    min-height: 44px; /* 确保触摸友好 */
-  }
+/* 为关闭按钮添加一些交互效果 */
+.modal-close-btn {
+  transition: transform 0.1s ease, color 0.1s ease;
+}
+
+.modal-close-btn:hover {
+  transform: rotate(90deg);
+  color: rgba(239, 68, 68, 0.9);
 }
 </style>

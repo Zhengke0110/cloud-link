@@ -25,7 +25,6 @@
 <script setup lang="ts">
 
 type ButtonType = 'submit' | 'button' | 'reset';
-import { defineProps, defineEmits } from 'vue';
 defineProps({
     // 提交按钮文本
     submitText: {

@@ -227,7 +227,7 @@
 import { ref, onMounted } from "vue";
 import { Data } from "./config";
 import BaseModal from "@/components/BaseModal.vue";
-import LinkCard from "@/components/LinkCard.vue";
+import LinkCard from "../components/LinkCard.vue";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal.vue";
 import EmptyState from "@/components/EmptyState.vue";
 import FormField from "@/components/FormField.vue";
