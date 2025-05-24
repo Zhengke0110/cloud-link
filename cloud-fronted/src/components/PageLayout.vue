@@ -1,5 +1,8 @@
 <template>
     <div class="relative overflow-hidden bg-gradient-to-b from-gray-50 via-white to-gray-50 py-12 md:py-16">
+        <!-- 背景插槽，允许自定义背景元素 -->
+        <slot name="background"></slot>
+
         <!-- 顶部装饰线条 -->
         <div
             class="absolute left-0 right-0 top-0 h-1.5 bg-gradient-to-r from-indigo-400 via-blue-500 to-indigo-400 opacity-85 shadow-sm animate-gradient">
@@ -16,8 +19,12 @@
 
                 <!-- 标题部分 -->
                 <h2
-                    class="mb-5 text-2xl font-bold md:text-3xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600 transition-all duration-300 ease-in-out hover:scale-101">
-                    {{ title }}
+                    class="mb-5 text-2xl font-bold md:text-3xl lg:text-5xl transition-all duration-300 ease-in-out hover:scale-101">
+                    <slot name="title">
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600">
+                            {{ title }}
+                        </span>
+                    </slot>
                 </h2>
 
                 <!-- 分隔装饰 - 简化但保留自定义样式类 -->

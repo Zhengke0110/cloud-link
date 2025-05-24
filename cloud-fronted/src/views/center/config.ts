@@ -40,3 +40,44 @@ export const AccountStats = [
         color: "indigo"
     }
 ]
+
+export const TrafficData = {
+    "total_page": 1,
+    "current_data": [
+        {
+            "id": 1914587494511300610,
+            "dayLimit": 5,
+            "dayUsed": 0,
+            "totalLimit": null,
+            "accountNo": 1744504211685,
+            "outTradeNo": "kDID7MX3hEy1VPvXhR95G1bU45ZOBcPr",
+            "level": "SECOND",
+            "expiredDate": "2025-05-21T16:00:00.000+00:00",
+            "pluginType": "SHORT_LINK",
+            "productId": 2
+        }, {
+            "id": 1914587494511300611,
+            "dayLimit": 5,
+            "dayUsed": 0,
+            "totalLimit": null,
+            "accountNo": 1744504211685,
+            "outTradeNo": "kDID7MX3hEy1VPvXhR95G1bU45ZOBcPr",
+            "level": "SECOND",
+            "expiredDate": "2025-05-21T16:00:00.000+00:00",
+            "pluginType": "SHORT_LINK",
+            "productId": 2
+        }, {
+            "id": 1914587494511300612,
+            "dayLimit": 5,
+            "dayUsed": 0,
+            "totalLimit": null,
+            "accountNo": 1744504211685,
+            "outTradeNo": "kDID7MX3hEy1VPvXhR95G1bU45ZOBcPr",
+            "level": "SECOND",
+            "expiredDate": "2025-05-21T16:00:00.000+00:00",
+            "pluginType": "SHORT_LINK",
+            "productId": 2
+        }
+    ],
+    "total_record": 1
+}

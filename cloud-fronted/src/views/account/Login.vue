@@ -44,7 +44,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { deviceType } from "@/utils/flexible";
-import { AccountLogin } from "@/services/account";
+import { AccountLoginApi } from "@/services/account";
 import { isValidPhone, isValidPassword } from "@/utils/formValidation";
 import AuthContainer from "./components/AuthContainer.vue";
 import FormInput from "./components/FormInput.vue";
@@ -126,7 +126,7 @@ const handleLogin = async () => {
 
     try {
         loading.value = true;
-        const response = await AccountLogin({
+        const response = await AccountLoginApi({
             phone: loginForm.phone,
             pwd: loginForm.pwd,
         });

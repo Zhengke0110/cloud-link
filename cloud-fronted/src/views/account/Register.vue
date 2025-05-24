@@ -113,9 +113,9 @@ import { useRouter } from "vue-router";
 import { deviceType } from "@/utils/flexible";
 import { isValidPhone, isValidEmail, isValidPassword, isValidVerificationCode } from "@/utils/formValidation";
 import {
-    AccountRegister,
-    GetCaptcha,
-    SendCodeByPhone,
+    AccountRegisterApi,
+    GetCaptchaApi,
+    SendCodeByPhoneApi,
 } from "@/services/account";
 import AuthContainer from "./components/AuthContainer.vue";
 import FormInput from "./components/FormInput.vue";
@@ -152,7 +152,7 @@ const errors = reactive({
 
 // 刷新图片验证码
 const refreshCaptcha = () => {
-    captchaUrl.value = GetCaptcha() + "?t=" + new Date().getTime();
+    captchaUrl.value = GetCaptchaApi() + "?t=" + new Date().getTime();
 };
 
 // 页面加载时获取验证码
@@ -178,7 +178,7 @@ const sendVerificationCode = async () => {
 
     try {
         // 调用发送验证码的API
-        const res = await SendCodeByPhone({
+        const res = await SendCodeByPhoneApi({
             captcha: imageCaptcha.value,
             to: registerForm.phone,
         });
@@ -282,7 +282,7 @@ const handleRegister = async () => {
 
     try {
         loading.value = true;
-        const response = await AccountRegister({
+        const response = await AccountRegisterApi({
             headImg: registerForm.headImg,
             username: registerForm.username,
             phone: registerForm.phone,

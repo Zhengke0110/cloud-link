@@ -11,7 +11,7 @@ import { DefaultService, OpenAPI } from '@/generated'
  * @returns Promise<AccountLoginResponse> 登录成功后，返回账户登录响应对象的Promise
  * @throws Error 如果手机号或密码为空，则抛出错误
  */
-export const AccountLogin = async (info: { phone: string, pwd: string }): Promise<boolean> => {
+export const AccountLoginApi = async (info: { phone: string, pwd: string }): Promise<boolean> => {
     if (!info.phone || !info.pwd) {
         throw new Error('手机号与密码不能为空!')
     }
@@ -44,7 +44,7 @@ export const AccountLogin = async (info: { phone: string, pwd: string }): Promis
  * 
  * @returns {string} 验证码服务的URL地址
  */
-export const GetCaptcha = () => {
+export const GetCaptchaApi = () => {
     return OpenAPI.BASE + '/account-server/api/notify/v1/captcha'
 }
 
@@ -58,7 +58,7 @@ export const GetCaptcha = () => {
  * @throws 如果图片验证码或手机号为空，则抛出错误
  * @returns 返回发送验证码的异步操作结果
  */
-export const SendCodeByPhone = async (info: { captcha: string; to: string; }) => {
+export const SendCodeByPhoneApi = async (info: { captcha: string; to: string; }) => {
     // 检查请求信息中是否包含图片验证码和目标手机号，如果任一为空，则抛出错误
     if (!info.captcha || !info.to) {
         throw new Error('图片验证码与手机号不能为空!')
@@ -88,7 +88,7 @@ export const SendCodeByPhone = async (info: { captcha: string; to: string; }) =>
  * @param info 账户注册所需的信息，包括但不限于用户名、密码等
  * @returns 返回服务器的响应结果，通常包含注册成功或失败的信息
  */
-export const AccountRegister = async (info: {
+export const AccountRegisterApi = async (info: {
     headImg: string;
     phone: string;
     pwd: string;
@@ -139,7 +139,7 @@ export const AccountRegister = async (info: {
  * 
  * @returns Promise<AccountDetail> 返回一个Promise，解析为账户详情对象
  */
-export const GetAccountDetail = async () => {
+export const GetAccountDetailApi = async () => {
     return await DefaultService.getAccountServerApiAccountV1Detail()
 }
 
@@ -151,7 +151,7 @@ export const GetAccountDetail = async () => {
  * 
  * @returns Promise<void> 返回一个Promise，解析为void，表示登出操作完成
  */
-export const AccountLogout = async () => { return await DefaultService.getAccountServerApiAccountV1Logout() }
+export const AccountLogoutApi = async () => { return await DefaultService.getAccountServerApiAccountV1Logout() }
 
 /**
  * 更新账户信息的异步函数
@@ -166,7 +166,7 @@ export const AccountLogout = async () => { return await DefaultService.getAccoun
  * 
  * 注意：该函数会抛出错误，当服务器返回非0代码或请求失败时，表示更新账户失败
  */
-export const AccountUpdate = async (info: { headImg?: string; mail?: string; username?: string; }) => {
+export const AccountUpdateApi = async (info: { headImg?: string; mail?: string; username?: string; }) => {
     try {
         // 发送更新请求到服务器
         const { code } = await DefaultService.postAccountServerApiAccountV1Update(info)
@@ -181,7 +181,7 @@ export const AccountUpdate = async (info: { headImg?: string; mail?: string; use
 
 
 // TODO 未测试:文件上传
-export const AccountUploadImage = async (file: File): Promise<any> => {
+export const AccountUploadImageApi = async (file: File): Promise<any> => {
     const formData = new FormData();
     formData.append('file', file);
 

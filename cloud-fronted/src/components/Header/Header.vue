@@ -227,10 +227,17 @@ const GearIcon = {
 
 // 导航菜单项
 const navItems = [
-    { name: '首页', path: '/', icon: HomeIcon },
-    { name: '我的链接', path: '/links', icon: LinkIcon },
-    { name: '数据中心', path: '/analytics', icon: ChartIcon },
-    { name: '设置', path: '/settings', icon: GearIcon },
+    { name: '首页', path: '/home', icon: HomeIcon },
+    { name: '创建短链', path: '/create', icon: LinkIcon },
+    { name: '链接管理', path: '/links', icon: ChartIcon },
+    { name: '分组管理', path: '/grouping', icon: GearIcon },
+    {
+        name: '个人中心', path: '/center', icon: {
+            template: `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                </svg>`
+        }
+    },
 ];
 
 // 用户菜单项
