@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="info-field">
         <div class="mb-1 text-xs text-gray-500">{{ label }}</div>
-        <div class="flex items-center gap-2 rounded-lg border p-2 text-sm font-medium" :class="[
+        <div class="flex items-center gap-2 rounded-lg border p-2 text-sm font-medium no-hover-animation" :class="[
             valueClass,
             borderClass || 'border-gray-100',
             bgClass || 'bg-gray-50'
@@ -72,3 +72,28 @@ defineProps({
     }
 });
 </script>
+
+<style scoped>
+/* 禁用上移动画效果 */
+.info-field .no-hover-animation {
+    transform: none !important;
+    transition: none !important;
+}
+
+/* 确保不受 PageLayout 或其他组件中通用选择器的影响 */
+:deep(.info-field) {
+    transform: none !important;
+}
+
+.info-field:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* 阻止 InfoField 上移动画 */
+.info-field>div,
+.info-field>div:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+</style>

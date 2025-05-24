@@ -1,9 +1,6 @@
 @import "tailwindcss";
 @plugin "@iconify/tailwind4";
 
-/* 导入动画样式 */
-@import "./assets/styles/animations.css";
-
 /* 其他全局样式 */
 body {
   margin: 0;

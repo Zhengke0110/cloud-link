@@ -1,7 +1,7 @@
 <template>
     <PageLayout tag="链接分组管理" title="管理您的链接分组" description="组织和管理您的短链接，提高工作效率">
         <!-- 分组数据展示 -->
-        <div class="reveal-element mx-auto max-w-3xl delay-300">
+        <div class=" mx-auto max-w-3xl delay-300">
             <!-- 创建分组按钮 -->
             <div class="mb-8 flex justify-center">
                 <button @click="openCreateModal"
@@ -77,7 +77,7 @@
         </div>
 
         <!-- 功能介绍卡片 -->
-        <div class="reveal-element mx-auto mt-16 max-w-4xl delay-500">
+        <div class=" mx-auto mt-16 max-w-4xl delay-500">
             <div class="mb-6 text-center md:mb-8">
                 <h3 class="mb-1 text-lg font-bold text-gray-900 md:mb-2 md:text-2xl">
                     分组管理功能
@@ -230,9 +230,9 @@ import BaseModal from "@/components/BaseModal.vue";
 import LinkCard from "../components/LinkCard.vue";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal.vue";
 import EmptyState from "@/components/EmptyState.vue";
-import FormField from "@/components/FormField.vue";
+import FormField from "@/components/Form/FormField.vue";
 import InfoField from "@/components/InfoField.vue";
-import FormActions from "@/components/FormActions.vue";
+import FormActions from "@/components/Form/FormActions.vue";
 import PageLayout from "@/components/PageLayout.vue";
 import IconActionButton from '../components/IconActionButton.vue';
 // 导入日期工具函数
@@ -455,64 +455,3 @@ onMounted(() => {
     // 原有的动画初始化已经被PageLayout组件接管
 });
 </script>
-
-<style scoped>
-/* 卡片效果 */
-.feature-card-3d {
-    box-shadow:
-        0 4px 6px -1px rgba(0, 0, 0, 0.05),
-        0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.feature-card-3d:hover {
-    box-shadow:
-        0 12px 20px -3px rgba(0, 0, 0, 0.07),
-        0 6px 8px -2px rgba(0, 0, 0, 0.04);
-}
-
-/* 改善移动端按钮点击区域 */
-@media (max-width: 640px) {
-    button {
-        min-height: 44px;
-    }
-}
-
-/* 模态框动画 */
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-
-/* 模态框内容动画 */
-.transform {
-    transition-property: transform, opacity;
-    transition-duration: 0.3s;
-}
-
-/* 模态框移动端优化 */
-@media (max-width: 640px) {
-
-    /* 确保模态框内容在移动设备上更易于点击 */
-    input,
-    button {
-        font-size: 16px;
-        /* 防止iOS自动缩放 */
-        min-height: 44px;
-        /* 确保触摸友好 */
-    }
-
-    /* 模态框从底部滑入效果 */
-    [role="dialog"] [role="dialog"] {
-        bottom: 0;
-        position: fixed;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-}
-</style>
