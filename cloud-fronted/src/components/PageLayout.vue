@@ -11,8 +11,35 @@
         </div>
 
         <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- 页面标题区域 -->
-            <PageHeader v-if="title" :tag="tag" :title="title" :description="description" />
+            <!-- 页面标题区域 (整合PageHeader) -->
+            <div v-if="title" class="reveal-element mb-8 text-center md:mb-10">
+                <!-- 顶部标签 -->
+                <span v-if="tag"
+                    class="mb-3 inline-block rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-800 shadow-sm">
+                    {{ tag }}
+                </span>
+
+                <!-- 标题部分 -->
+                <h2
+                    class="mb-4 bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-2xl font-bold text-transparent md:text-3xl lg:text-5xl">
+                    {{ title }}
+                </h2>
+
+                <!-- 分隔装饰 - 增加了一个小分隔符来增强间距感 -->
+                <div
+                    class="mx-auto mb-4 h-1 w-16 rounded-full bg-gradient-to-r from-indigo-300 via-blue-500 to-indigo-600 opacity-70">
+                </div>
+
+                <!-- 描述文本 - 增加了顶部外边距和最大宽度控制 -->
+                <p v-if="description" class="mx-auto max-w-2xl text-sm text-gray-600 md:text-base lg:text-lg">
+                    {{ description }}
+                </p>
+
+                <!-- 底部装饰线条 -->
+                <div
+                    class="mx-auto mt-6 h-1 w-24 rounded-full bg-gradient-to-r from-indigo-300 via-blue-500 to-indigo-600">
+                </div>
+            </div>
 
             <!-- 页面内容区域 -->
             <slot></slot>
@@ -22,7 +49,6 @@
 
 <script setup lang="ts">
 import DecorativeBackground from '@/components/DecorativeBackground.vue';
-import PageHeader from '@/components/PageHeader'; // 确保使用正确的导入路径
 import { onMounted } from 'vue';
 import { initPageAnimations } from '@/utils/AnimationUtils';
 
@@ -146,5 +172,25 @@ onMounted(() => {
     :deep(.mb-8) {
         margin-bottom: 2rem;
     }
+}
+
+/* 从PageHeader组件整合的样式 */
+/* 添加标题悬停效果 */
+h2 {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+h2:hover {
+    transform: scale(1.01);
+}
+
+/* 分隔线动画效果 */
+div.h-1 {
+    transition: width 0.3s ease;
+}
+
+div.h-1:hover {
+    width: 32px;
 }
 </style>

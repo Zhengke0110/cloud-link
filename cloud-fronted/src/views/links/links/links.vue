@@ -291,7 +291,7 @@ import FormField from '@/components/FormField.vue';
 import InfoField from '@/components/InfoField.vue';
 import FormActions from '@/components/FormActions.vue';
 import PageLayout from '@/components/PageLayout.vue';
-import IconActionButton from '@/components/IconActionButton.vue';
+import IconActionButton from '../components/IconActionButton.vue';
 
 // 导入颜色方案工具
 import {
