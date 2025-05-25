@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 标题和统计部分 -->
-        <GsapAnimation animation="fadeInDown" ::duration="0.7">
+        <GsapAnimation animation="fadeInDown" :duration="0.7">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                 <div class="flex items-center gap-3">
                     <div
@@ -31,7 +31,7 @@
         <div class="space-y-5">
             <!-- 循环渲染流量包卡片 -->
             <GsapAnimation v-for="(traffic, index) in trafficData.current_data" :key="traffic.id" animation="fadeInUp"
-                :delay="0.1 * index" ::duration="0.6">
+                :delay="0.1 * index" :duration="0.6">
                 <div class="group relative bg-white border rounded-xl shadow-sm transition-all duration-200 overflow-hidden"
                     :class="getCardBorderClass(traffic)">
 
@@ -64,7 +64,7 @@
                                             </span>
                                         </h4>
 
-                                        <!-- 产品ID和订单号 - 修复复制功能问题 -->
+                                        <!-- 产品ID和订单号 - 使用@vueuse/core优化复制功能 -->
                                         <div class="flex flex-wrap items-center mt-1 text-xs text-gray-500 gap-2">
                                             <span class="inline-flex items-center px-2 py-0.5 rounded bg-gray-50">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +77,7 @@
                                                 产品ID: {{ traffic.productId }}
                                             </span>
 
-                                            <!-- 订单号带复制按钮 - 完全重构复制功能 -->
+                                            <!-- 订单号带复制按钮 - 使用useClipboard和useTimeoutFn -->
                                             <div
                                                 class="inline-flex items-center px-2 py-0.5 rounded bg-gray-50 group/copy relative">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -89,24 +89,37 @@
                                                 </svg>
                                                 订单号: {{ traffic.outTradeNo }}
 
-                                                <!-- 复制按钮 - 修改函数参数 -->
-                                                <button @click="copyOrderNo(traffic.outTradeNo, index)"
+                                                <!-- 复制按钮 - 使用@vueuse/core的useClipboard处理 -->
+                                                <button @click="() => copyTrafficOrderNo(traffic.outTradeNo, index)"
                                                     class="ml-1.5 text-indigo-500 hover:text-indigo-700 transition-colors duration-200"
-                                                    title="复制订单号">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                    title="复制订单号"
+                                                    :class="{ 'text-green-500': copyResults[index]?.copied }">
+                                                    <svg v-if="!copyResults[index]?.copied"
+                                                        xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
                                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             stroke-width="2"
                                                             d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                                     </svg>
+                                                    <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
                                                 </button>
 
-                                                <!-- 复制成功提示 - 使用GSAP动画 -->
-                                                <GsapAnimation v-if="copiedIndex === index" animation="fadeInUp"
-                                                    ::duration="0.3" :to="{ opacity: 1, y: 0 }"
-                                                    class="absolute left-0 -bottom-6 bg-indigo-600 text-white text-xs px-2 py-0.5 rounded shadow-md whitespace-nowrap z-20">
-                                                    已复制到剪贴板
-                                                </GsapAnimation>
+                                                <!-- 复制成功提示 - 使用useTransition控制动画 -->
+                                                <Transition enter-active-class="transition duration-300 ease-out"
+                                                    enter-from-class="transform opacity-0 scale-95 translate-y-2"
+                                                    enter-to-class="transform opacity-100 scale-100 translate-y-0"
+                                                    leave-active-class="transition duration-200 ease-in"
+                                                    leave-from-class="transform opacity-100 scale-100 translate-y-0"
+                                                    leave-to-class="transform opacity-0 scale-95 translate-y-2">
+                                                    <div v-if="copyResults[index]?.copied"
+                                                        class="absolute left-0 -bottom-6 bg-indigo-600 text-white text-xs px-2 py-0.5 rounded shadow-md whitespace-nowrap z-20">
+                                                        已复制到剪贴板
+                                                    </div>
+                                                </Transition>
                                             </div>
 
                                             <span
@@ -235,8 +248,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { reactive } from 'vue';
 import GsapAnimation from '@/components/GsapAnimation.vue';
+import { useClipboard, useTimeoutFn } from '@vueuse/core';
+import { useDateFormat } from '@vueuse/core';
 
 // 定义流量包数据接口
 interface Traffic {
@@ -266,71 +281,45 @@ defineEmits<{
     'view-details': [id: string | number];
 }>();
 
-// 复制功能相关状态 - 改为使用索引而不是ID
-const copiedIndex = ref<number | null>(null);
 
-// 复制到剪贴板功能 - 使用索引而不是ID
-const copyOrderNo = async (text: string, index: number) => {
+// 创建多个复制功能的状态对象
+const copyResults = reactive<Record<number, { copied: boolean, text: string }>>({});
+
+// 初始化剪贴板功能
+const { copy, isSupported } = useClipboard({ copiedDuring: 2000 });
+
+// 复制订单号函数 - 使用@vueuse/core的useClipboard
+const copyTrafficOrderNo = async (text: string, index: number) => {
     try {
-        // 使用剪贴板API复制文本
-        await navigator.clipboard.writeText(text);
+        // 使用useClipboard的copy方法
+        await copy(text);
 
-        // 设置当前复制的索引
-        copiedIndex.value = index;
+        // 设置当前索引的复制状态
+        copyResults[index] = { copied: true, text };
 
-        console.log("已复制订单号:", text, "索引:", index); // 调试输出
-
-        // 设置提示显示时间
-        setTimeout(() => {
-            if (copiedIndex.value === index) {
-                copiedIndex.value = null;
+        // 使用useTimeoutFn设置自动重置状态
+        useTimeoutFn(() => {
+            if (copyResults[index]?.copied) {
+                copyResults[index].copied = false;
             }
         }, 2000);
+
+        console.log("已复制订单号:", text, "索引:", index);
     } catch (err) {
         console.error('无法复制文本: ', err);
-        fallbackCopyTextToClipboard(text, index);
-    }
-};
-
-// 备用复制方法（兼容性考虑）- 使用索引而不是ID
-const fallbackCopyTextToClipboard = (text: string, index: number) => {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-
-    textArea.style.position = "fixed";
-    textArea.style.left = "-999999px";
-    textArea.style.top = "-999999px";
-    document.body.appendChild(textArea);
-
-    try {
-        textArea.focus();
-        textArea.select();
-
-        const successful = document.execCommand('copy');
-        if (successful) {
-            // 设置当前复制的索引
-            copiedIndex.value = index;
-
-            setTimeout(() => {
-                if (copiedIndex.value === index) {
-                    copiedIndex.value = null;
-                }
-            }, 2000);
+        // 如果浏览器不支持copy API，显示提示
+        if (!isSupported.value) {
+            alert(`请手动复制此订单号: ${text}`);
         }
-    } catch (err) {
-        console.error('无法复制文本: ', err);
     }
-
-    document.body.removeChild(textArea);
 };
 
-// 格式化日期
+// 使用useDateFormat格式化日期
 const formatExpiryDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    return useDateFormat(dateString, 'YYYY-MM-DD').value;
 };
 
-// 判断是否过期
+// 判断是否过期 (使用@vueuse/core日期工具)
 const isExpired = (dateString: string) => {
     const expiryDate = new Date(dateString);
     const today = new Date();
@@ -533,7 +522,3 @@ const getActionButtonClass = (traffic: Traffic) => {
     return 'bg-indigo-500 hover:bg-indigo-600 transition-colors';
 };
 </script>
-
-<style scoped>
-/* 移除原有的CSS动画，我们现在使用GSAP */
-</style>
