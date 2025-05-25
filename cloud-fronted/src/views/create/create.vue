@@ -256,6 +256,18 @@ const groupData = ref(GroupData);
 // 获取默认的分组ID
 const defaultGroupId = groupData.value.length > 0 ? groupData.value[0].id : 0;
 
+// TODO: 在这里添加API调用以获取分组数据，替代静态导入的GroupData
+// 例如: 
+// const fetchGroups = async () => {
+//   try {
+//     const response = await api.getGroups();
+//     groupData.value = response.data;
+//   } catch (error) {
+//     console.error('获取分组数据失败:', error);
+//   }
+// };
+// onMounted(fetchGroups);
+
 // 使用组合式函数
 const {
     linkForm,
@@ -279,8 +291,14 @@ const {
     formatDateTime
 } = useShortLinkForm(defaultGroupId);
 
-// 一些页面特有的逻辑可以放在这里
-
+// TODO: 在这里添加必要的生命周期钩子以获取其他初始数据
+// 例如加载域名列表、用户配置等
+// onMounted(async () => {
+//   await Promise.all([
+//     fetchDomains(), 
+//     fetchUserPreferences()
+//   ]);
+// });
 </script>
 
 <style scoped>
