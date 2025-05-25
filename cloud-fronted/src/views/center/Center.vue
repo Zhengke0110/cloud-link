@@ -8,11 +8,11 @@
         <!-- 主内容区域 -->
         <div class="mx-auto max-w-4xl">
             <!-- 使用ProfileCard组件 -->
-            <ProfileCard class="reveal-element delay-300" :userData="userData" :accountStats="accountStats"
+            <ProfileCard class="delay-300" :userData="userData" :accountStats="accountStats"
                 @update-profile="showUpdateModal = true" @change-password="handleChangePassword" />
 
             <!-- 使用TrafficPackages组件 -->
-            <TrafficPackages class="mt-10 reveal-element delay-500" :trafficData="trafficData"
+            <TrafficPackages class="mt-10  delay-500" :trafficData="trafficData"
                 @view-details="handleViewTrafficDetails" />
         </div>
 
@@ -130,7 +130,7 @@ const handleChangePassword = () => {
     // TODO: 实现密码修改功能，可能需要打开密码修改模态窗口
     // 可以创建一个新的模态组件 ChangePasswordModal 处理密码修改逻辑
     // showPasswordModal.value = true;
-    
+
     alert('密码修改功能开发中...');
 };
 
@@ -144,7 +144,7 @@ const handleViewTrafficDetails = (id: string | number) => {
     // } catch (error) {
     //   console.error('获取流量包详情失败:', error);
     // }
-    
+
     alert(`查看流量包详情 ID: ${id}`);
 };
 
@@ -152,7 +152,7 @@ const handleViewTrafficDetails = (id: string | number) => {
 const showSuccessNotification = (message: string) => {
     // TODO: 使用项目中的通知系统，如 Toast 组件
     // toast.success(message, { title: '成功' });
-    
+
     alert(message);
 };
 
