@@ -27,74 +27,24 @@
                         <!-- 输入表单 -->
                         <div class="p-6">
                             <form @submit.prevent="createShortLink" class="space-y-6">
-                                <!-- 原始链接输入 -->
-                                <div>
-                                    <label for="originalUrl"
-                                        class="block text-sm font-medium text-gray-700 mb-1">完整链接地址</label>
-                                    <div class="relative">
-                                        <input type="text" id="originalUrl" v-model="linkForm.originalUrl"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                                            placeholder="请输入您想要缩短的链接，如 https://example.com/page" required
-                                            @input="validateUrl" />
-                                        <button v-if="linkForm.originalUrl" type="button"
-                                            @click="linkForm.originalUrl = ''; urlError = ''"
-                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <p v-if="urlError" class="mt-1 text-xs text-red-500">{{ urlError }}</p>
-                                    <p v-else class="mt-1 text-xs text-gray-500">输入以http://或https://开头的有效网址</p>
-                                </div>
+                                <!-- 原始链接输入 - 使用FormField替换 -->
+                                <FormField id="originalUrl" label="完整链接地址" v-model="linkForm.originalUrl"
+                                    placeholder="请输入您想要缩短的链接，如 https://example.com/page" :error="urlError"
+                                    helpText="输入以http://或https://开头的有效网址" required :clearable="true"
+                                    @input="validateUrl" />
 
-                                <!-- 标题输入 -->
-                                <div>
-                                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">链接标题
-                                        (选填)</label>
-                                    <div class="relative">
-                                        <input type="text" id="title" v-model="linkForm.title"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                                            placeholder="为您的链接添加一个易于识别的标题" maxlength="50" />
-                                        <button v-if="linkForm.title" type="button" @click="linkForm.title = ''"
-                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <p class="mt-1 text-xs text-gray-500">最多50个字符</p>
-                                </div>
+                                <!-- 标题输入 - 使用FormField替换 -->
+                                <FormField id="title" label="链接标题 (选填)" v-model="linkForm.title"
+                                    placeholder="为您的链接添加一个易于识别的标题" maxlength="50" helpText="最多50个字符"
+                                    :clearable="true" />
 
-                                <!-- 分组选择 - 新增 -->
-                                <div>
-                                    <label for="groupId"
-                                        class="block text-sm font-medium text-gray-700 mb-1">选择分组</label>
-                                    <div class="relative">
-                                        <select id="groupId" v-model="linkForm.groupId"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 appearance-none bg-white touch-manipulation">
-                                            <option v-for="group in groupData" :key="group.id" :value="group.id">
-                                                {{ group.title }}
-                                            </option>
-                                        </select>
-                                        <div
-                                            class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <p class="mt-1 text-xs text-gray-500">选择要归属的分组</p>
-                                </div>
+                                <!-- 分组选择 - 使用FormField替换 -->
+                                <FormField id="groupId" label="选择分组" type="select" v-model="linkForm.groupId"
+                                    helpText="选择要归属的分组">
+                                    <option v-for="group in groupData" :key="group.id" :value="group.id">
+                                        {{ group.title }}
+                                    </option>
+                                </FormField>
 
                                 <!-- 过期时间选择 -->
                                 <div>
@@ -127,36 +77,22 @@
 
                                     <!-- 日期时间选择器 -->
                                     <div v-if="presetExpiry === 0" class="relative">
+                                        <!-- 使用更简单的原生日期时间选择器布局 -->
                                         <div class="flex flex-col sm:flex-row gap-2">
                                             <!-- 日期选择器 -->
-                                            <div class="flex-grow relative">
-                                                <input type="date" v-model="expiryDate"
-                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 appearance-none pr-10 min-h-[48px] text-base"
-                                                    :min="minDate" />
-                                                <div
-                                                    class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                        viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd"
-                                                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </div>
+                                            <div class="flex-grow">
+                                                <label for="expiryDate"
+                                                    class="block text-sm font-medium text-gray-700 mb-1">选择日期</label>
+                                                <input type="date" id="expiryDate" v-model="expiryDate" :min="minDate"
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 appearance-none pr-10 min-h-[48px] text-base" />
                                             </div>
 
                                             <!-- 时间选择器 -->
-                                            <div class="flex-grow relative">
-                                                <input type="time" v-model="expiryTime"
+                                            <div class="flex-grow">
+                                                <label for="expiryTime"
+                                                    class="block text-sm font-medium text-gray-700 mb-1">选择时间</label>
+                                                <input type="time" id="expiryTime" v-model="expiryTime"
                                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 appearance-none pr-10 min-h-[48px] text-base" />
-                                                <div
-                                                    class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                                        viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd"
-                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -176,21 +112,9 @@
                                         '如果不设置，链接将永不过期' }}</p>
                                 </div>
 
-                                <!-- 提交按钮 -->
-                                <div>
-                                    <button type="submit" :disabled="isSubmitting || !isFormValid"
-                                        class="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-medium rounded-lg shadow-md hover:shadow-lg hover:shadow-indigo-200 transition-all duration-300 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-gradient-to-r disabled:from-gray-400 disabled:to-gray-500 min-h-[44px] touch-manipulation">
-                                        <svg v-if="isSubmitting" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                                stroke-width="4"></circle>
-                                            <path class="opacity-75" fill="currentColor"
-                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                            </path>
-                                        </svg>
-                                        {{ isSubmitting ? '生成中...' : '生成短链接' }}
-                                    </button>
-                                </div>
+                                <!-- 提交按钮 - 使用FormActions替换 -->
+                                <FormActions submitText="生成短链接" loadingText="生成中..." :isLoading="isSubmitting"
+                                    :disabled="!isFormValid" submitOnly />
                             </form>
                         </div>
                     </div>
@@ -213,52 +137,31 @@
                             <div class="p-4 md:p-6">
                                 <!-- 短链接信息 -->
                                 <div class="space-y-4 md:space-y-5">
-                                    <!-- 短链接 -->
-                                    <div>
-                                        <div class="flex items-center justify-between mb-1">
-                                            <span class="text-xs font-medium text-gray-500">短链接</span>
-                                            <span class="text-xs text-green-600 font-medium">已成功创建</span>
-                                        </div>
-                                        <div class="flex flex-col md:flex-row gap-2 md:gap-0">
-                                            <div
-                                                class="bg-gray-50 flex-grow rounded-lg md:rounded-l-lg md:rounded-r-none border border-gray-200 p-2 md:p-3 font-medium text-indigo-600 break-all md:border-r-0">
-                                                {{ shortLinkResult.shortUrl }}
-                                            </div>
+                                    <!-- 短链接 - 使用InfoField替换 -->
+                                    <InfoField label="短链接" valueClass="text-indigo-600" borderClass="border-indigo-100"
+                                        bgClass="bg-indigo-50">
+                                        <div class="flex items-center justify-between w-full">
+                                            <span>{{ shortLinkResult.shortUrl }}</span>
                                             <button @click="copyToClipboard(shortLinkResult.shortUrl)"
-                                                class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg md:rounded-l-none md:rounded-r-lg transition-colors duration-300 md:min-w-[80px] text-center touch-manipulation min-h-[44px]">
+                                                class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-3 rounded-lg transition-colors duration-300 text-sm touch-manipulation min-h-[36px]">
                                                 {{ copied ? '已复制' : '复制' }}
                                             </button>
                                         </div>
-                                    </div>
+                                    </InfoField>
 
-                                    <!-- 原始链接 -->
-                                    <div>
-                                        <div class="mb-1">
-                                            <span class="text-xs font-medium text-gray-500">原始链接</span>
-                                        </div>
-                                        <div
-                                            class="bg-gray-50 rounded-lg border border-gray-200 p-3 text-gray-600 text-sm break-all">
-                                            {{ shortLinkResult.originalUrl }}
-                                        </div>
-                                    </div>
+                                    <!-- 原始链接 - 使用InfoField替换 -->
+                                    <InfoField label="原始链接" :value="shortLinkResult.originalUrl" breakAll />
 
                                     <!-- 链接信息 -->
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                                        <div>
-                                            <span class="text-xs font-medium text-gray-500 block mb-1">创建时间</span>
-                                            <div
-                                                class="bg-gray-50 rounded-lg border border-gray-200 p-2 md:p-3 text-gray-600 text-xs md:text-sm">
-                                                {{ formatDateTime(shortLinkResult.createTime) }}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span class="text-xs font-medium text-gray-500 block mb-1">过期时间</span>
-                                            <div
-                                                class="bg-gray-50 rounded-lg border border-gray-200 p-2 md:p-3 text-gray-600 text-xs md:text-sm">
-                                                {{ shortLinkResult.expired ? formatDateTime(shortLinkResult.expired) :
-                                                    '永不过期' }}
-                                            </div>
-                                        </div>
+                                        <!-- 创建时间 - 使用InfoField替换 -->
+                                        <InfoField label="创建时间" :value="formatDateTime(shortLinkResult.createTime)"
+                                            icon="clock" />
+
+                                        <!-- 过期时间 - 使用InfoField替换 -->
+                                        <InfoField label="过期时间"
+                                            :value="shortLinkResult.expired ? formatDateTime(shortLinkResult.expired) : '永不过期'"
+                                            icon="calendar" />
                                     </div>
 
                                     <!-- 二维码 -->
@@ -271,21 +174,11 @@
                                     </div>
                                 </div>
 
-                                <!-- 操作按钮 -->
-                                <div class="mt-5 md:mt-6 flex flex-col md:flex-row md:justify-end gap-3">
-                                    <button @click="resetForm"
-                                        class="order-2 md:order-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300 text-sm md:text-base touch-manipulation min-h-[44px]">
-                                        创建新链接
-                                    </button>
-                                    <button @click="shareLink"
-                                        class="order-1 md:order-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center gap-1 text-sm md:text-base touch-manipulation min-h-[44px]">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                                        </svg>
-                                        分享链接
-                                    </button>
+                                <!-- 操作按钮 - 使用FormActions替换 -->
+                                <div class="mt-5 md:mt-6">
+                                    <FormActions submitText="分享链接" cancelText="创建新链接" cancelVariant="secondary"
+                                        submitVariant="primary" submitIcon="share" @submit="shareLink"
+                                        @cancel="resetForm" reverseOrder />
                                 </div>
                             </div>
                         </div>
@@ -348,10 +241,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { GroupData } from './config'; // 引入GroupData
 import PageLayout from '@/components/PageLayout.vue'; // 导入PageLayout组件
 import GsapAnimation from '@/components/GsapAnimation.vue'; // 导入GsapAnimation组件
+import FormField from '@/components/Form/FormField.vue'; // 导入FormField组件
+import InfoField from '@/components/Form/InfoField.vue'; // 导入InfoField组件
+import FormActions from '@/components/Form/FormActions.vue'; // 导入FormActions组件
 import { useShortLinkForm } from '@/composables/useShortLinkForm'; // 导入组合式函数
 
 // 引入分组数据
@@ -370,7 +266,6 @@ const {
     presetExpiry,
     expiryDate,
     expiryTime,
-    minDateTime,
     minDate,
     isFormValid,
     formattedExpiryDate,
@@ -389,17 +284,21 @@ const {
 </script>
 
 <style scoped>
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
+/* 修复日期选择器在某些浏览器的显示问题 */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
 }
 
-.animate-spin {
-    animation: spin 1s linear infinite;
+input[type="date"],
+input[type="time"] {
+    position: relative;
 }
 </style>

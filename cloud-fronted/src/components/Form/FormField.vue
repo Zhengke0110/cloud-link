@@ -69,7 +69,24 @@ const props = defineProps({
         type: String,
         default: 'text',
         validator: (value: string) => {
-            return ['text', 'number', 'email', 'password', 'select', 'textarea'].includes(value);
+            return [
+                'text',
+                'email',
+                'password',
+                'number',
+                'tel',
+                'url',
+                'search',
+                'textarea',
+                'select',
+                'checkbox',
+                'radio',
+                'date',     // 添加日期类型支持
+                'time',     // 添加时间类型支持
+                'datetime-local', // 可能也需要这种类型
+                'file',     // 可能用到的其他类型
+                'color'     // 可能用到的其他类型
+            ].includes(value);
         }
     },
     // v-model绑定值
