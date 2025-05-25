@@ -18,16 +18,22 @@
                 </button>
             </div>
 
-            <div v-if="collapsible ? isExpanded : true" class="mt-2 transition-opacity duration-200">
-                <p class="text-sm md:text-base text-gray-600 leading-relaxed">{{ answer }}</p>
-                <slot></slot>
+            <div v-if="collapsible ? isExpanded : true" ref="contentRef" class="overflow-hidden">
+                <GsapAnimation :animation="'fadeInDown'" :duration="0.4" :disabled="!isAnimationEnabled"
+                    :key="animationKey">
+                    <div class="mt-2">
+                        <p class="text-sm md:text-base text-gray-600 leading-relaxed">{{ answer }}</p>
+                        <slot></slot>
+                    </div>
+                </GsapAnimation>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import GsapAnimation from '@/components/GsapAnimation.vue';
 
 const props = defineProps({
     // FAQ问题
@@ -64,23 +70,30 @@ const props = defineProps({
 
 // 展开/折叠状态
 const isExpanded = ref(props.defaultOpen);
+const contentRef = ref<HTMLElement | null>(null);
+const animationKey = ref(0);
+
+// 控制是否启用动画（首次渲染不需要动画）
+const isAnimationEnabled = ref(false);
 
 // 切换展开/折叠状态
 const toggleExpanded = () => {
     if (props.collapsible) {
         isExpanded.value = !isExpanded.value;
+        // 触发GSAP重新动画
+        animationKey.value++;
+        // 确保展开/折叠时启用动画
+        isAnimationEnabled.value = true;
     }
 };
+
+// 监听defaultOpen属性变化
+watch(() => props.defaultOpen, (newValue) => {
+    isExpanded.value = newValue;
+}, { immediate: false });
+
+// 组件挂载后启用动画，但首次渲染不需要动画
+setTimeout(() => {
+    isAnimationEnabled.value = true;
+}, 100);
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-</style>

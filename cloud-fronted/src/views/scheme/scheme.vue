@@ -4,7 +4,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <MembershipPlanCard v-for="(plan, index) in membershipPlans" :key="plan.id" :plan="plan"
                 :color-index="index" :transition-delay="index" :is-popular="isPopularPlan(plan)"
-                @select="handlePlanSelection" />
+                @select="openOrderModal" />
         </div>
 
         <!-- 会员优势说明 - 移动端优化 -->
@@ -50,6 +50,10 @@
                     :answer="`我们提供多种会员时长选择，目前黄金会员和黑金会员的有效期为${getMaxValidDay()}天，具体以您选择的方案为准。`" />
             </div>
         </div>
+
+        <!-- 订单确认模态框 -->
+        <OrderConfirmModal :show="showOrderModal" :plan="selectedPlan" @close="showOrderModal = false"
+            @submit="submitOrder" />
     </PageLayout>
 </template>
 
@@ -60,10 +64,15 @@ import MembershipPlanCard from './components/MembershipPlanCard.vue';
 import FeatureCard from './components/FeatureCard.vue';
 import FaqItem from './components/FaqItem.vue';
 import PageLayout from '@/components/PageLayout.vue';
+import OrderConfirmModal from './components/OrderConfirmModal.vue';
 
 // 会员方案数据
 const membershipPlans = ref(Data);
 const isRevealed = ref(false);
+
+// 订单相关状态
+const showOrderModal = ref(false);
+const selectedPlan = ref({});
 
 // TODO: 从API获取会员方案数据
 // 示例: 
@@ -113,19 +122,46 @@ const isPopularPlan = (plan: any) => {
     return plan.level === 'SECOND';
 };
 
-// 处理会员方案选择
-const handlePlanSelection = (plan: any) => {
-    console.log('选择了会员方案:', plan);
-    // TODO: 发起会员购买请求，根据返回结果跳转到支付页面
-    // 示例:
-    // try {
-    //   const response = await api.post('/orders/create', { planId: plan.id });
-    //   const { orderId, paymentUrl } = response.data;
-    //   window.location.href = paymentUrl; // 或使用路由导航到内部支付页面
-    // } catch (error) {
-    //   console.error('创建订单失败', error);
-    //   // 显示错误通知
-    // }
+// 打开订单模态框
+const openOrderModal = (plan: any) => {
+    selectedPlan.value = plan;
+    showOrderModal.value = true;
+};
+
+// 提交订单
+const submitOrder = async (orderParams: any) => {
+    try {
+        // TODO: 实际调用API
+        console.log('提交订单参数:', orderParams);
+
+        // 模拟API调用
+        const response = await new Promise(resolve => {
+            setTimeout(() => {
+                resolve({
+                    success: true,
+                    data: {
+                        orderId: 'ORD' + Date.now(),
+                        paymentUrl: 'https://example.com/pay'
+                    }
+                });
+            }, 1500);
+        });
+
+        // 处理响应
+        const result = response as any;
+        if (result.success) {
+            // 跳转到支付页面或展示支付二维码
+            window.location.href = result.data.paymentUrl;
+        } else {
+            alert('创建订单失败，请重试');
+        }
+    } catch (error) {
+        console.error('提交订单出错:', error);
+        alert('提交订单出错，请重试');
+    } finally {
+        // 关闭模态框
+        showOrderModal.value = false;
+    }
 };
 
 // 添加页面动画效果
