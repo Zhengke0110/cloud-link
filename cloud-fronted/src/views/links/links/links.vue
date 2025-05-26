@@ -110,9 +110,9 @@
 
                     <!-- 底部操作按钮 -->
                     <template #footer-actions>
-                        <!-- 替换为IconActionButton组件，使用light变体 -->
-                        <IconActionButton icon="view" variant="light" customClass="border border-gray-300"
-                            title="查看详情" />
+                        <!-- 替换为IconActionButton组件，使用light变体，添加有效性检查功能 -->
+                        <IconActionButton icon="view" variant="light" customClass="border border-gray-300" title="有效性检查"
+                            :disabled="checkingValidityMap[link.code]" @click="checkLinkValidity(link)" />
 
                         <button
                             class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
@@ -666,6 +666,98 @@ const deleteLink = async () => {
         toast.error("删除链接失败，请重试", { title: "操作失败" });
     } finally {
         deleteLinkModal.endLoading();
+    }
+};
+
+// 添加有效性检查状态管理
+const checkingValidityMap = ref<Record<string, boolean>>({});
+
+// 模拟短链接有效性检查API
+const mockCheckLinkValidityAPI = async (shortLinkCode: string) => {
+    // 模拟网络延迟
+    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+
+    // 模拟不同的返回结果 - 70%概率成功，30%概率失败
+    const isValid = Math.random() > 0.3;
+
+    if (isValid) {
+        return {
+            code: 0,
+            data: null,
+            msg: "success"
+        };
+    } else {
+        return {
+            code: -1,
+            data: null,
+            msg: "短链不存在"
+        };
+    }
+};
+
+// 检查短链接有效性
+const checkLinkValidity = async (link: any) => {
+    const shortLinkCode = link.code;
+
+    // 设置检查状态
+    checkingValidityMap.value[shortLinkCode] = true;
+
+    // 显示检查中的通知
+    const checkingToastId = toast.info(`正在检查短链接 ${shortLinkCode} 的有效性...`, {
+        duration: 0, // 不自动关闭
+        title: "有效性检查"
+    });
+
+    try {
+        console.log("开始检查短链接有效性:", shortLinkCode);
+
+        // 调用模拟API
+        const response = await mockCheckLinkValidityAPI(shortLinkCode);
+
+        // 移除检查中通知
+        toast.removeToast(checkingToastId);
+
+        // 根据返回结果显示不同的通知
+        if (response.code === 0) {
+            // 有效
+            toast.success(`短链接 ${shortLinkCode} 有效且可正常访问`, {
+                title: "检查通过",
+                duration: 3000
+            });
+
+            console.log("短链接有效性检查通过:", {
+                code: shortLinkCode,
+                response
+            });
+        } else {
+            // 无效
+            toast.error(`${response.msg}，代码: ${shortLinkCode}`, {
+                title: "检查失败",
+                duration: 4000
+            });
+
+            console.warn("短链接有效性检查失败:", {
+                code: shortLinkCode,
+                response
+            });
+        }
+
+    } catch (error) {
+        // 移除检查中通知
+        toast.removeToast(checkingToastId);
+
+        // 显示错误通知
+        toast.error(`检查短链接 ${shortLinkCode} 时发生错误，请稍后重试`, {
+            title: "检查异常"
+        });
+
+        console.error("短链接有效性检查异常:", {
+            code: shortLinkCode,
+            error
+        });
+    } finally {
+        // 清除检查状态
+        checkingValidityMap.value[shortLinkCode] = false;
     }
 };
 </script>

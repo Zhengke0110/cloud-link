@@ -3,7 +3,7 @@
         content-padding="p-0" id="order-confirm-modal">
 
         <!-- 自定义渐变头部 -->
-        <template #customHeader="{ close }">
+        <template #customHeader>
             <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-4 sm:px-6 py-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg sm:text-xl font-semibold text-white" id="modal-title">
