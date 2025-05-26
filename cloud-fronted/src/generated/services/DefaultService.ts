@@ -68,7 +68,7 @@ export class DefaultService {
      * @throws ApiError
      */
     public static getAccountServerApiTrafficV1Detail(
-        trafficId: number,
+        trafficId: string,
     ): CancelablePromise<JsonData> {
         return __request(OpenAPI, {
             method: 'GET',

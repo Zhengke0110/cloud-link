@@ -24,15 +24,25 @@
                     <div class="flex items-center">
                         <div class="relative mr-4">
                             <div class="h-20 w-20 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
-                                <img :src="formData.headImg || userData.headImg" alt="用户头像"
-                                    class="h-full w-full object-cover" />
+                                <img :src="displayAvatar" alt="用户头像" class="h-full w-full object-cover" />
                             </div>
-                            <div
-                                class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300">
+                            <div v-if="!isUploading"
+                                class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer">
                                 <span class="text-white text-xs">更换头像</span>
                             </div>
+                            <div v-else
+                                class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center rounded-full">
+                                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                            </div>
                             <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer"
-                                @change="handleImageUpload" />
+                                @change="handleImageUpload" :disabled="isUploading" />
                         </div>
                         <div class="text-sm text-gray-500">
                             <p>点击头像更换</p>
@@ -106,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive, watch, computed } from 'vue';
 
 // 定义 props 和 emits
 const props = defineProps({
@@ -120,7 +130,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['update:modelValue', 'submit']);
+const emit = defineEmits(['update:modelValue', 'submit', 'upload-image']);
 
 // 表单数据
 const formData = reactive({
@@ -136,8 +146,14 @@ const errors = reactive({
     headImg: ''
 });
 
-// 提交状态
+// 提交和上传状态
 const isSubmitting = ref(false);
+const isUploading = ref(false);
+
+// 计算显示的头像
+const displayAvatar = computed(() => {
+    return formData.headImg || props.userData.headImg;
+});
 
 // 当模态窗口打开时，初始化表单数据
 watch(() => props.modelValue, (val) => {
@@ -157,32 +173,28 @@ const closeModal = () => {
 };
 
 // 处理图片上传
-const handleImageUpload = (event: Event) => {
+const handleImageUpload = async (event: Event) => {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
         const file = input.files[0];
 
-        // 验证文件类型
-        if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
-            errors.headImg = '请上传 JPG 或 PNG 格式的图片';
-            return;
+        try {
+            isUploading.value = true;
+            errors.headImg = '';
+
+            // 通过事件让父组件处理上传，不期望返回值
+            emit('upload-image', file);
+
+            // 注意：这里需要父组件通过其他方式（如props）来更新头像URL
+            // 或者通过一个回调函数来设置URL
+
+        } catch (error) {
+            errors.headImg = error instanceof Error ? error.message : '图片上传失败';
+        } finally {
+            isUploading.value = false;
+            // 清空input值，允许重新选择同一个文件
+            input.value = '';
         }
-
-        // 验证文件大小 (最大 2MB)
-        if (file.size > 2 * 1024 * 1024) {
-            errors.headImg = '图片大小不能超过 2MB';
-            return;
-        }
-
-        // 清除错误信息
-        errors.headImg = '';
-
-        // 将文件转换为 base64 格式
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            formData.headImg = e.target?.result as string;
-        };
-        reader.readAsDataURL(file);
     }
 };
 
@@ -223,9 +235,9 @@ const validateForm = () => {
     return isValid;
 };
 
-// TODO 提交表单
+// 提交表单
 const submitForm = async () => {
-    if (!validateForm()) return;
+    if (!validateForm() || isUploading.value) return;
 
     try {
         isSubmitting.value = true;

@@ -1,5 +1,7 @@
 package fun.timu.cloud.net.account.model.VO;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,6 +15,7 @@ import java.util.Date;
 public class TrafficVO implements Serializable {
 
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**

@@ -1,5 +1,7 @@
 package fun.timu.cloud.net.link.model.VO;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,6 +20,7 @@ public class LinkGroupVO implements Serializable {
     /**
      * 链接分组的唯一标识符
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**

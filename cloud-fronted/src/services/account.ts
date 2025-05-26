@@ -200,3 +200,50 @@ export const AccountUploadImageApi = async (file: File): Promise<any> => {
 
     return result;
 };
+
+
+/**
+ * 获取流量数据列表的API函数
+ * 
+ * 此函数通过向服务器发送POST请求，获取分页后的流量数据列表
+ * 能够捕获请求过程中的错误，确保在数据获取失败时抛出易于理解的错误信息
+ * 
+ * @param page 页码，表示请求的流量数据所在页数
+ * @param size 每页的流量数据条数
+ * @returns 返回一个Promise，解析为流量数据列表对象
+ * @throws 当流量数据获取失败时，抛出错误
+ */
+export const TrafficDataListApi = async (page: number = 1, size: number = 20) => {
+    try {
+        // 发送POST请求获取流量数据列表
+        const { data, code, msg } = await DefaultService.postAccountServerApiTrafficV1Page({
+            page: page,
+            size: size
+        });
+
+        // 检查响应状态码，如果不为0则表示获取数据失败，抛出错误
+        if (code !== 0) throw new Error(msg || '获取流量数据失败');
+
+        // 返回获取到的流量数据列表
+        return data;
+    } catch (error) {
+        // 捕获请求过程中的错误，并抛出带有错误信息的新错误
+        throw new Error(`获取流量数据失败: ${(error as Error).message}`);
+    }
+}
+
+
+export const TrafficDetailByIDApi = async (id: string) => {
+    try {
+        // 发送GET请求获取指定ID的流量数据详情
+        const { data, code, msg } = await DefaultService.getAccountServerApiTrafficV1Detail(id);
+
+        // 检查响应状态码，如果不为0则表示获取数据失败，抛出错误
+        if (code !== 0) throw new Error(msg || '获取流量数据详情失败');
+        // 返回获取到的流量数据详情
+        return data;
+    } catch (error) {
+        // 捕获请求过程中的错误，并抛出带有错误信息的新错误
+        throw new Error(`获取流量数据详情失败: ${(error as Error).message}`);
+    }
+}
