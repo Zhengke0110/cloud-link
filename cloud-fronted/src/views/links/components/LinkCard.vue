@@ -100,12 +100,12 @@ const handleMouseEnter = () => {
     if (!props.enableHover) return;
 
     gsap.to(cardElement.value, {
-        y: -8,
-        scale: 1.02,
-        // 修改阴影颜色，减少不透明度避免灰蒙蒙效果
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 10px 10px -5px rgba(0, 0, 0, 0.03)',
-        duration: 0.4,
-        ease: 'power2.out'
+        y: -3, // 从 -8 降至 -3，减少位移
+        scale: 1.01, // 从 1.02 降至 1.01，减少缩放
+        // 大幅降低阴影强度和扩散
+        boxShadow: '0 8px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
+        duration: 0.3, // 从 0.4 降至 0.3，加快响应
+        ease: 'power1.out' // 从 power2.out 改为 power1.out，更柔和
     });
 };
 
@@ -115,10 +115,10 @@ const handleMouseLeave = () => {
     gsap.to(cardElement.value, {
         y: 0,
         scale: 1,
-        // 修改默认阴影，消除灰蒙蒙效果
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01)',
-        duration: 0.5,
-        ease: 'power3.out'
+        // 进一步减轻默认阴影
+        boxShadow: '0 2px 4px -1px rgba(0, 0, 0, 0.015), 0 1px 2px -1px rgba(0, 0, 0, 0.01)',
+        duration: 0.4, // 从 0.5 降至 0.4
+        ease: 'power2.out' // 保持柔和的退出效果
     });
 };
 
@@ -126,7 +126,7 @@ const handleMouseLeave = () => {
 onMounted(() => {
     // 添加页面初始化时的设置，确保默认样式正确
     gsap.set(cardElement.value, {
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01)',
+        boxShadow: '0 2px 4px -1px rgba(0, 0, 0, 0.015), 0 1px 2px -1px rgba(0, 0, 0, 0.01)', // 进一步减轻初始阴影
         background: 'transparent' // 确保背景透明
     });
 
@@ -149,16 +149,24 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 卡片阴影效果 - 进一步减轻阴影，消除灰蒙蒙效果 */
+/* 卡片阴影效果 - 大幅减轻阴影强度 */
 .card-container {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02),
-        0 2px 4px -1px rgba(0, 0, 0, 0.01);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.015),
+        0 1px 2px -1px rgba(0, 0, 0, 0.01);
     will-change: transform, box-shadow;
     background-color: #ffffff;
     /* 使用纯白色背景 */
+    transition: border-color 0.3s ease;
+    /* 添加边框过渡效果 */
 }
 
-/* 标题栏光效 - 减少反光强度 */
+/* 减少悬停时的边框变化 */
+.card-container:hover {
+    border-color: rgba(99, 102, 241, 0.1);
+    /* 更轻微的边框颜色变化 */
+}
+
+/* 标题栏光效 - 大幅减少反光强度 */
 [class*="header-gradient-"]::after {
     content: "";
     position: absolute;
@@ -167,14 +175,17 @@ onMounted(() => {
     bottom: 0;
     left: 0;
     background: linear-gradient(120deg,
-            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0.08) 0%,
+            /* 从 0.2 降至 0.08 */
             rgba(255, 255, 255, 0) 70%);
     opacity: 0;
-    transition: opacity 0.25s ease-out;
+    transition: opacity 0.3s ease-out;
+    /* 从 0.25s 增至 0.3s */
 }
 
 [class*="header-gradient-"]:hover::after {
-    opacity: 1;
+    opacity: 0.6;
+    /* 从 1 降至 0.6，减少光效强度 */
 }
 
 /* 移除卡片内容的渐变光效 */
@@ -190,10 +201,10 @@ onMounted(() => {
     /* 移除伪元素内容，去除光效 */
 }
 
-/* 悬停时的阴影优化 - 极度轻微以避免在移动端产生灰蒙蒙效果 */
+/* 悬停时的阴影优化 - 更加轻微 */
 .card-container:hover {
-    box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.03),
-        0 4px 6px -2px rgba(0, 0, 0, 0.01) !important;
+    box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.02),
+        0 2px 4px -1px rgba(0, 0, 0, 0.015) !important;
 }
 
 /* 移动端特别优化 */
@@ -202,11 +213,17 @@ onMounted(() => {
         min-height: 44px;
     }
 
-    /* 移动端特别处理，消除灰蒙蒙效果 */
+    /* 移动端禁用悬停效果 */
     .card-container {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01) !important;
-        border-color: rgba(0, 0, 0, 0.1);
-        /* 更明显的边框代替阴影 */
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01) !important;
+        border-color: rgba(0, 0, 0, 0.08);
+        /* 更轻微的边框 */
+    }
+
+    .card-container:hover {
+        transform: none !important;
+        /* 移动端禁用变换效果 */
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01) !important;
     }
 
     /* 更新移动端背景颜色确保清晰度 */

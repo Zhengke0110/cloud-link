@@ -37,6 +37,11 @@ const routes: RouteRecordRaw[] = [
     name: "grouping",
     component: () => import("@/views/links/grouping"),
     meta: { layout: LayoutMenu.BasicLayout }
+  }, {
+    path: "/domain",
+    name: "domain",
+    component: () => import("@/views/links/domain"),
+    meta: { layout: LayoutMenu.BasicLayout }
   },
   {
     path: "/login",

@@ -198,9 +198,10 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
 import { useWindowScroll, useToggle, useEventListener } from '@vueuse/core';
+import router from '@/router';
+import { LayoutMenu } from '@/config';
 
-// 导航项目定义，使用Vue的引入图标组件
-// 在实际项目中，可能会直接引入图标组件，这里用内联SVG模拟
+// 图标组件定义
 const HomeIcon = {
     template: `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
@@ -225,20 +226,67 @@ const GearIcon = {
              </svg>`
 };
 
-// 导航菜单项
-const navItems = [
-    { name: '首页', path: '/home', icon: HomeIcon },
-    { name: '创建短链', path: '/create', icon: LinkIcon },
-    { name: '链接管理', path: '/links', icon: ChartIcon },
-    { name: '分组管理', path: '/grouping', icon: GearIcon },
-    {
-        name: '个人中心', path: '/center', icon: {
-            template: `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                </svg>`
-        }
-    },
-];
+const UserIcon = {
+    template: `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+               <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+             </svg>`
+};
+
+const TemplateIcon = {
+    template: `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+               <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
+             </svg>`
+};
+
+const FolderIcon = {
+    template: `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+               <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+             </svg>`
+};
+
+const GlobeIcon = {
+    template: `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd" />
+             </svg>`
+};
+
+// 路由名称到图标的映射
+const iconMap: Record<string, any> = {
+    home: HomeIcon,
+    center: UserIcon,
+    scheme: TemplateIcon,
+    create: LinkIcon,
+    links: ChartIcon,
+    grouping: FolderIcon,
+    domain: GlobeIcon,
+};
+
+// 路由名称到中文名称的映射
+const nameMap: Record<string, string> = {
+    home: '首页',
+    center: '个人中心',
+    scheme: '方案模板',
+    create: '创建短链',
+    links: '链接管理',
+    grouping: '分组管理',
+    domain: '域名管理',
+};
+
+// 从router配置中获取导航项
+const navItems = computed(() => {
+    return router.getRoutes()
+        .filter(route => 
+            route.meta?.layout === LayoutMenu.BasicLayout && 
+            route.name && 
+            route.path !== '/' &&
+            nameMap[route.name as string]
+        )
+        .map(route => ({
+            name: nameMap[route.name as string] || route.name,
+            path: route.path,
+            icon: iconMap[route.name as string] || LinkIcon
+        }));
+});
 
 // 用户菜单项
 const userMenuItems = [
