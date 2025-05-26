@@ -52,42 +52,73 @@
         </div>
 
         <!-- 订单确认模态框 -->
-        <OrderConfirmModal :show="showOrderModal" :plan="selectedPlan" @close="showOrderModal = false"
+        <OrderConfirmModal :show="showOrderModal" :plan="selectedPlan || {}" @close="showOrderModal = false"
             @submit="submitOrder" />
+
+        <!-- 支付模态框 -->
+        <PaymentModal v-if="showPaymentModal" :show="showPaymentModal" :payment-type="paymentType"
+            :order-info="orderInfo" @close="showPaymentModal = false" @payment-success="handlePaymentSuccess"
+            @payment-failed="handlePaymentFailed" @weichat-pay-handler="WeChatPayApi" />
     </PageLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { Data } from './config';
 import MembershipPlanCard from './components/MembershipPlanCard.vue';
 import FeatureCard from './components/FeatureCard.vue';
 import FaqItem from './components/FaqItem.vue';
 import PageLayout from '@/components/PageLayout.vue';
 import OrderConfirmModal from './components/OrderConfirmModal.vue';
+import PaymentModal from './components/PaymentModal.vue';
+import { ProductGetListApi, ProductGetOrderTokenApi, ProductOrderConfirmApi, WeChatPayApi } from '@/services/shop'
+import { useToast } from '@/composables/useToast'
+const toast = useToast();
+// 定义会员方案接口
+interface MembershipPlan {
+    id: number;
+    title: string;
+    detail: string;
+    img: string | null;
+    level: 'FIRST' | 'SECOND' | 'THIRD' | string;
+    oldAmount: number;
+    amount: number;
+    pluginType: string;
+    dayTimes: number;
+    totalTimes: number | null;
+    validDay: number;
+}
 
 // 会员方案数据
-const membershipPlans = ref(Data);
+const membershipPlans = ref<MembershipPlan[]>([]);
 const isRevealed = ref(false);
 
 // 订单相关状态
 const showOrderModal = ref(false);
-const selectedPlan = ref({});
+const selectedPlan = ref<MembershipPlan | null>(null);
 
-// TODO: 从API获取会员方案数据
-// 示例: 
-// const fetchMembershipPlans = async () => {
-//   try {
-//     const response = await api.get('/membership-plans');
-//     membershipPlans.value = response.data;
-//   } catch (error) {
-//     console.error('获取会员方案失败', error);
-//   }
-// };
-// 
-// onMounted(() => {
-//   fetchMembershipPlans();
-// });
+// 支付相关状态
+const showPaymentModal = ref(false);
+const paymentType = ref('');
+const orderInfo = ref({
+    outTradeNo: '',
+    accountNo: '',
+    productTitle: '',
+    amount: 0
+});
+
+// 从API获取会员方案数据
+const fetchMembershipPlans = async () => {
+    try {
+        const response = await ProductGetListApi()
+        membershipPlans.value = response;
+    } catch (error) {
+        console.error('获取会员方案失败', error);
+    }
+};
+
+onMounted(() => {
+    fetchMembershipPlans();
+});
 
 // 根据数据计算的特性存在标志
 const hasDayTimesFeature = computed(() => {
@@ -128,40 +159,52 @@ const openOrderModal = (plan: any) => {
     showOrderModal.value = true;
 };
 
-// 提交订单
+// TODO:提交订单
 const submitOrder = async (orderParams: any) => {
     try {
-        // TODO: 实际调用API
-        console.log('提交订单参数:', orderParams);
+        // 1.获取订单令牌
+        const token = await ProductGetOrderTokenApi()
+        const orderData = {
+            ...orderParams,
+            token: token
+        };
+        // 2.提交订单
+        const orderResponse = await ProductOrderConfirmApi(orderData);
+        const accountNo = orderResponse.account_no;
+        const outTradeNo = orderResponse.out_trade_no;
+        const payType = orderResponse.pay_type;
 
-        // 模拟API调用
-        const response = await new Promise(resolve => {
-            setTimeout(() => {
-                resolve({
-                    success: true,
-                    data: {
-                        orderId: 'ORD' + Date.now(),
-                        paymentUrl: 'https://example.com/pay'
-                    }
-                });
-            }, 1500);
-        });
+        // 3.设置支付信息并打开支付模态框
+        paymentType.value = payType;
+        orderInfo.value = {
+            outTradeNo: outTradeNo,
+            accountNo: accountNo,
+            productTitle: selectedPlan.value?.title || '默认',
+            amount: orderData.payAmount || 0
+        };
 
-        // 处理响应
-        const result = response as any;
-        if (result.success) {
-            // 跳转到支付页面或展示支付二维码
-            window.location.href = result.data.paymentUrl;
-        } else {
-            alert('创建订单失败，请重试');
-        }
+        // 关闭订单确认模态框，打开支付模态框
+        showOrderModal.value = false;
+        showPaymentModal.value = true;
+
     } catch (error) {
         console.error('提交订单出错:', error);
         alert('提交订单出错，请重试');
-    } finally {
-        // 关闭模态框
         showOrderModal.value = false;
     }
+};
+
+
+// 支付成功回调
+const handlePaymentSuccess = () => {
+    console.log('支付成功');
+    toast.success('支付成功！会员已激活');
+};
+
+// 支付失败回调
+const handlePaymentFailed = () => {
+    console.log('支付失败');
+    toast.error('支付失败，请重试');
 };
 
 // 添加页面动画效果
@@ -196,31 +239,10 @@ onMounted(() => {
         });
     }
 });
+
 </script>
 
 <style>
-/* 自定义Tailwind类 - 只保留无法用Tailwind直接实现的样式 */
-.transition-delay-100 {
-    transition-delay: 0.1s;
-}
-
-.transition-delay-250 {
-    transition-delay: 0.25s;
-}
-
-.transition-delay-400 {
-    transition-delay: 0.4s;
-}
-
-.transition-delay-500 {
-    transition-delay: 0.5s;
-}
-
-.transition-delay-700 {
-    transition-delay: 0.7s;
-}
-
-/* 处理媒体查询对动画的优先级 */
 @media (prefers-reduced-motion: reduce) {
     .transition-all {
         transition: none !important;

@@ -248,7 +248,7 @@ export class DefaultService {
      * @throws ApiError
      */
     public static getShopServerApiProductV1Detail(
-        productId: number,
+        productId: string,
     ): CancelablePromise<JsonData> {
         return __request(OpenAPI, {
             method: 'GET',
