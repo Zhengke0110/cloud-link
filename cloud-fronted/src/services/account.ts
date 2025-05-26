@@ -25,6 +25,10 @@ export const AccountLoginApi = async (info: { phone: string, pwd: string }): Pro
 
         if (typeof data !== 'string') throw new Error('登录失败：无效的token返回')
 
+        // 保存token到本地存储
+        localStorage.setItem('userToken', data)
+        
+        // 设置请求头
         OpenAPI.HEADERS = {
             'token': `${data}`,
         }
@@ -151,7 +155,23 @@ export const GetAccountDetailApi = async () => {
  * 
  * @returns Promise<void> 返回一个Promise，解析为void，表示登出操作完成
  */
-export const AccountLogoutApi = async () => { return await DefaultService.getAccountServerApiAccountV1Logout() }
+export const AccountLogoutApi = async () => { 
+    try {
+        const result = await DefaultService.getAccountServerApiAccountV1Logout()
+        // 清除本地存储的token
+        localStorage.removeItem('userToken')
+        localStorage.removeItem('rememberedUser')
+        // 清除请求头
+        OpenAPI.HEADERS = {}
+        return result
+    } catch (error) {
+        // 即使请求失败也要清除本地token
+        localStorage.removeItem('userToken')
+        localStorage.removeItem('rememberedUser')
+        OpenAPI.HEADERS = {}
+        throw error
+    }
+}
 
 /**
  * 更新账户信息的异步函数
@@ -178,26 +198,40 @@ export const AccountUpdateApi = async (info: { headImg?: string; mail?: string; 
     }
 }
 
-
-
-// TODO 未测试:文件上传
+/**
+ * 上传账户图片到服务器
+ * 
+ * 本函数通过调用后端API，将用户选择的文件上传到服务器，并返回上传结果
+ * 主要涉及表单数据的准备、API请求的发送以及响应结果的处理
+ * 
+ * @param file 用户选择的文件，类型为File
+ * @returns 返回一个Promise，解析为上传结果的对象
+ * @throws 如果上传失败或服务器返回错误代码，则抛出错误
+ */
 export const AccountUploadImageApi = async (file: File): Promise<any> => {
+    // 创建表单数据对象，用于包装文件数据
     const formData = new FormData();
+    // 将文件添加到表单数据中，键名为'file'
     formData.append('file', file);
 
+    // 构造上传API的URL
     const url = OpenAPI.BASE + '/account-server/api/account/v1/upload';
 
+    // 发送POST请求到上传API，请求体为表单数据
     const response = await fetch(url, {
         method: 'POST',
         body: formData,
     });
 
+    // 解析响应的JSON数据
     const result = await response.json();
 
+    // 检查响应状态和结果代码，如果不符合预期，则抛出错误
     if (!response.ok || result.code !== 0) {
         throw new Error(result.msg || '文件上传失败');
     }
 
+    // 返回上传结果
     return result;
 };
 
@@ -246,4 +280,20 @@ export const TrafficDetailByIDApi = async (id: string) => {
         // 捕获请求过程中的错误，并抛出带有错误信息的新错误
         throw new Error(`获取流量数据详情失败: ${(error as Error).message}`);
     }
+}
+
+/**
+ * 初始化认证状态
+ * 从本地存储中恢复token并设置到请求头中
+ * 应在应用启动时调用
+ */
+export const initAuthFromStorage = () => {
+    const token = localStorage.getItem('userToken')
+    if (token) {
+        OpenAPI.HEADERS = {
+            'token': token,
+        }
+        return true
+    }
+    return false
 }

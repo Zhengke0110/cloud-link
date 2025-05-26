@@ -149,8 +149,9 @@ const handleLogin = async () => {
             // 显示通用错误信息
             errors.general = "登录失败，请检查您的账号信息";
         }
-    } catch (error) {
-        errors.general = "登录失败，请稍后重试";
+    } catch (error: any) {
+        // 显示具体的错误信息
+        errors.general = error?.message || "登录失败，请稍后重试";
     } finally {
         loading.value = false;
     }

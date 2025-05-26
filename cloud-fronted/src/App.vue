@@ -3,8 +3,15 @@ import BasicLayout from "@/layouts/BasicLayout.vue";
 import { LayoutMenu } from "@/config";
 import { useRoute } from "vue-router";
 import Toast from '@/components/Toast.vue';
+import { initAuthFromStorage } from "@/services/account";
+import { onMounted } from "vue";
 
 const route = useRoute();
+
+// 应用启动时初始化认证状态
+onMounted(() => {
+    initAuthFromStorage();
+});
 
 </script>
 
