@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { deviceType } from "@/utils/flexible";
 import { AccountLoginApi } from "@/services/account";
 import { isValidPhone, isValidPassword } from "@/utils/formValidation";
@@ -52,6 +52,7 @@ import PasswordInput from "./components/PasswordInput.vue";
 import SubmitButton from "./components/SubmitButton.vue";
 
 const router = useRouter();
+const route = useRoute();
 const loading = ref(false);
 
 const loginForm = reactive({
@@ -143,8 +144,14 @@ const handleLogin = async () => {
             } else {
                 localStorage.removeItem("rememberedUser"); // 如果未勾选，清除之前可能保存的信息
             }
-            // TODO 跳转到首页
-            router.push("/home");
+
+            // 检查是否有重定向路径
+            const redirectPath = route.query.redirect as string;
+            if (redirectPath && redirectPath !== '/account/login') {
+                router.push(redirectPath);
+            } else {
+                router.push("/home");
+            }
         } else {
             // 显示通用错误信息
             errors.general = "登录失败，请检查您的账号信息";

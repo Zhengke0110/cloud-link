@@ -49,23 +49,8 @@
 
                     <!-- 右侧用户操作区 -->
                     <div class="flex items-center gap-2">
-                        <!-- 通知按钮 -->
-                        <button v-if="isLoggedIn" class="relative hidden rounded-full p-1.5 text-gray-300 transition-all duration-200 
-                           hover:bg-gray-700/70 hover:text-white md:block">
-                            <span class="sr-only">查看通知</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path
-                                    d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                            </svg>
-                            <!-- 通知红点 -->
-                            <span v-if="hasNotifications"
-                                class="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5 items-center justify-center rounded-full bg-red-500">
-                            </span>
-                        </button>
-
                         <!-- 登录/注册按钮 -->
-                        <button v-if="!isLoggedIn" class="hidden rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-2 text-sm font-semibold 
+                        <button v-if="!isLoggedIn" @click="goToLogin" class="hidden rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-2 text-sm font-semibold 
                            text-white shadow-md transition-all duration-200 hover:from-indigo-500 hover:to-blue-500 
                            hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 
                            focus:ring-offset-2 md:block">
@@ -75,26 +60,54 @@
                         <!-- 用户头像下拉菜单 -->
                         <div v-else class="relative hidden md:block">
                             <button @click="isUserMenuOpen = !isUserMenuOpen"
-                                class="flex items-center gap-2 rounded-full bg-gray-700 p-1 text-sm text-white transition-all hover:bg-gray-600">
+                                class="flex items-center gap-2 rounded-full bg-gray-700 px-3 py-2 text-sm text-white transition-all duration-200 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800">
                                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="用户头像"
-                                    class="h-7 w-7 rounded-full bg-white" />
-                                <span class="pr-2">用户名</span>
+                                    class="h-6 w-6 rounded-full bg-white" />
+                                <span class="font-medium text-white">用户中心</span>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 transition-transform duration-200 text-gray-300"
+                                    :class="{ 'rotate-180': isUserMenuOpen }" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
                             </button>
 
-                            <div v-if="isUserMenuOpen" class="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 
-                         ring-black ring-opacity-5 transition-all">
-                                <router-link v-for="item in userMenuItems" :key="item.name" :to="item.path" custom
-                                    v-slot="{ href, navigate }">
-                                    <a :href="href" @click="navigate"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                        {{ item.name }}
-                                    </a>
-                                </router-link>
-                                <button @click="logout"
-                                    class="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100">
-                                    退出登录
-                                </button>
-                            </div>
+                            <!-- 下拉菜单 -->
+                            <gsap-animation 
+                                v-if="isUserMenuOpen" 
+                                animation="fadeInDown" 
+                                :duration="0.2"
+                                class="absolute right-0 mt-2 w-48 origin-top-right">
+                                <div class="rounded-lg bg-white py-2 shadow-xl ring-1 ring-black ring-opacity-5 backdrop-blur-sm border border-gray-200">
+                                    <router-link to="/center" custom v-slot="{ href, navigate }">
+                                        <a :href="href" @click="navigate"
+                                            class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-150">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 20 20"
+                                                fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span class=" text-black">个人中心</span>
+                                        </a>
+                                    </router-link>
+                                    
+                                    <!-- 分割线 -->
+                                    <div class="my-1 border-t border-gray-100"></div>
+                                    
+                                    <button @click="logout"
+                                        class="flex items-center gap-3 w-full px-4 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-150">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span>退出登录</span>
+                                    </button>
+                                </div>
+                            </gsap-animation>
                         </div>
 
                         <!-- 移动端菜单按钮 -->
@@ -164,22 +177,21 @@
 
                             <div class="mt-3 space-y-1 px-2">
                                 <div v-if="isLoggedIn">
-                                    <router-link v-for="item in userMenuItems" :key="item.name" :to="item.path" custom
-                                        v-slot="{ href, navigate }">
+                                    <router-link to="/center" custom v-slot="{ href, navigate }">
                                         <a :href="href" @click="navigate"
-                                            class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
-                                            {{ item.name }}
+                                            class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                                            个人中心
                                         </a>
                                     </router-link>
                                     <button @click="logout"
-                                        class="mt-1 block w-full rounded-md px-3 py-2 text-left text-base font-medium text-red-400 hover:bg-gray-700 hover:text-red-300">
+                                        class="mt-1 block w-full rounded-md px-3 py-2 text-left text-base font-medium text-red-400 hover:bg-gray-700 hover:text-red-300 transition-colors duration-200">
                                         退出登录
                                     </button>
                                 </div>
                                 <div v-else class="px-1">
-                                    <button class="w-full rounded-md bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-2 text-white shadow-md
+                                    <button @click="goToLogin" class="w-full rounded-md bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-2 text-white shadow-md
                                  hover:from-indigo-500 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 
-                                 focus:ring-offset-2">
+                                 focus:ring-offset-2 transition-all duration-200">
                                         登录 / 注册
                                     </button>
                                 </div>
@@ -200,6 +212,7 @@ import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
 import { useWindowScroll, useToggle, useEventListener } from '@vueuse/core';
 import router from '@/router';
 import { LayoutMenu } from '@/config';
+import GsapAnimation from '@/components/GsapAnimation.vue';
 
 // 图标组件定义
 const HomeIcon = {
@@ -253,7 +266,6 @@ const GlobeIcon = {
 // 路由名称到图标的映射
 const iconMap: Record<string, any> = {
     home: HomeIcon,
-    center: UserIcon,
     scheme: TemplateIcon,
     create: LinkIcon,
     links: ChartIcon,
@@ -264,7 +276,6 @@ const iconMap: Record<string, any> = {
 // 路由名称到中文名称的映射
 const nameMap: Record<string, string> = {
     home: '首页',
-    center: '个人中心',
     scheme: '方案模板',
     create: '创建短链',
     links: '链接管理',
@@ -275,9 +286,9 @@ const nameMap: Record<string, string> = {
 // 从router配置中获取导航项
 const navItems = computed(() => {
     return router.getRoutes()
-        .filter(route => 
-            route.meta?.layout === LayoutMenu.BasicLayout && 
-            route.name && 
+        .filter(route =>
+            route.meta?.layout === LayoutMenu.BasicLayout &&
+            route.name &&
             route.path !== '/' &&
             nameMap[route.name as string]
         )
@@ -290,13 +301,13 @@ const navItems = computed(() => {
 
 // 用户菜单项
 const userMenuItems = [
-    { name: '个人资料', path: '/profile' },
-    { name: '账户设置', path: '/account' },
-    { name: '订阅管理', path: '/billing' },
+    { name: '个人中心', path: '/center' },
 ];
 
 // 模拟登录状态和通知状态
-const isLoggedIn = ref(false); // 根据实际情况可以从store或API获取
+const isLoggedIn = computed(() => {
+    return !!localStorage.getItem('userToken');
+});
 const hasNotifications = ref(true);
 
 // 移动端菜单状态
@@ -342,11 +353,27 @@ const handleResize = () => {
 };
 
 // 模拟退出登录功能
-const logout = () => {
-    isLoggedIn.value = false;
-    isUserMenuOpen.value = false;
-    // 可以添加实际的退出逻辑，如清除token、重定向等
-    console.log('用户退出登录');
+const logout = async () => {
+    try {
+        // 调用退出登录API
+        const { AccountLogoutApi } = await import('@/services/account');
+        await AccountLogoutApi();
+        isUserMenuOpen.value = false;
+        // 跳转到首页
+        router.push('/home');
+    } catch (error) {
+        console.error('退出登录失败:', error);
+        // 即使API失败也要清除本地数据
+        localStorage.removeItem('userToken');
+        localStorage.removeItem('rememberedUser');
+        isUserMenuOpen.value = false;
+        router.push('/home');
+    }
+};
+
+// 跳转到登录页面
+const goToLogin = () => {
+    router.push('/account/login');
 };
 
 // 组件生命周期处理
