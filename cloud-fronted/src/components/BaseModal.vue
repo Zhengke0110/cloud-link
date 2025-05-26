@@ -4,7 +4,8 @@
       leave-active-class="duration-100 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
       <div v-if="modelValue" class="fixed inset-0 z-50 overflow-y-auto" :id="id" ref="modalContainerRef">
         <!-- 背景遮罩 -->
-        <div class="fixed inset-0 bg-black/40 transition-opacity" aria-hidden="true" ref="backdropRef">
+        <div class="fixed inset-0 bg-black/40 transition-opacity" aria-hidden="true" ref="backdropRef"
+          @click="handleBackdropClick">
           <!-- 模糊效果背景使用GsapAnimation -->
           <GsapAnimation animation="fadeIn" :from="{ backdropFilter: 'blur(0px)', opacity: 0 }"
             :to="{ backdropFilter: 'blur(4px)', opacity: 1 }" :duration="0.2" ease="power1.out"
@@ -13,15 +14,19 @@
 
         <!-- 调整移动端容器的内边距和宽度 -->
         <div class="flex min-h-full items-center justify-center p-2 sm:p-4 text-center sm:items-center ">
-          <!-- 模态框内容使用GsapAnimation - 增加移动端的最大宽度 -->
+          <!-- 模态框内容使用GsapAnimation -->
           <GsapAnimation :from="{ y: 10, opacity: 0, scale: 0.98 }" :to="{ y: 0, opacity: 1, scale: 1 }"
             :duration="0.18" ease="power2.out"
-            class="modal-content relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl w-full sm:my-8 sm:w-full sm:max-w-lg"
+            class="modal-content relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl w-full sm:my-8"
             :class="[contentPadding]" ref="modalContentRef">
             <!-- 添加可聚焦元素，并使用tabindex使其可接收焦点 -->
             <div tabindex="-1" ref="focusableElementRef" class="outline-none">
-              <!-- 标题与关闭按钮 - 优化移动端间距 -->
-              <div v-if="title" class="flex items-center justify-between pb-2 px-4 sm:pb-3 sm:px-6 sm:py-4">
+              <!-- 自定义头部插槽 -->
+              <div v-if="$slots.customHeader">
+                <slot name="customHeader" :close="() => emit('update:modelValue', false)"></slot>
+              </div>
+              <!-- 默认标题与关闭按钮 -->
+              <div v-else-if="title" class="flex items-center justify-between pb-2 px-4 sm:pb-3 sm:px-6 sm:py-4">
                 <h3 class="text-lg font-medium leading-6 text-gray-900">{{ title }}</h3>
                 <button type="button"
                   class="modal-close-btn rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
@@ -41,7 +46,7 @@
 
               <!-- 分离的页脚，优化移动端间距 -->
               <div v-if="$slots.separateFooter"
-                class="bg-gray-50 px-3 py-2  sm:py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                class="bg-gray-50 px-3 py-2 sm:py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <slot name="separateFooter"></slot>
               </div>
             </div>
@@ -78,6 +83,11 @@ const props = defineProps({
   contentPadding: {
     type: String,
     default: 'p-6'
+  },
+  // 是否允许点击背景关闭
+  closeOnBackdrop: {
+    type: Boolean,
+    default: true
   }
 });
 
@@ -100,6 +110,13 @@ const setupFocusTrap = () => {
   // 使用focusableElementRef而不是modalContentRef
   if (focusableElementRef.value) {
     focusableElementRef.value.focus();
+  }
+};
+
+// 处理背景点击
+const handleBackdropClick = () => {
+  if (props.closeOnBackdrop) {
+    emit('update:modelValue', false);
   }
 };
 
@@ -136,17 +153,10 @@ onUnmounted(() => {
 <style scoped>
 .modal-content {
   will-change: transform, opacity;
-  /* 优化移动端的边距和宽度 */
+  /* 移动端使用全宽度减去边距 */
   margin-left: auto;
   margin-right: auto;
   max-width: calc(100% - 1rem);
-}
-
-/* 分离背景模糊效果，解决闪烁问题 */
-.backdrop-blur-effect {
-  backdrop-filter: blur(0px);
-  /* 初始值由GsapAnimation控制 */
-  -webkit-backdrop-filter: blur(0px);
 }
 
 /* 移动端优化 */
@@ -162,6 +172,24 @@ onUnmounted(() => {
   h3 {
     font-size: 1rem;
     line-height: 1.5;
+  }
+}
+
+/* PC端固定宽度为视口宽度的三分之一 */
+@media (min-width: 640px) {
+  .modal-content {
+    width: 33.333333vw !important;
+    max-width: none !important;
+    min-width: 400px;
+    /* 设置最小宽度避免过小 */
+  }
+}
+
+/* 超大屏幕限制最大宽度 */
+@media (min-width: 1920px) {
+  .modal-content {
+    max-width: 640px !important;
+    /* 在超大屏幕上限制最大宽度 */
   }
 }
 
