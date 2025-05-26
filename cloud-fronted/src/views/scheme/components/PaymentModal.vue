@@ -150,7 +150,6 @@ const processPayment = async () => {
 
     isProcessing.value = true
     isGeneratingQR.value = true
-    console.log(props)
     try {
         // 根据支付类型调用对应的支付处理函数
         if (props.paymentType.includes('WECHAT_PAY')) {
@@ -168,7 +167,7 @@ const processPayment = async () => {
             await new Promise(resolve => setTimeout(resolve, 1500))
             qrCodeUrl.value = generatePlaceholderQRCode(getPaymentMethodName())
         }
-        emit('payment-success')
+        emit('payment-success', props.orderInfo.outTradeNo)
     } catch (error) {
         console.error('生成支付码失败:', error)
         emit('payment-failed')

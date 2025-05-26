@@ -70,7 +70,7 @@ import FaqItem from './components/FaqItem.vue';
 import PageLayout from '@/components/PageLayout.vue';
 import OrderConfirmModal from './components/OrderConfirmModal.vue';
 import PaymentModal from './components/PaymentModal.vue';
-import { ProductGetListApi, ProductGetOrderTokenApi, ProductOrderConfirmApi, WeChatPayApi } from '@/services/shop'
+import { ProductGetListApi, ProductGetOrderTokenApi, ProductOrderConfirmApi, WeChatPayApi, ProductGetOrderStatusApi } from '@/services/shop'
 import { useToast } from '@/composables/useToast'
 const toast = useToast();
 // 定义会员方案接口
@@ -196,9 +196,19 @@ const submitOrder = async (orderParams: any) => {
 
 
 // 支付成功回调
-const handlePaymentSuccess = () => {
-    console.log('支付成功');
-    toast.success('支付成功！会员已激活');
+const handlePaymentSuccess = async (outTradeNo: string) => {
+    toast.success('支付成功!');
+    showPaymentModal.value = false;
+    setTimeout(async () => {
+        const res = await ProductGetOrderStatusApi(outTradeNo);
+        const statusMap: Record<string, string> = {
+            PAY: "已支付",
+            NEW: "未支付"
+        };
+        const statusMessage = statusMap[res] || "订单已取消";
+        toast.info(`订单状态: ${statusMessage}`);
+    }, 1000);
+
 };
 
 // 支付失败回调
