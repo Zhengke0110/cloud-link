@@ -98,7 +98,7 @@
             "description": "流量包的唯一标识符",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -465,7 +465,7 @@
             "description": "商品ID，用于标识特定的商品",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -818,7 +818,7 @@
         "security": []
       }
     },
-    "/api/group/v1/del/{groupId}": {
+    "/link-server/api/group/v1/del/{groupId}": {
       "delete": {
         "summary": "处理删除链接分组的请求",
         "deprecated": false,
@@ -870,7 +870,7 @@
             "description": "友链分组的唯一标识符",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -1093,9 +1093,9 @@
         "security": []
       }
     },
-    "/link-server/api/link/v1/del": {
+    "/link-server/api/link/v1/update": {
       "post": {
-        "summary": "删除短链",
+        "summary": "更新短链",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -1104,7 +1104,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ShortLinkDelRequest",
+                "$ref": "#/components/schemas/ShortLinkUpdateRequest",
                 "description": ""
               },
               "examples": {}
@@ -1133,9 +1133,9 @@
         "security": []
       }
     },
-    "/link-server/api/link/v1/update": {
+    "/link-server/api/link/v1/del": {
       "post": {
-        "summary": "更新短链",
+        "summary": "删除短链",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -1144,10 +1144,9 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ShortLinkUpdateRequest",
+                "$ref": "#/components/schemas/ShortLinkDelRequest",
                 "description": ""
-              },
-              "examples": {}
+              }
             }
           }
         },
@@ -1675,11 +1674,6 @@
           "groupId": {
             "type": "integer",
             "description": "组",
-            "format": "int64"
-          },
-          "mappingId": {
-            "type": "integer",
-            "description": "映射id",
             "format": "int64"
           },
           "code": {

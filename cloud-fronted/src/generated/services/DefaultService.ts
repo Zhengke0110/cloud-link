@@ -432,12 +432,12 @@ export class DefaultService {
      * @returns JsonData
      * @throws ApiError
      */
-    public static deleteApiGroupV1Del(
+    public static deleteLinkServerApiGroupV1Del(
         groupId: string,
     ): CancelablePromise<JsonData> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/api/group/v1/del/{groupId}',
+            url: '/link-server/api/group/v1/del/{groupId}',
             path: {
                 'groupId': groupId,
             },
@@ -548,22 +548,6 @@ export class DefaultService {
         });
     }
     /**
-     * 删除短链
-     * @param requestBody
-     * @returns JsonData
-     * @throws ApiError
-     */
-    public static postLinkServerApiLinkV1Del(
-        requestBody?: ShortLinkDelRequest,
-    ): CancelablePromise<JsonData> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/link-server/api/link/v1/del',
-            body: requestBody,
-            mediaType: 'application/json',
-        });
-    }
-    /**
      * 更新短链
      * @param requestBody
      * @returns JsonData
@@ -575,6 +559,22 @@ export class DefaultService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/link-server/api/link/v1/update',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * 删除短链
+     * @param requestBody
+     * @returns JsonData
+     * @throws ApiError
+     */
+    public static postLinkServerApiLinkV1Del(
+        requestBody?: ShortLinkDelRequest,
+    ): CancelablePromise<JsonData> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/link-server/api/link/v1/del',
             body: requestBody,
             mediaType: 'application/json',
         });

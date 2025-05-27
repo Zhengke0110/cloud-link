@@ -8,10 +8,6 @@ export type ShortLinkDelRequest = {
      */
     groupId?: number;
     /**
-     * 映射id
-     */
-    mappingId?: number;
-    /**
      * 短链码
      */
     code?: string;

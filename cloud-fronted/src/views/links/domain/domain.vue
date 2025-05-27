@@ -2,8 +2,35 @@
     <PageLayout tag="域名管理" title="查看您的域名配置" description="管理和查看您的短链接域名设置">
         <!-- 域名列表 -->
         <div class="mx-auto max-w-6xl delay-300">
-            <!-- 域名卡片 -->
-            <div class="space-y-4">
+            <!-- 加载状态 -->
+            <div v-if="loading" class="flex items-center justify-center py-12">
+                <div class="flex items-center space-x-2">
+                    <div class="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
+                    <span class="text-gray-600">正在加载域名数据...</span>
+                </div>
+            </div>
+
+            <!-- 错误状态 -->
+            <div v-else-if="error" class="flex items-center justify-center py-12">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-red-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">加载失败</h3>
+                    <p class="text-gray-600 mb-4">获取域名数据时出现错误</p>
+                    <button @click="fetchDomainList"
+                        class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition-colors">
+                        重试
+                    </button>
+                </div>
+            </div>
+
+            <!-- 域名卡片 - 仅在数据加载完成且有数据时显示 -->
+            <div v-else-if="domainData.length > 0" class="space-y-4">
                 <LinkCard v-for="(domain, index) in domainData" :key="domain.id" :title="domain.value"
                     :colorIndex="getDomainColorIndex(domain, index)">
                     <!-- 顶部操作按钮 -->
@@ -81,8 +108,8 @@
                 </LinkCard>
             </div>
 
-            <!-- 无域名数据提示 -->
-            <EmptyState v-if="!domainData.length" title="暂无域名数据" description="当前没有配置任何域名，请联系管理员添加域名" iconType="blue">
+            <!-- 无域名数据提示 - 仅在数据加载完成但无数据时显示 -->
+            <EmptyState v-else title="暂无域名数据" description="当前没有配置任何域名，请联系管理员添加域名" iconType="blue">
                 <template #icon>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" viewBox="0 0 20 20"
                         fill="currentColor">
@@ -97,12 +124,13 @@
 </template>
 
 <script setup lang="ts">
-import { domainData } from "./config";
+
 import LinkCard from '../components/LinkCard.vue';
 import EmptyState from '@/components/EmptyState.vue';
 import InfoField from '@/components/Form/InfoField.vue';
 import PageLayout from '@/components/PageLayout.vue';
 import IconActionButton from '../components/IconActionButton.vue';
+import { DomainGetListsApi } from '@/services/links'
 
 // 导入颜色方案工具
 import {
@@ -111,7 +139,31 @@ import {
     getLinkColorIndex
 } from "@/utils/ColorSchemeProvider";
 import { formatDate } from '@/utils/DateUtils';
+import { onMounted, ref } from 'vue';
 
+// 添加响应式数据
+const domainData = ref<any[]>([]);
+const loading = ref<boolean>(false);
+const error = ref<any>(null);
+
+onMounted(async () => {
+    await fetchDomainList();
+});
+
+const fetchDomainList = async () => {
+    try {
+        loading.value = true;
+        error.value = null; // 重置错误状态
+        const response = await DomainGetListsApi()
+        domainData.value = response || []; // 确保数据是数组
+    } catch (err) {
+        error.value = err;
+        console.error('获取域名列表失败:', err);
+        domainData.value = []; // 错误时重置为空数组
+    } finally {
+        loading.value = false;
+    }
+};
 
 // 获取域名颜色索引
 const getDomainColorIndex = (domain: any, index: number) => {
@@ -134,6 +186,4 @@ const getDomainTypeText = (domainType: string) => {
 const getStatusText = (del: number) => {
     return del === 0 ? '正常' : '已删除';
 };
-
-
 </script>

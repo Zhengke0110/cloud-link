@@ -77,7 +77,7 @@ export const GroupingGetDetailByIDApi = async (id: string) => {
 export const GroupingDeleteByIDApi = async (id: string) => {
     try {
         // 调用服务端接口删除指定ID的分组
-        const { code, msg } = await DefaultService.deleteApiGroupV1Del(id);
+        const { code, msg } = await DefaultService.deleteLinkServerApiGroupV1Del(id);
 
         // 检查响应码，如果不为0则表示删除失败，抛出错误
         if (code !== 0) throw new Error(msg || '删除分组失败');

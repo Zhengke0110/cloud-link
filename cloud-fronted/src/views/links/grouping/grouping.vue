@@ -15,8 +15,14 @@
                 </button>
             </div>
 
+            <!-- 加载状态 -->
+            <div v-if="isLoading" class="flex justify-center items-center py-12">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                <span class="ml-3 text-gray-600">加载分组数据中...</span>
+            </div>
+
             <!-- 分组卡片 - 使用LinkCard组件替换 -->
-            <div class="space-y-4 md:space-y-6">
+            <div v-else-if="groupData && groupData.length" class="space-y-4 md:space-y-6">
                 <LinkCard v-for="(group, index) in groupData" :key="group.id" :title="group.title" :colorIndex="index">
                     <!-- 顶部操作按钮 -->
                     <template #header-actions>
@@ -70,9 +76,7 @@
                 </LinkCard>
             </div>
 
-            <!-- 替换现有的无分组数据提示 -->
-            <EmptyState v-if="!groupData.length" title="暂无分组数据" description="您还没有创建任何分组，点击上方按钮创建新分组">
-                <!-- 使用默认文件夹图标 -->
+            <EmptyState v-else title="暂无分组数据" description="您还没有创建任何分组，点击上方按钮创建新分组">
             </EmptyState>
         </div>
 
@@ -225,7 +229,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { Data } from "./config";
 import BaseModal from "@/components/BaseModal.vue";
 import LinkCard from "../components/LinkCard.vue";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal.vue";
@@ -243,9 +246,12 @@ import { getIconColor, getActionButtonBg } from "@/utils/ColorSchemeProvider";
 import { useModal } from "@/composables/useModal";
 // 导入Toast通知系统
 import { useToast } from "@/composables/useToast";
-
+import { GroupingGetListsApi, GroupingDeleteByIDApi, GroupingUpdateApi, GroupingCreateApi } from '@/services/links'
 // 分组数据
-const groupData = ref(Data);
+// TODO: 需要替换为从 API 获取的真实数据
+const groupData = ref();
+// 添加加载状态
+const isLoading = ref(true);
 
 // 初始化Toast
 const toast = useToast();
@@ -263,7 +269,7 @@ const editGroupModal = useModal({
 
 // 使用模态框状态管理Hook - 删除确认模态框
 const deleteGroupModal = useModal({
-    id: 0,
+    id: '',
     title: ""
 });
 
@@ -331,34 +337,17 @@ const generateRandomNumber = (min: number, max: number) => {
 // 创建分组
 const createGroup = async () => {
     if (!newGroup.title) return;
-
     createGroupModal.startLoading();
-
     try {
-        // 模拟API请求
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        // 创建新分组对象
-        const newGroupData = {
-            id: Date.now(),
-            title: newGroup.title,
-            accountNo: 1126256272715284480,
-            gmtCreate: new Date().toISOString(),
-            gmtModified: new Date().toISOString(),
-        };
-
-        // 将新分组添加到数据中
-        groupData.value = [newGroupData, ...groupData.value];
-        console.log("分组数据:", groupData.value);
-
+        await GroupingCreateApi({ title: newGroup.title });
         // 关闭模态框
         closeCreateModal();
-
         // 重置表单
         createGroupModal.resetForm();
-
         // 使用Toast通知替换console.log
         toast.success("分组创建成功", { title: "操作成功" });
+        // 创建成功后刷新列表
+        await fetchGroupList();
     } catch (error) {
         console.error("创建分组失败:", error);
         // 显示错误通知
@@ -375,32 +364,16 @@ const updateGroup = async () => {
     editGroupModal.startLoading();
 
     try {
-        // 模拟API请求
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        // 更新分组数据
-        const index = groupData.value.findIndex(
-            (group) => group.id === editingGroup.id,
-        );
-
-        if (index !== -1) {
-            // 创建更新后的分组对象
-            const updatedGroup = {
-                ...groupData.value[index],
-                title: editingGroup.title,
-                gmtModified: new Date().toISOString(),
-            };
-
-            // 更新数据
-            groupData.value[index] = updatedGroup;
-            console.log("分组数据更新:", updatedGroup);
-        }
-
+        await GroupingUpdateApi({
+            id: editingGroup.id,
+            title: editingGroup.title
+        });
         // 关闭模态框
         closeEditModal();
-
         // 使用Toast通知替换console.log
         toast.success("分组更新成功", { title: "操作成功" });
+        // 更新成功后刷新列表
+        await fetchGroupList();
     } catch (error) {
         console.error("更新分组失败:", error);
         // 显示错误通知
@@ -413,33 +386,15 @@ const updateGroup = async () => {
 // 删除分组
 const deleteGroup = async () => {
     deleteGroupModal.startLoading();
-
     try {
-        // 构建请求参数 - 这里可能需要根据API要求调整
-        const params = {
-            id: deletingGroup.id,
-        };
-
-        console.log("删除分组参数:", params);
-
-        // 模拟API请求
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        // 从本地数据中移除该分组
-        const index = groupData.value.findIndex(
-            (group) => group.id === deletingGroup.id,
-        );
-
-        if (index !== -1) {
-            groupData.value.splice(index, 1);
-            console.log("分组删除成功:", deletingGroup);
-        }
-
+        if (!deletingGroup.id) return;
+        await GroupingDeleteByIDApi(deletingGroup.id);
         // 关闭模态框
         deleteGroupModal.close();
-
         // 使用Toast通知替换console.log
         toast.success("分组删除成功", { title: "操作成功" });
+        // 删除成功后刷新列表
+        await fetchGroupList();
     } catch (error) {
         console.error("删除分组失败:", error);
         // 显示错误通知
@@ -449,9 +404,20 @@ const deleteGroup = async () => {
     }
 };
 
-// 添加页面动画效果
-onMounted(() => {
-    // 只保留业务逻辑相关的初始化操作，移除动画初始化
-    // 原有的动画初始化已经被PageLayout组件接管
-});
+const fetchGroupList = async () => {
+    try {
+        isLoading.value = true;
+        const response = await GroupingGetListsApi()
+        groupData.value = response
+    } catch (error) {
+        console.error("获取分组列表失败:", error);
+        toast.error("获取分组列表失败", { title: "加载失败" });
+        // 设置空数组以避免渲染错误
+        groupData.value = [];
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+onMounted(() => fetchGroupList());
 </script>
