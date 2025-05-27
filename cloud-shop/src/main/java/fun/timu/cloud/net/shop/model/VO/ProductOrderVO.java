@@ -80,6 +80,7 @@ public class ProductOrderVO implements Serializable {
     /**
      * 用户id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long accountNo;
 
     /**

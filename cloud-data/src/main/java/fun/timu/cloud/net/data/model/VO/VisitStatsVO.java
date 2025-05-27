@@ -1,5 +1,7 @@
 package fun.timu.cloud.net.data.model.VO;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +36,7 @@ public class VisitStatsVO {
     /**
      * 租户id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long accountNo;
 
 

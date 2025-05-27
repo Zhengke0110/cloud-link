@@ -54,6 +54,7 @@ public class ShortLinkVO implements Serializable {
     /**
      * 账号唯一编号
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long accountNo;
 
     /**

@@ -1,5 +1,7 @@
 package fun.timu.cloud.net.shop.model.VO;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,9 +49,9 @@ public class PayInfoVO {
      */
     private Long orderPayTimeoutMills;
 
-
     /**
      * 用户标识
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long accountNo;
 }

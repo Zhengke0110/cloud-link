@@ -22,6 +22,7 @@ public class DomainVO implements Serializable {
     /**
      * 用户自己绑定的域名
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long accountNo;
 
     /**

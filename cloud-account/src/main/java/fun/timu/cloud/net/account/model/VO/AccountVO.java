@@ -3,6 +3,8 @@ package fun.timu.cloud.net.account.model.VO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,8 +14,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class AccountVO {
-
-
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long accountNo;
 
     /**

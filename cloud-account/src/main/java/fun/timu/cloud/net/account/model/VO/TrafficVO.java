@@ -36,6 +36,7 @@ public class TrafficVO implements Serializable {
     /**
      * 账号
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long accountNo;
 
     /**
