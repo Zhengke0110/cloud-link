@@ -123,6 +123,7 @@ const initData = async () => {
     try {
         loading.value = true
         const params = {
+            // TODO: [访问记录] 动态获取项目code，替换硬编码值
             code: "04jw1SM0",
             size: 20,
             page: 1

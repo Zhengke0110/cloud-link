@@ -149,7 +149,8 @@ const debouncedHandleDateChange = useDebounceFn((dateRange: { startTime: string,
 // 节流处理刷新操作 - 1秒内最多执行一次
 const throttledHandleRefresh = useThrottleFn(async (dateRange: { startTime: string, endTime: string }) => {
     const params = {
-        code: "04jw1SM0", // TODO: 替换为实际的项目code参数
+        // TODO: [趋势分析] 动态获取项目code，替换硬编码值
+        code: "04jw1SM0",
         type: "Day",
         startTime: dateRange.startTime,
         endTime: dateRange.endTime

@@ -218,7 +218,8 @@ const debouncedRefresh = useDebounceFn(async (dateRange: { startTime: string, en
 
     try {
         const params = {
-            code: "04jw1SM0", // TODO: 替换为实际的项目code参数
+            // TODO: [区域分析] 动态获取项目code，替换硬编码值
+            code: "04jw1SM0",
             startTime: dateRange.startTime,
             endTime: dateRange.endTime
         }
