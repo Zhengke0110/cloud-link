@@ -1093,9 +1093,9 @@
         "security": []
       }
     },
-    "/link-server/api/link/v1/update": {
+    "/link-server/api/link/v1/del": {
       "post": {
-        "summary": "更新短链",
+        "summary": "删除短链",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -1104,10 +1104,9 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ShortLinkUpdateRequest",
+                "$ref": "#/components/schemas/ShortLinkDelRequest",
                 "description": ""
-              },
-              "examples": {}
+              }
             }
           }
         },
@@ -1133,9 +1132,9 @@
         "security": []
       }
     },
-    "/link-server/api/link/v1/del": {
+    "/link-server/api/link/v1/update": {
       "post": {
-        "summary": "删除短链",
+        "summary": "更新短链",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -1144,7 +1143,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ShortLinkDelRequest",
+                "$ref": "#/components/schemas/ShortLinkUpdateRequest",
                 "description": ""
               }
             }
@@ -1345,6 +1344,162 @@
               "schema": {
                 "$ref": "#/components/schemas/QueryDeviceRequest",
                 "description": "包含查询设备访问分布所需信息的请求对象"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/link/v1/check": {
+      "get": {
+        "summary": "检查短链的有效性",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "shortLinkCode",
+            "in": "query",
+            "description": "短链代码，用于解析短链信息",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/link/v1/add": {
+      "post": {
+        "summary": "创建短链接的控制器方法",
+        "deprecated": false,
+        "description": "该方法接收一个HTTP POST请求，用于添加新的短链接信息",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShortLinkAddRequest",
+                "description": "包含短链接相关数据的请求对象，由请求体自动转换而来"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/link/v1/page": {
+      "post": {
+        "summary": "根据组ID分页查询短链接信息",
+        "deprecated": false,
+        "description": "此方法使用@RequestMapping注解来映射HTTP请求到此方法\n请求体应包含ShortLinkPageRequest对象，其中包含分页查询所需的信息",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShortLinkPageRequest",
+                "description": "ShortLinkPageRequest对象，包含分页查询参数"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/link/v1/del": {
+      "post": {
+        "summary": "删除短链",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShortLinkDelRequest",
+                "description": ""
               }
             }
           }
@@ -1723,11 +1878,6 @@
       "ShortLinkUpdateRequest": {
         "type": "object",
         "properties": {
-          "groupId": {
-            "type": "integer",
-            "description": "组",
-            "format": "int64"
-          },
           "code": {
             "type": "string",
             "description": "短链码"

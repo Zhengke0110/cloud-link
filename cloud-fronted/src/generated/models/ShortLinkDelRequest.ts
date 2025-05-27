@@ -6,7 +6,7 @@ export type ShortLinkDelRequest = {
     /**
      * 组
      */
-    groupId?: number;
+    groupId?: string;
     /**
      * 短链码
      */

@@ -78,7 +78,6 @@ public class ShortLinkManagerImpl implements ShortLinkManager {
                 .eq("code", shortLinkDO.getCode()) // 根据短链接代码进行匹配
                 .eq("del", 0) // 确保短链接未被删除
                 .eq("account_no", shortLinkDO.getAccountNo()) // 根据账户编号进行匹配
-
                 .set("title", shortLinkDO.getTitle()) // 更新标题
                 .set("domain", shortLinkDO.getDomain())); // 更新域名
 

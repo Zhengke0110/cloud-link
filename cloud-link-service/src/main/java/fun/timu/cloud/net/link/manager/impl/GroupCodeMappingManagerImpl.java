@@ -171,9 +171,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
         int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
                 .eq("code", groupCodeMappingDO.getCode())
                 .eq("account_no", groupCodeMappingDO.getAccountNo())
-                .eq("group_id", groupCodeMappingDO.getGroupId())
                 .eq("del", 0)
-
                 .set("title", groupCodeMappingDO.getTitle())
                 .set("domain", groupCodeMappingDO.getDomain())
         );

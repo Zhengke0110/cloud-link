@@ -6,7 +6,7 @@ export type ShortLinkPageRequest = {
     /**
      * 组
      */
-    groupId?: number;
+    groupId?: string;
     /**
      * 第几页
      */

@@ -4,10 +4,6 @@
 /* eslint-disable */
 export type ShortLinkUpdateRequest = {
     /**
-     * 组
-     */
-    groupId?: number;
-    /**
      * 短链码
      */
     code?: string;

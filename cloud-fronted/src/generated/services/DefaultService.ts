@@ -548,22 +548,6 @@ export class DefaultService {
         });
     }
     /**
-     * 更新短链
-     * @param requestBody
-     * @returns JsonData
-     * @throws ApiError
-     */
-    public static postLinkServerApiLinkV1Update(
-        requestBody?: ShortLinkUpdateRequest,
-    ): CancelablePromise<JsonData> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/link-server/api/link/v1/update',
-            body: requestBody,
-            mediaType: 'application/json',
-        });
-    }
-    /**
      * 删除短链
      * @param requestBody
      * @returns JsonData
@@ -575,6 +559,22 @@ export class DefaultService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/link-server/api/link/v1/del',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * 更新短链
+     * @param requestBody
+     * @returns JsonData
+     * @throws ApiError
+     */
+    public static postLinkServerApiLinkV1Update(
+        requestBody?: ShortLinkUpdateRequest,
+    ): CancelablePromise<JsonData> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/link-server/api/link/v1/update',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -670,6 +670,74 @@ export class DefaultService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/data-server/api/visitStats/v1/deviceInfo',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * 检查短链的有效性
+     * @param shortLinkCode 短链代码，用于解析短链信息
+     * @returns JsonData
+     * @throws ApiError
+     */
+    public static getApiLinkV1Check(
+        shortLinkCode: string,
+    ): CancelablePromise<JsonData> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/link/v1/check',
+            query: {
+                'shortLinkCode': shortLinkCode,
+            },
+        });
+    }
+    /**
+     * 创建短链接的控制器方法
+     * 该方法接收一个HTTP POST请求，用于添加新的短链接信息
+     * @param requestBody
+     * @returns JsonData
+     * @throws ApiError
+     */
+    public static postApiLinkV1Add(
+        requestBody?: ShortLinkAddRequest,
+    ): CancelablePromise<JsonData> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/link/v1/add',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * 根据组ID分页查询短链接信息
+     * 此方法使用@RequestMapping注解来映射HTTP请求到此方法
+     * 请求体应包含ShortLinkPageRequest对象，其中包含分页查询所需的信息
+     * @param requestBody
+     * @returns JsonData
+     * @throws ApiError
+     */
+    public static postApiLinkV1Page(
+        requestBody?: ShortLinkPageRequest,
+    ): CancelablePromise<JsonData> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/link/v1/page',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * 删除短链
+     * @param requestBody
+     * @returns JsonData
+     * @throws ApiError
+     */
+    public static postApiLinkV1Del(
+        requestBody?: ShortLinkDelRequest,
+    ): CancelablePromise<JsonData> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/link/v1/del',
             body: requestBody,
             mediaType: 'application/json',
         });
