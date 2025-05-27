@@ -166,7 +166,7 @@ export const LinksCheckApi = async (url: string) => {
  * @param data.expired 链接的过期时间，超过该时间链接将无法访问
  * @throws {Error} 如果创建链接失败，抛出一个错误
  */
-export const LinksCreateApi = async (data: {
+export const LinksCreateApi = async (form: {
     groupId: string;
     title: string;
     originalUrl: string;
@@ -176,10 +176,11 @@ export const LinksCreateApi = async (data: {
 }) => {
     try {
         // 调用服务端接口创建新的链接
-        const { code, msg } = await DefaultService.postLinkServerApiLinkV1Add(data);
+        const { code, data, msg } = await DefaultService.postLinkServerApiLinkV1Add(form);
 
         // 检查响应码，如果不为0则表示创建失败，抛出错误
         if (code !== 0) throw new Error(msg || '创建链接失败');
+        return data;
     } catch (error) {
         // 捕获错误，并重新抛出一个包含错误信息的错误对象
         throw new Error(`创建链接失败: ${(error as Error).message}`);
@@ -280,5 +281,19 @@ export const LinkDeleteApi = async (form: { groupId: string, code: string }) => 
     } catch (error) {
         // 捕获错误，并重新抛出一个包含错误信息的错误对象
         throw new Error(`删除链接失败: ${(error as Error).message}`);
+    }
+}
+
+export const ListResultTaskApi = async (taskID: string) => {
+    try {
+       
+        const { code, data, msg } = await DefaultService.getLinkServerApiLinkV1QueryTask(taskID);
+        // 检查响应码，如果不为0则表示获取失败，抛出错误
+        if (code !== 0) throw new Error(msg || '获取任务结果失败');
+        // 返回任务结果数据
+        return data;
+    } catch (error) {
+        // 捕获错误，并重新抛出一个包含错误信息的错误对象
+        throw new Error(`获取任务结果失败: ${(error as Error).message}`);
     }
 }

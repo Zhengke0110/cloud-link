@@ -1,5 +1,7 @@
 package fun.timu.cloud.net.link.model.DTO;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +18,7 @@ public class TaskStatusDTO {
     /**
      * 组
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long groupId;
 
     /**
@@ -47,6 +50,7 @@ public class TaskStatusDTO {
     /**
      * 账号唯一编号
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long accountNo;
 
     /**

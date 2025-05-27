@@ -141,8 +141,10 @@
                                     <InfoField label="短链接" valueClass="text-indigo-600" borderClass="border-indigo-100"
                                         bgClass="bg-indigo-50">
                                         <div class="flex items-center justify-between w-full">
-                                            <span>{{ shortLinkResult.shortUrl }}</span>
-                                            <button @click="copyToClipboard(shortLinkResult.shortUrl)"
+                                            <span>{{ `https://${shortLinkResult.domain}/${shortLinkResult.code}`
+                                                }}</span>
+                                            <button
+                                                @click="copyToClipboard(`https://${shortLinkResult.domain}/${shortLinkResult.code}`)"
                                                 class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-3 rounded-lg transition-colors duration-300 text-sm touch-manipulation min-h-[36px]">
                                                 {{ copied ? '已复制' : '复制' }}
                                             </button>
@@ -152,24 +154,37 @@
                                     <!-- 原始链接 - 使用InfoField替换 -->
                                     <InfoField label="原始链接" :value="shortLinkResult.originalUrl" breakAll />
 
+                                    <!-- 链接标题 -->
+                                    <InfoField label="链接标题" :value="shortLinkResult.title" />
+
                                     <!-- 链接信息 -->
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                                        <!-- 创建时间 - 使用InfoField替换 -->
-                                        <InfoField label="创建时间" :value="formatDateTime(shortLinkResult.createTime)"
+                                        <!-- 创建时间 -->
+                                        <InfoField label="创建时间"
+                                            :value="shortLinkResult.gmtCreate ? formatDateTime(shortLinkResult.gmtCreate) : '暂无'"
                                             icon="clock" />
 
-                                        <!-- 过期时间 - 使用InfoField替换 -->
+                                        <!-- 过期时间 -->
                                         <InfoField label="过期时间"
                                             :value="shortLinkResult.expired ? formatDateTime(shortLinkResult.expired) : '永不过期'"
                                             icon="calendar" />
                                     </div>
 
+                                    <!-- 状态信息 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                                        <!-- 状态 -->
+                                        <InfoField label="状态" :value="shortLinkResult.status" />
+
+                                        <!-- 链接状态 -->
+                                        <InfoField label="链接状态" :value="shortLinkResult.state" />
+                                    </div>
+
                                     <!-- 二维码 -->
-                                    <div v-if="shortLinkResult.qrCode" class="text-center">
+                                    <div class="text-center">
                                         <span class="text-xs font-medium text-gray-500 block mb-2">链接二维码</span>
                                         <div class="inline-block bg-white p-2 border border-gray-200 rounded-lg">
-                                            <img :src="shortLinkResult.qrCode" alt="QR Code"
-                                                class="h-24 w-24 md:h-32 md:w-32">
+                                            <img :src="`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`https://${shortLinkResult.domain}/${shortLinkResult.code}`)}`"
+                                                alt="QR Code" class="h-24 w-24 md:h-32 md:w-32">
                                         </div>
                                     </div>
                                 </div>
@@ -242,17 +257,16 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
-import { GroupData } from './config'; // 引入GroupData
 import PageLayout from '@/components/PageLayout.vue'; // 导入PageLayout组件
 import GsapAnimation from '@/components/GsapAnimation.vue'; // 导入GsapAnimation组件
 import FormField from '@/components/Form/FormField.vue'; // 导入FormField组件
 import InfoField from '@/components/Form/InfoField.vue'; // 导入InfoField组件
 import FormActions from '@/components/Form/FormActions.vue'; // 导入FormActions组件
-import { useShortLinkForm } from '@/composables/useShortLinkForm'; // 导入组合式函数
+import { useShortLinkForm } from './useShortLinkForm'; // 导入组合式函数
 import { GroupingGetListsApi } from '@/services/links'
 
 // 引入分组数据
-const groupData = ref(GroupData);
+const groupData = ref();
 
 // 获取默认的分组ID
 const defaultGroupId = ref('')

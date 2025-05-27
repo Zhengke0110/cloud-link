@@ -1,6 +1,6 @@
 import { ref, reactive, computed, watch } from 'vue';
 import { useClipboard } from '@vueuse/core';
-import { LinksCreateApi } from '@/services/links'
+import { LinksCreateApi, ListResultTaskApi } from '@/services/links'
 import dayjs from 'dayjs';
 
 interface LinkForm {
@@ -13,13 +13,19 @@ interface LinkForm {
 }
 
 interface ShortLinkResult {
-  id: number;
-  shortUrl: string;
-  originalUrl: string;
+  status: string;
+  groupId: number;
   title: string;
-  createTime: string;
+  originalUrl: string;
+  domain: string;
+  code: string;
   expired: string | null;
-  qrCode: string;
+  accountNo: number;
+  gmtCreate: string | null;
+  gmtModified: string | null;
+  del: number;
+  state: string;
+  linkType: string | null;
 }
 
 export function useShortLinkForm(initialGroupId: string = '') {
@@ -32,7 +38,7 @@ export function useShortLinkForm(initialGroupId: string = '') {
     title: '',
     expired: '',
     groupId: initialGroupId,
-    domainId: '',
+    domainId: '1',
     domainType: 'OFFICIAL'
   });
 
@@ -188,7 +194,15 @@ export function useShortLinkForm(initialGroupId: string = '') {
       // 控制台日志
       console.log('准备发送的数据:', requestData);
 
-      await LinksCreateApi(requestData);
+      const taskID = await LinksCreateApi(requestData);
+      setTimeout(async () => {
+        // 获取任务结果
+        const res = await ListResultTaskApi(taskID)
+        console.log('创建短链接结果:', res);
+
+        // 直接使用API返回的数据，不添加额外字段
+        shortLinkResult.value = res;
+      }, 2000)
     } catch (error) {
       console.error('创建短链接失败:', error);
       errorMessage.value = '创建短链接失败，请稍后再试';
@@ -211,12 +225,14 @@ export function useShortLinkForm(initialGroupId: string = '') {
   const shareLink = () => {
     if (!shortLinkResult.value) return false;
 
+    const shortUrl = `https://${shortLinkResult.value.domain}/${shortLinkResult.value.code}`;
+
     // 检查Web分享API是否可用
     if (navigator.share) {
       navigator.share({
         title: shortLinkResult.value.title || '分享短链接',
         text: '我创建了一个短链接，快来看看吧！',
-        url: shortLinkResult.value.shortUrl
+        url: shortUrl
       })
         .catch((error) => {
           console.error('分享失败:', error);
@@ -224,7 +240,7 @@ export function useShortLinkForm(initialGroupId: string = '') {
       return true;
     } else {
       // 不支持Web分享API时，回退到复制链接
-      copyToClipboard(shortLinkResult.value.shortUrl);
+      copyToClipboard(shortUrl);
       return false;
     }
   };
