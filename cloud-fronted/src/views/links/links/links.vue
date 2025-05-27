@@ -2,19 +2,31 @@
     <PageLayout tag="短链接管理" title="管理您的短链接" description="查看、编辑和管理您的所有短链接">
         <!-- 分组选择器 -->
         <div class="mx-auto mb-8 max-w-6xl delay-300">
-            <div class="rounded-xl bg-white p-4 shadow-md">
+            <div class="rounded-xl bg-white p-6 shadow-md border border-gray-100">
                 <div class="mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">选择分组</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                        </svg>
+                        选择分组
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1">点击分组标签查看对应的短链接</p>
                 </div>
 
                 <div class="flex flex-wrap gap-3">
                     <button v-for="group in groupData" :key="group.id" @click="selectGroup(group.id)"
-                        class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all duration-300" :class="selectedGroupId === group.id
+                        class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm transition-all duration-300 shadow-sm hover:shadow-md" 
+                        :class="selectedGroupId === group.id
                             ? getSelectedButtonStyle(group.id)
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
                             ">
-                        <span class="h-2 w-2 rounded-full" :class="getColorDot(getGroupIndex(group.id))"></span>
+                        <span class="h-2.5 w-2.5 rounded-full" :class="getColorDot(getGroupIndex(group.id))"></span>
                         {{ group.title }}
+                        <span v-if="selectedGroupId === group.id" class="ml-1">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </span>
                     </button>
                 </div>
             </div>
@@ -25,7 +37,7 @@
             <!-- 创建链接按钮 -->
             <div class="mb-6 flex justify-end">
                 <button
-                    class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-5 py-2.5 font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-indigo-200">
+                    class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-6 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-indigo-200 hover:scale-105">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
@@ -144,15 +156,15 @@
             </EmptyState>
 
             <!-- 分页区域 -->
-            <div class="mt-6 flex justify-center">
-                <nav class="flex items-center space-x-1">
+            <div class="mt-8 flex justify-center">
+                <nav class="flex items-center space-x-2">
                     <button @click="prevPage" :disabled="currentPage <= 1" :class="[
-                        'rounded-md border p-2',
+                        'rounded-lg border p-2.5 transition-all duration-200',
                         currentPage <= 1
                             ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
-                            : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50',
+                            : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50 hover:border-gray-400 shadow-sm hover:shadow',
                     ]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                                 clip-rule="evenodd" />
@@ -203,12 +215,12 @@
                     </template>
 
                     <button @click="nextPage" :disabled="currentPage >= totalPages" :class="[
-                        'rounded-md border p-2',
+                        'rounded-lg border p-2.5 transition-all duration-200',
                         currentPage >= totalPages
                             ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
-                            : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50',
+                            : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50 hover:border-gray-400 shadow-sm hover:shadow',
                     ]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                 clip-rule="evenodd" />
@@ -218,16 +230,21 @@
             </div>
 
             <!-- 页面大小选择器 -->
-            <div class="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600">
+            <div class="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-lg p-3">
+                <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
                 <span>每页显示</span>
                 <select v-model="pageSize" @change="handlePageSizeChange"
-                    class="rounded-md border border-gray-300 bg-white p-1">
+                    class="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                     <option :value="10">10</option>
                     <option :value="20">20</option>
                     <option :value="50">50</option>
                     <option :value="100">100</option>
                 </select>
-                <span>条，总计 {{ totalCount }} 条数据</span>
+                <span>条，总计</span>
+                <span class="font-semibold text-blue-600">{{ totalCount.toLocaleString() }}</span>
+                <span>条数据</span>
             </div>
         </div>
     </PageLayout>

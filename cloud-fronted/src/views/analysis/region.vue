@@ -8,12 +8,50 @@
 
         <!-- 图表容器 -->
         <div class="mx-auto max-w-6xl">
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
                 <!-- 省份访问分布图表 -->
-                <ProvinceChart :data="filteredData" :loading="loading" :date-range="currentDateRange" />
+                <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6 transition-all duration-300 hover:shadow-lg">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 flex items-center">
+                                <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/>
+                                </svg>
+                                省份分布
+                            </h3>
+                            <p class="text-sm text-gray-500 mt-1">各省份访问量统计</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sm text-gray-500 bg-blue-50 px-3 py-1.5 rounded-lg">
+                            <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/>
+                            </svg>
+                            <span class="text-blue-700 font-medium">区域图</span>
+                        </div>
+                    </div>
+                    <ProvinceChart :data="filteredData" :loading="loading" :date-range="currentDateRange" />
+                </div>
 
                 <!-- 城市访问TOP10图表 -->
-                <CityChart :data="filteredData" :loading="loading" />
+                <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6 transition-all duration-300 hover:shadow-lg">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 flex items-center">
+                                <svg class="w-5 h-5 text-emerald-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                                </svg>
+                                城市TOP10
+                            </h3>
+                            <p class="text-sm text-gray-500 mt-1">访问量前十城市</p>
+                        </div>
+                        <div class="flex items-center space-x-2 text-sm text-gray-500 bg-emerald-50 px-3 py-1.5 rounded-lg">
+                            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                            </svg>
+                            <span class="text-emerald-700 font-medium">排行榜</span>
+                        </div>
+                    </div>
+                    <CityChart :data="filteredData" :loading="loading" />
+                </div>
             </div>
         </div>
     </PageLayout>
