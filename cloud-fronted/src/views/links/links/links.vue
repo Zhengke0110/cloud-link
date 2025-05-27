@@ -607,7 +607,7 @@ const updateLink = async () => {
         const params = {
             code: String(editingLink.code),
             title: String(editingLink.title),
-            domainId: Number(editingLink.domainId),
+            domainId: String(editingLink.domainId),
             domainType: String(editingLink.domainType),
         };
         await LinkUpdateApi(params);

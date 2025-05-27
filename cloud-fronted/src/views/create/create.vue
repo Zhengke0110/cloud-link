@@ -241,7 +241,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { GroupData } from './config'; // 引入GroupData
 import PageLayout from '@/components/PageLayout.vue'; // 导入PageLayout组件
 import GsapAnimation from '@/components/GsapAnimation.vue'; // 导入GsapAnimation组件
@@ -249,25 +249,27 @@ import FormField from '@/components/Form/FormField.vue'; // 导入FormField组�
 import InfoField from '@/components/Form/InfoField.vue'; // 导入InfoField组件
 import FormActions from '@/components/Form/FormActions.vue'; // 导入FormActions组件
 import { useShortLinkForm } from '@/composables/useShortLinkForm'; // 导入组合式函数
+import { GroupingGetListsApi } from '@/services/links'
 
 // 引入分组数据
 const groupData = ref(GroupData);
 
 // 获取默认的分组ID
-const defaultGroupId = groupData.value.length > 0 ? groupData.value[0].id : 0;
+const defaultGroupId = ref('')
 
-// TODO: 在这里添加API调用以获取分组数据，替代静态导入的GroupData
-// 例如: 
-// const fetchGroups = async () => {
-//   try {
-//     const response = await api.getGroups();
-//     groupData.value = response.data;
-//   } catch (error) {
-//     console.error('获取分组数据失败:', error);
-//   }
-// };
-// onMounted(fetchGroups);
+// TODO: 获取分组列表的网络请求 - 组件挂载时获取用户的分组数据
+const fetchGroups = async () => {
+    try {
+        const response = await GroupingGetListsApi()
+        console.log('获取分组数据:', response);
+        groupData.value = response;
+        defaultGroupId.value = response.length > 0 ? response[0].id : 0; // 设置默认分组ID
+    } catch (error) {
+        console.error('获取分组数据失败:', error);
+    }
+};
 
+// TODO: 创建短链接的网络请求将在 useShortLinkForm 的 createShortLink 方法中发送
 // 使用组合式函数
 const {
     linkForm,
@@ -284,21 +286,25 @@ const {
     copied,
     validateUrl,
     setPresetExpiry,
-    createShortLink,
+    createShortLink, // TODO: 这个方法内部会发送创建短链接的网络请求
     copyToClipboard,
     shareLink,
     resetForm,
     formatDateTime
-} = useShortLinkForm(defaultGroupId);
+} = useShortLinkForm(defaultGroupId.value);
 
-// TODO: 在这里添加必要的生命周期钩子以获取其他初始数据
-// 例如加载域名列表、用户配置等
-// onMounted(async () => {
-//   await Promise.all([
-//     fetchDomains(), 
-//     fetchUserPreferences()
-//   ]);
-// });
+// 监听默认分组ID变化，更新表单
+watch(defaultGroupId, (newGroupId) => {
+    if (newGroupId !== '') {
+        linkForm.groupId = newGroupId;
+    }
+});
+
+onMounted(() => {
+    fetchGroups()
+    // 设置默认过期时间为1周后
+    setPresetExpiry(7)
+});
 </script>
 
 <style scoped>

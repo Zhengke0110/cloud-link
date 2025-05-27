@@ -263,7 +263,7 @@ const createGroupModal = useModal({
 
 // 使用模态框状态管理Hook - 编辑分组模态框
 const editGroupModal = useModal({
-    id: 0,
+    id: "",
     title: ""
 });
 

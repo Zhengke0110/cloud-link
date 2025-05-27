@@ -117,7 +117,7 @@ export const GroupingCreateApi = async (data: { title: string; }) => {
  * @param data 包含分组ID和新标题的对象
  * @throws {Error} 当更新失败时抛出的错误
  */
-export const GroupingUpdateApi = async (data: { id: number, title: string }) => {
+export const GroupingUpdateApi = async (data: { id: string, title: string }) => {
     try {
         // 调用服务端接口更新指定ID的分组信息
         const { code, msg } = await DefaultService.putLinkServerApiGroupV1Update(data);
@@ -167,10 +167,10 @@ export const LinksCheckApi = async (url: string) => {
  * @throws {Error} 如果创建链接失败，抛出一个错误
  */
 export const LinksCreateApi = async (data: {
-    groupId: number;
+    groupId: string;
     title: string;
     originalUrl: string;
-    domainId: number;
+    domainId: string;
     domainType: string;
     expired: string;
 }) => {
@@ -241,7 +241,7 @@ export const LinkUpdateApi = async (form: {
     /**
      * 域名id
      */
-    domainId?: number;
+    domainId?: string;
     /**
      * 域名类型
      */
