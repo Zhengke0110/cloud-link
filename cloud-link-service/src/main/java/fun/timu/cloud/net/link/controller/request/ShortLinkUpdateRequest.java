@@ -4,18 +4,10 @@ import lombok.Data;
 
 @Data
 public class ShortLinkUpdateRequest {
-
-
-    /**
-     * 组
-     */
-    private Long groupId;
-
     /**
      * 短链码
      */
     private String code;
-
 
     /**
      * 标题

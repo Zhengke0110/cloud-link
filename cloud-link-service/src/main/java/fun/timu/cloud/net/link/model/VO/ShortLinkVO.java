@@ -19,6 +19,7 @@ public class ShortLinkVO implements Serializable {
     /**
      * 组
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long groupId;
 
     /**

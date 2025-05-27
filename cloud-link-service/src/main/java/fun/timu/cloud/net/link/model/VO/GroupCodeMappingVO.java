@@ -19,6 +19,7 @@ public class GroupCodeMappingVO implements Serializable {
     /**
      * 组
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long groupId;
 
     /**
