@@ -14,7 +14,7 @@ export type ShortLinkUpdateRequest = {
     /**
      * 域名id
      */
-    domainId?: number;
+    domainId?: string;
     /**
      * 域名类型
      */

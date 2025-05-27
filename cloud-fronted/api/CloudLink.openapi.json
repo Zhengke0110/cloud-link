@@ -1171,6 +1171,45 @@
         "security": []
       }
     },
+    "/link-server/api/link/v1/query-task/{taskId}": {
+      "get": {
+        "summary": "查询短链创建任务状态",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "description": "要查询的任务ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonData",
+                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
+                },
+                "example": {
+                  "code": 0,
+                  "data": {},
+                  "msg": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
     "/data-server/api/visitStats/v1/pageRecord": {
       "post": {
         "summary": "处理页面访问记录的请求",
@@ -1369,162 +1408,6 @@
         },
         "security": []
       }
-    },
-    "/api/link/v1/check": {
-      "get": {
-        "summary": "检查短链的有效性",
-        "deprecated": false,
-        "description": "",
-        "tags": [],
-        "parameters": [
-          {
-            "name": "shortLinkCode",
-            "in": "query",
-            "description": "短链代码，用于解析短链信息",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonData",
-                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
-                },
-                "example": {
-                  "code": 0,
-                  "data": {},
-                  "msg": ""
-                }
-              }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/api/link/v1/add": {
-      "post": {
-        "summary": "创建短链接的控制器方法",
-        "deprecated": false,
-        "description": "该方法接收一个HTTP POST请求，用于添加新的短链接信息",
-        "tags": [],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ShortLinkAddRequest",
-                "description": "包含短链接相关数据的请求对象，由请求体自动转换而来"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonData",
-                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
-                },
-                "example": {
-                  "code": 0,
-                  "data": {},
-                  "msg": ""
-                }
-              }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/api/link/v1/page": {
-      "post": {
-        "summary": "根据组ID分页查询短链接信息",
-        "deprecated": false,
-        "description": "此方法使用@RequestMapping注解来映射HTTP请求到此方法\n请求体应包含ShortLinkPageRequest对象，其中包含分页查询所需的信息",
-        "tags": [],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ShortLinkPageRequest",
-                "description": "ShortLinkPageRequest对象，包含分页查询参数"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonData",
-                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
-                },
-                "example": {
-                  "code": 0,
-                  "data": {},
-                  "msg": ""
-                }
-              }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/api/link/v1/del": {
-      "post": {
-        "summary": "删除短链",
-        "deprecated": false,
-        "description": "",
-        "tags": [],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ShortLinkDelRequest",
-                "description": ""
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonData",
-                  "description": "返回一个JsonData对象，包含处理结果\n 目前仅作为成功处理的标志返回，实际使用时可能包含更详细的信息"
-                },
-                "example": {
-                  "code": 0,
-                  "data": {},
-                  "msg": ""
-                }
-              }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
     }
   },
   "components": {
@@ -1619,9 +1502,8 @@
         "type": "object",
         "properties": {
           "groupId": {
-            "type": "integer",
-            "description": "组",
-            "format": "int64"
+            "type": "string",
+            "description": "组"
           },
           "title": {
             "type": "string",
@@ -1632,9 +1514,8 @@
             "description": "原生url"
           },
           "domainId": {
-            "type": "integer",
-            "description": "域名id",
-            "format": "int64"
+            "type": "string",
+            "description": "域名id"
           },
           "domainType": {
             "type": "string",
@@ -1650,9 +1531,8 @@
         "type": "object",
         "properties": {
           "productId": {
-            "type": "integer",
-            "description": "商品id",
-            "format": "int64"
+            "type": "string",
+            "description": "商品id"
           },
           "buyNum": {
             "type": "integer",
@@ -1721,9 +1601,8 @@
         "type": "object",
         "properties": {
           "accountNo": {
-            "type": "integer",
-            "description": "账号",
-            "format": "int64"
+            "type": "string",
+            "description": "账号"
           },
           "bizId": {
             "type": "string",
@@ -1765,9 +1644,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "description": "组id",
-            "format": "int64"
+            "type": "string",
+            "description": "组id"
           },
           "title": {
             "type": "string",
@@ -1779,9 +1657,8 @@
         "type": "object",
         "properties": {
           "groupId": {
-            "type": "integer",
-            "description": "组",
-            "format": "int64"
+            "type": "string",
+            "description": "组"
           },
           "page": {
             "type": "integer",
@@ -1827,9 +1704,8 @@
         "type": "object",
         "properties": {
           "groupId": {
-            "type": "integer",
-            "description": "组",
-            "format": "int64"
+            "type": "string",
+            "description": "组"
           },
           "code": {
             "type": "string",
@@ -1887,9 +1763,8 @@
             "description": "标题"
           },
           "domainId": {
-            "type": "integer",
-            "description": "域名id",
-            "format": "int64"
+            "type": "string",
+            "description": "域名id"
           },
           "domainType": {
             "type": "string",

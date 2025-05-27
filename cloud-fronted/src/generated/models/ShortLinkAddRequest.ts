@@ -6,7 +6,7 @@ export type ShortLinkAddRequest = {
     /**
      * 组
      */
-    groupId?: number;
+    groupId?: string;
     /**
      * 短链标题
      */
@@ -18,7 +18,7 @@ export type ShortLinkAddRequest = {
     /**
      * 域名id
      */
-    domainId?: number;
+    domainId?: string;
     /**
      * 域名类型
      */

@@ -6,7 +6,7 @@ export type LinkGroupUpdateRequest = {
     /**
      * 组id
      */
-    id?: number;
+    id?: string;
     /**
      * 组名
      */

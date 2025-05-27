@@ -6,7 +6,7 @@ export type ConfirmOrderRequest = {
     /**
      * 商品id
      */
-    productId?: number;
+    productId?: string;
     /**
      * 购买数量
      */

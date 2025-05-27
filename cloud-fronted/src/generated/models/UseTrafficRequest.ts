@@ -6,7 +6,7 @@ export type UseTrafficRequest = {
     /**
      * 账号
      */
-    accountNo?: number;
+    accountNo?: string;
     /**
      * 业务id, 短链码
      */
