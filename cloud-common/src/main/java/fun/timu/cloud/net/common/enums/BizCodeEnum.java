@@ -132,7 +132,9 @@ public enum BizCodeEnum {
     /**
      * 数据查询超过最大跨度
      */
-    DATA_OUT_OF_LIMIT_DATE(400002, "日期查询超过最大跨度");
+    DATA_OUT_OF_LIMIT_DATE(400002, "日期查询超过最大跨度"),
+    TASK_NOT_EXIST(400003, "任务不存在"),
+    TASK_STATUS_PARSE_ERROR(400004, "任务状态解析错误");
 
     @Getter
     private String message;

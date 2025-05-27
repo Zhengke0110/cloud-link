@@ -84,4 +84,12 @@ public interface ShortLinkService extends IService<ShortLink> {
      * @return
      */
     boolean handleDelShortLink(EventMessage eventMessage);
+
+    /**
+     * 查询任务状态
+     *
+     * @param taskId 任务ID
+     * @return 返回任务状态的JsonData对象
+     */
+    JsonData queryTaskStatus(String taskId);
 }

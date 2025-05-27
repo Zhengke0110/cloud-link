@@ -130,5 +130,14 @@ public class ShortLinkController {
         return jsonData;
     }
 
-
+    /**
+     * 查询短链创建任务状态
+     *
+     * @param taskId 要查询的任务ID
+     * @return 返回任务当前的状态（PENDING / SUCCESS / FAILED）
+     */
+    @GetMapping("query-task/{taskId}")
+    public JsonData queryTaskStatus(@PathVariable String taskId) {
+        return shortLinkService.queryTaskStatus(taskId);
+    }
 }

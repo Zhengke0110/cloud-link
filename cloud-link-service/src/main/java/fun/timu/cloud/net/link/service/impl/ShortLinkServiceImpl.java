@@ -25,6 +25,7 @@ import fun.timu.cloud.net.link.model.DO.Domain;
 import fun.timu.cloud.net.link.model.DO.GroupCodeMapping;
 import fun.timu.cloud.net.link.model.DO.LinkGroup;
 import fun.timu.cloud.net.link.model.DO.ShortLink;
+import fun.timu.cloud.net.link.model.DTO.TaskStatusDTO;
 import fun.timu.cloud.net.link.model.VO.ShortLinkVO;
 import fun.timu.cloud.net.link.service.DomainService;
 import fun.timu.cloud.net.link.service.ShortLinkService;
@@ -139,19 +140,28 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             String newOriginalUrl = CommonUtil.addUrlPrefix(request.getOriginalUrl());
             request.setOriginalUrl(newOriginalUrl);
 
+            // 生成唯一任务ID
+            String taskId = IDUtil.geneSnowFlakeID().toString();
+
             // 构建事件消息对象，包含账户编号、请求内容、消息ID和事件类型
-            EventMessage eventMessage = EventMessage.builder()
-                    .accountNo(accountNo)
-                    .content(JsonUtil.obj2Json(request)) // 将请求对象序列化为JSON字符串
-                    .messageId(IDUtil.geneSnowFlakeID().toString()) // 生成唯一的消息ID
+            EventMessage eventMessage = EventMessage.builder().accountNo(accountNo).content(JsonUtil.obj2Json(request)) // 将请求对象序列化为JSON字符串
+                    .messageId(taskId) // 生成唯一的消息ID
                     .eventMessageType(EventMessageType.SHORT_LINK_ADD.name()) // 设置事件类型为短链接新增
                     .build();
 
             // 将事件消息发送到RabbitMQ，通过指定的交换机和路由键进行异步处理
             rabbitTemplate.convertAndSend(rabbitMQConfig.getShortLinkEventExchange(), rabbitMQConfig.getShortLinkAddRoutingKey(), eventMessage);
 
-            // 返回操作成功的结果
-            return JsonData.buildSuccess();
+            // 存储任务状态为 pending
+            String taskStatusKey = "task:sÏtatus:" + taskId;
+
+            // 初始化任务状态对象
+            TaskStatusDTO initialStatus = new TaskStatusDTO();
+            initialStatus.setStatus("PENDING");
+            initialStatus.setCode(null); // 还未生成
+
+            redisTemplate.opsForValue().set(taskStatusKey, initialStatus, 5, TimeUnit.MINUTES);
+            return JsonData.buildSuccess(taskId); // 返回任务ID
         } else {
             // 如果流量不足，返回操作失败的结果，并附带相应的错误码
             return JsonData.buildResult(BizCodeEnum.TRAFFIC_REDUCE_FAIL);
@@ -253,6 +263,46 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     }
 
     /**
+     * 查询任务状态
+     * 通过taskId从Redis中获取任务的状态信息
+     * 如果任务状态信息不存在，则返回任务不存在或已过期的错误信息
+     * 如果任务状态信息存在，则返回任务状态信息
+     *
+     * @param taskId 任务ID，用于标识特定的任务
+     * @return JsonData 包含任务状态信息或错误信息的JSON数据
+     */
+    @Override
+    public JsonData queryTaskStatus(String taskId) {
+        // 构造任务状态的Redis键
+        String taskStatusKey = "task:status:" + taskId;
+
+        // 从 Redis 获取值
+        Object statusObj = redisTemplate.opsForValue().get(taskStatusKey);
+
+        // 检查任务状态信息是否存在
+        if (statusObj == null) {
+            // 如果不存在，返回任务不存在或已过期的错误信息
+            return JsonData.buildResult(BizCodeEnum.TASK_NOT_EXIST);
+        }
+
+        // 确保是 String 类型
+        if (!(statusObj instanceof String)) {
+            // 如果数据类型不是字符串，记录错误日志并返回错误信息
+            logger.error("Redis 中的任务状态数据不是字符串类型：{}", statusObj.getClass());
+            // 返回任务状态解析错误的信息
+            return JsonData.buildResult(BizCodeEnum.TASK_STATUS_PARSE_ERROR); // 自定义错误码
+        }
+
+        // 将字符串形式的任务状态信息转换为 TaskStatusDTO 对象
+        String statusJson = (String) statusObj;
+        TaskStatusDTO statusDTO = JsonUtil.json2Obj(statusJson, TaskStatusDTO.class);
+
+        // 返回任务状态信息
+        return JsonData.buildSuccess(statusDTO);
+    }
+
+
+    /**
      * 处理短链新增逻辑
      * <p>
      * 本方法负责处理短链的新增请求，包括验证域名和组名的合法性，生成长链的摘要和短链码，
@@ -263,7 +313,6 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
      */
     @Override
     public boolean handleAddShortLink(EventMessage eventMessage) {
-
         // 获取事件消息中的账户编号和消息类型
         Long accountNo = eventMessage.getAccountNo();
         String messageType = eventMessage.getEventMessageType();
@@ -280,25 +329,22 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         // 长链摘要
         String originalUrlDigest = CommonUtil.MD5(addRequest.getOriginalUrl());
 
-        //短链码重复标记
+        // 短链码重复标记
         boolean duplicateCodeFlag = false;
 
         // 生成短链码
         String shortLinkCode = shortLinkComponent.createShortLinkCode(addRequest.getOriginalUrl());
 
-        //  加锁
-        String script = "if redis.call('EXISTS',KEYS[1])==0 then redis.call('set',KEYS[1],ARGV[1]); redis.call('expire',KEYS[1],ARGV[2]); return 1;" + " elseif redis.call('get',KEYS[1]) == ARGV[1] then return 2;" + " else return 0; end;";
+        // 加锁
+        String script = "if redis.call('EXISTS', KEYS[1]) == 0 then " + "redis.call('set', KEYS[1], ARGV[1]); " + "redis.call('expire', KEYS[1], ARGV[2]); " + "return 1; " + "elseif redis.call('get', KEYS[1]) == ARGV[1] then return 2; " + "else return 0; end;";
 
         Long result = redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(shortLinkCode), accountNo, 100);
 
-        //加锁成功
+        // 加锁成功
         if (result > 0) {
-
-            //C端处理
+            // C端处理
             if (EventMessageType.SHORT_LINK_ADD_LINK.name().equalsIgnoreCase(messageType)) {
-
-
-                //先判断是否短链码被占用
+                // 先判断是否短链码被占用
                 ShortLink shortLinCodeDOInDB = shortLinkManager.findByShortLinCode(shortLinkCode);
 
                 if (shortLinCodeDOInDB == null) {
@@ -306,6 +352,17 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                     if (reduceFlag) {
                         ShortLink shortLinkDO = ShortLink.builder().accountNo(accountNo).code(shortLinkCode).title(addRequest.getTitle()).originalUrl(addRequest.getOriginalUrl()).domain(domainDO.getValue()).groupId(linkGroupDO.getId()).expired(addRequest.getExpired()).sign(originalUrlDigest).state(ShortLinkStateEnum.ACTIVE.name()).del(0).build();
                         shortLinkManager.addShortLink(shortLinkDO);
+
+                        // ✅ 更新 Redis 中的任务状态为 SUCCESS，并携带 shortLinkCode
+                        String taskId = eventMessage.getMessageId();
+                        String taskStatusKey = "task:status:" + taskId;
+
+                        TaskStatusDTO successStatus = new TaskStatusDTO();
+                        successStatus.setStatus("SUCCESS");
+                        BeanUtils.copyProperties(shortLinkDO, successStatus);
+
+                        String statusJson = JsonUtil.obj2Json(successStatus);
+                        redisTemplate.opsForValue().set(taskStatusKey, statusJson, 5, TimeUnit.MINUTES);
                         return true;
                     }
                 } else {
@@ -313,37 +370,40 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                     duplicateCodeFlag = true;
                 }
 
-
             } else if (EventMessageType.SHORT_LINK_ADD_MAPPING.name().equalsIgnoreCase(messageType)) {
-                //B端处理
+                // B端处理
                 GroupCodeMapping groupCodeMappingDOInDB = groupCodeMappingManager.findByCodeAndGroupId(shortLinkCode, linkGroupDO.getId(), accountNo);
 
                 if (groupCodeMappingDOInDB == null) {
-
                     GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().accountNo(accountNo).code(shortLinkCode).title(addRequest.getTitle()).originalUrl(addRequest.getOriginalUrl()).domain(domainDO.getValue()).groupId(linkGroupDO.getId()).expired(addRequest.getExpired()).sign(originalUrlDigest).state(ShortLinkStateEnum.ACTIVE.name()).del(0).build();
 
                     groupCodeMappingManager.add(groupCodeMappingDO);
+                    // ✅ 更新 Redis 中的任务状态为 SUCCESS，并携带 shortLinkCode
+                    String taskId = eventMessage.getMessageId();
+                    String taskStatusKey = "task:status:" + taskId;
+                    TaskStatusDTO successStatus = new TaskStatusDTO();
+                    successStatus.setStatus("SUCCESS");
+                    BeanUtils.copyProperties(groupCodeMappingDO, successStatus);
+                    String statusJson = JsonUtil.obj2Json(successStatus);
+                    redisTemplate.opsForValue().set(taskStatusKey, statusJson, 5, TimeUnit.MINUTES);
                     return true;
-
                 } else {
                     logger.error("B端短链码重复:{}", eventMessage);
                     duplicateCodeFlag = true;
                 }
-
             }
 
         } else {
-
-            //加锁失败，自旋100毫秒，再调用； 失败的可能是短链码已经被占用，需要重新生成
+            // 加锁失败，自旋100毫秒，再调用；失败的可能是短链码已经被占用，需要重新生成
             logger.error("加锁失败:{}", eventMessage);
 
             try {
                 TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // 保留中断状态
             }
 
             duplicateCodeFlag = true;
-
         }
 
         if (duplicateCodeFlag) {
@@ -353,9 +413,14 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
             logger.warn("短链码报错失败，重新生成:{}", eventMessage);
             handleAddShortLink(eventMessage);
         }
-        return false;
 
+        // 如果执行失败，也可以将任务状态设置为 FAILED
+        String taskId = eventMessage.getMessageId();
+        String taskStatusKey = "task:status:" + taskId;
+        redisTemplate.opsForValue().set(taskStatusKey, "FAILED", 5, TimeUnit.MINUTES);
+        return false;
     }
+
 
     /**
      * 从B端查找，group_code_mapping表
