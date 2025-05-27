@@ -15,37 +15,17 @@
         <!-- 数据指标卡片 -->
         <div class="mx-auto max-w-6xl">
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <StatCard 
-                    label="总页面访问量" 
-                    :value="totalStats.pv" 
-                    description="PV (Page Views)" 
-                    type="blue"
-                    :loading="loading"
-                />
-                
-                <StatCard 
-                    label="独立访客数" 
-                    :value="totalStats.uv" 
-                    description="UV (Unique Visitors)" 
-                    type="emerald"
-                    :loading="loading"
-                />
-                
-                <StatCard 
-                    label="独立IP数" 
-                    :value="totalStats.ip" 
-                    description="IP Addresses" 
-                    type="purple"
-                    :loading="loading"
-                />
-                
-                <StatCard 
-                    label="新访客数" 
-                    :value="totalStats.newUV" 
-                    description="New Visitors" 
-                    type="orange"
-                    :loading="loading"
-                />
+                <StatCard label="总页面访问量" :value="totalStats.pv" description="PV (Page Views)" type="blue"
+                    :loading="loading" />
+
+                <StatCard label="独立访客数" :value="totalStats.uv" description="UV (Unique Visitors)" type="emerald"
+                    :loading="loading" />
+
+                <StatCard label="独立IP数" :value="totalStats.ip" description="IP Addresses" type="purple"
+                    :loading="loading" />
+
+                <StatCard label="新访客数" :value="totalStats.newUV" description="New Visitors" type="orange"
+                    :loading="loading" />
             </div>
         </div>
     </PageLayout>
@@ -77,20 +57,21 @@ const fetchTrendData = async (params: {
     try {
         loading.value = true;
 
-        // TODO: 替换为实际的API请求
+        // TODO: 替换为实际的趋势数据API请求
         // const response = await api.getTrendData(params);
         // return response.data;
-        
+
         // 模拟网络延迟
         await new Promise(resolve => setTimeout(resolve, 500));
-        
+
         console.log('API请求参数:', params);
-        
+
         // 暂时使用模拟数据
         return mockTrendData;
 
     } catch (error) {
         console.error('获取趋势数据失败:', error);
+        // TODO: 添加错误处理和用户提示
         return [];
     } finally {
         loading.value = false;
@@ -123,7 +104,7 @@ const handleRefresh = async (dateRange: { startTime: string, endTime: string }) 
 
     try {
         const params = {
-            code: "04jw1SM0", // TODO: 替换为实际的code参数
+            code: "04jw1SM0", // TODO: 替换为实际的项目code参数
             type: "Day",
             startTime: dateRange.startTime,
             endTime: dateRange.endTime
@@ -133,6 +114,7 @@ const handleRefresh = async (dateRange: { startTime: string, endTime: string }) 
         trendData.value = data;
     } catch (error) {
         console.error('刷新图表失败:', error);
+        // TODO: 添加错误提示给用户
     }
 };
 

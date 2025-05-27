@@ -64,12 +64,17 @@ const fetchDeviceData = async (params: {
     try {
         loading.value = true;
 
-        // TODO: 替换为实际的API请求
+        // TODO: 替换为实际的设备数据API请求
+        // const response = await api.getDeviceAnalysis(params);
+        // return response.data;
+
+        // 模拟API请求延迟
         await new Promise(resolve => setTimeout(resolve, 500));
         return deviceInfoData;
 
     } catch (error) {
         console.error('获取设备数据失败:', error);
+        // TODO: 添加错误处理和用户提示
         return deviceInfoData;
     } finally {
         loading.value = false;
@@ -88,7 +93,7 @@ const handleRefresh = async (dateRange: { startTime: string, endTime: string }) 
 
     try {
         const params = {
-            code: "04jw1SM0", // TODO: 替换为实际的code参数
+            code: "04jw1SM0", // TODO: 替换为实际的项目code参数
             startTime: dateRange.startTime,
             endTime: dateRange.endTime
         };
@@ -97,6 +102,7 @@ const handleRefresh = async (dateRange: { startTime: string, endTime: string }) 
         deviceData.value = data;
     } catch (error) {
         console.error('刷新图表失败:', error);
+        // TODO: 添加错误提示给用户
     }
 };
 

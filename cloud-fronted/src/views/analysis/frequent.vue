@@ -63,13 +63,18 @@ const fetchSourceData = async (params: {
     try {
         loading.value = true;
 
-        // TODO: 替换为实际的API请求
+        // TODO: 替换为实际的访问来源数据API请求
+        // const response = await api.getSourceAnalysis(params);
+        // return response.data;
+
+        // 模拟API请求延迟
         await new Promise(resolve => setTimeout(resolve, 800));
         console.log('API请求参数:', params);
 
         return frequentSourceData;
     } catch (error) {
         console.error('获取来源数据失败:', error);
+        // TODO: 添加错误处理和用户提示
         return [];
     } finally {
         loading.value = false;
@@ -101,7 +106,7 @@ const handleRefresh = async (dateRange: { startTime: string, endTime: string }) 
 
     try {
         const params = {
-            code: "04jw1SM0", // TODO: 替换为实际的code参数
+            code: "04jw1SM0", // TODO: 替换为实际的项目code参数
             startTime: dateRange.startTime,
             endTime: dateRange.endTime
         };
@@ -110,6 +115,7 @@ const handleRefresh = async (dateRange: { startTime: string, endTime: string }) 
         sourceData.value = data;
     } catch (error) {
         console.error('刷新数据失败:', error);
+        // TODO: 添加错误提示给用户
     }
 };
 

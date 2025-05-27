@@ -42,6 +42,39 @@ const routes: RouteRecordRaw[] = [
     name: "domain",
     component: () => import("@/views/links/domain"),
     meta: { layout: LayoutMenu.BasicLayout, auth: true }
+  }, {
+    path: "/analysis",
+    name: "analysis",
+    component: () => import("@/views/analysis"),
+    children: [
+      {
+        path: "record",
+        name: "record",
+        component: () => import("@/views/analysis/record.vue"),
+        meta: { layout: LayoutMenu.BasicLayout, auth: true }
+      }, {
+        path: "region",
+        name: "region",
+        component: () => import("@/views/analysis/region.vue"),
+        meta: { layout: LayoutMenu.BasicLayout, auth: true }
+      }, {
+        path: "trend",
+        name: "trend",
+        component: () => import("@/views/analysis/trend.vue"),
+        meta: { layout: LayoutMenu.BasicLayout, auth: true }
+      }, {
+        path: "frequent",
+        name: "frequent",
+        component: () => import("@/views/analysis/frequent.vue"),
+        meta: { layout: LayoutMenu.BasicLayout, auth: true }
+      }, {
+        path: "device",
+        name: "device",
+        component: () => import("@/views/analysis/device.vue"),
+        meta: { layout: LayoutMenu.BasicLayout, auth: true }
+      }
+    ],
+    meta: { layout: LayoutMenu.BasicLayout, auth: true }
   },
   {
     path: "/login",
@@ -78,7 +111,7 @@ const router = createRouter({
 });
 
 // 路由拦截器
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   // 检查路由是否需要认证
   const requiresAuth = to.matched.some(record => record.meta.auth);
 

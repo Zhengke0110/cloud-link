@@ -433,7 +433,7 @@ export class DefaultService {
      * @throws ApiError
      */
     public static deleteApiGroupV1Del(
-        groupId: number,
+        groupId: string,
     ): CancelablePromise<JsonData> {
         return __request(OpenAPI, {
             method: 'DELETE',
@@ -450,7 +450,7 @@ export class DefaultService {
      * @throws ApiError
      */
     public static getLinkServerApiGroupV1Detail(
-        groupId: number,
+        groupId: string,
     ): CancelablePromise<JsonData> {
         return __request(OpenAPI, {
             method: 'GET',
