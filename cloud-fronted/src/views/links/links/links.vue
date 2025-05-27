@@ -6,7 +6,8 @@
                 <div class="mb-4">
                     <h3 class="text-lg font-semibold text-gray-800 flex items-center">
                         <svg class="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                            <path
+                                d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                         </svg>
                         选择分组
                     </h3>
@@ -15,7 +16,7 @@
 
                 <div class="flex flex-wrap gap-3">
                     <button v-for="group in groupData" :key="group.id" @click="selectGroup(group.id)"
-                        class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm transition-all duration-300 shadow-sm hover:shadow-md" 
+                        class="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm transition-all duration-300 shadow-sm hover:shadow-md"
                         :class="selectedGroupId === group.id
                             ? getSelectedButtonStyle(group.id)
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
@@ -24,7 +25,9 @@
                         {{ group.title }}
                         <span v-if="selectedGroupId === group.id" class="ml-1">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" />
                             </svg>
                         </span>
                     </button>
@@ -37,7 +40,8 @@
             <!-- 创建链接按钮 -->
             <div class="mb-6 flex justify-end">
                 <button
-                    class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-6 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-indigo-200 hover:scale-105">
+                    class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-6 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:shadow-indigo-200 hover:scale-105"
+                    @click="router.push({ name: 'create' })">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
@@ -128,7 +132,7 @@
 
                         <button
                             class="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm text-white transition-colors duration-300"
-                            :class="getActionButtonBg(getLinkColorIndex(link, index))">
+                            :class="getActionButtonBg(getLinkColorIndex(link, index))" @click="openLink(link.code)">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"
                                 fill="currentColor">
                                 <path
@@ -232,7 +236,7 @@
             <!-- 页面大小选择器 -->
             <div class="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-lg p-3">
                 <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span>每页显示</span>
                 <select v-model="pageSize" @change="handlePageSizeChange"
@@ -257,14 +261,6 @@
             <!-- 替换链接标题字段 -->
             <FormField id="edit-link-title" label="链接标题" v-model="editingLink.title" placeholder="请输入链接标题"
                 helpText="为您的链接添加一个易于识别的名称" required />
-
-            <!-- 替换选择分组字段 -->
-            <FormField id="edit-link-group" label="选择分组" type="select" v-model="editingLink.groupId"
-                helpText="选择该链接所属的分组">
-                <option v-for="group in groupData" :key="group.id" :value="group.id">
-                    {{ group.title }}
-                </option>
-            </FormField>
 
             <!-- 替换域名类型字段 -->
             <FormField id="edit-link-domain-type" label="域名类型" type="select" v-model="editingLink.domainType"
@@ -299,7 +295,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { GroupData, Data } from "./config";
 import BaseModal from "@/components/BaseModal.vue";
 import LinkCard from '../components/LinkCard.vue';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
@@ -309,7 +304,10 @@ import InfoField from '@/components/Form/InfoField.vue';
 import FormActions from '@/components/Form/FormActions.vue';
 import PageLayout from '@/components/PageLayout.vue';
 import IconActionButton from '../components/IconActionButton.vue';
-
+import { GroupingGetListsApi, LinksGetListsApi, LinkDeleteApi, LinkUpdateApi, LinksCheckApi } from '@/services/links'
+import { useRouter } from 'vue-router';
+import { OpenAPI } from '@/generated'
+const router = useRouter();
 // 导入颜色方案工具
 import {
     getIconColor,
@@ -325,21 +323,21 @@ import { useModal } from "@/composables/useModal";
 // 导入Toast通知系统
 import { useToast } from "@/composables/useToast";
 
-// 分组数据
-const groupData = ref(GroupData);
+// 数据状态管理 - 改为响应式状态，初始值为空
+const groupData = ref<any[]>([]);
+const linkData = ref<any[]>([]);
+const totalPages = ref(0);
+const totalCount = ref(0);
 
-// 链接数据
-const linkData = ref(Data.current_data);
+// 加载状态管理
+const isLoadingGroups = ref(false);
+const isLoadingLinks = ref(false);
 
 // 初始化Toast
 const toast = useToast();
 
-// 分页信息 - 从API获取
-const totalPages = ref(Data.total_page);
-const totalCount = ref(Data.total_record);
-
 // 当前选中的分组ID
-const selectedGroupId = ref<number | null>(null);
+const selectedGroupId = ref<string | null>(null);
 
 // 分页相关参数
 const currentPage = ref(1);
@@ -384,8 +382,88 @@ const filteredLinks = computed(() => {
     return linkData.value;
 });
 
+// 加载分组数据
+const fetchGroups = async () => {
+    if (isLoadingGroups.value) return;
+
+    isLoadingGroups.value = true;
+
+    try {
+        groupData.value = await GroupingGetListsApi()
+        // 默认选择第一个分组
+        if (groupData.value.length > 0 && selectedGroupId.value === null) {
+            selectedGroupId.value = groupData.value[0].id;
+        }
+    } catch (error) {
+        console.error("加载分组数据失败:", error);
+        toast.error("加载分组数据失败，请刷新页面重试", {
+            title: "加载失败"
+        });
+    } finally {
+        isLoadingGroups.value = false;
+    }
+};
+
+// 加载链接数据
+const fetchLinks = async () => {
+    if (isLoadingLinks.value) return;
+    isLoadingLinks.value = true;
+
+    // 显示加载中通知
+    const loadingToastId = toast.info("正在加载链接数据...", {
+        duration: 0, // 不自动关闭
+        title: "加载中"
+    });
+
+    try {
+        // 构建API请求参数
+        const params = {
+            groupId: selectedGroupId.value !== null ? String(selectedGroupId.value) : '',
+            page: currentPage.value,
+            size: pageSize.value,
+        };
+
+        const response = await LinksGetListsApi(params);
+        totalCount.value = response.total_record || 0;
+        totalPages.value = response.total_page || 0;
+        linkData.value = response.current_data || [];
+
+        // 移除加载中通知
+        toast.removeToast(loadingToastId);
+
+        // 显示成功通知
+        toast.success("链接数据加载成功", {
+            title: "数据已更新",
+            duration: 2000
+        });
+    } catch (error) {
+        console.error("加载链接数据失败:", error);
+
+        // 移除加载中通知
+        toast.removeToast(loadingToastId);
+
+        // 显示错误通知
+        toast.error("加载链接数据失败，请重试", {
+            title: "加载失败"
+        });
+    } finally {
+        isLoadingLinks.value = false;
+    }
+};
+
+// 初始化数据加载
+const initializeData = async () => {
+    // 先加载分组数据
+    await fetchGroups();
+
+    // 再加载链接数据
+    if (selectedGroupId.value !== null) {
+        await fetchLinks();
+    }
+};
+
 // 选择分组
-const selectGroup = (groupId: number | null) => {
+const selectGroup = (groupId: string | null) => {
     selectedGroupId.value = groupId;
     // 切换分组时重置页码
     currentPage.value = 1;
@@ -421,50 +499,6 @@ const handlePageSizeChange = () => {
     fetchLinks();
 };
 
-// 获取链接数据
-const fetchLinks = () => {
-    // 构建API请求参数
-    const params = {
-        groupId: selectedGroupId.value,
-        page: currentPage.value,
-        size: pageSize.value,
-    };
-
-    console.log("请求参数:", params);
-
-    // 显示加载中通知
-    const loadingToastId = toast.info("正在加载链接数据...", {
-        duration: 0, // 不自动关闭
-        title: "加载中"
-    });
-
-    // 模拟API调用 - 仅用于演示
-    setTimeout(() => {
-        try {
-            // 假设这是从API获取的数据
-            linkData.value = Data.current_data;
-            totalPages.value = Data.total_page;
-            totalCount.value = Data.total_record;
-
-            // 移除加载中通知
-            toast.removeToast(loadingToastId);
-
-            // 显示成功通知
-            toast.success("链接数据加载成功", {
-                title: "数据已更新",
-                duration: 2000
-            });
-        } catch (error) {
-            // 移除加载中通知
-            toast.removeToast(loadingToastId);
-
-            // 显示错误通知
-            toast.error("加载链接数据失败，请重试", {
-                title: "加载失败"
-            });
-        }
-    }, 800);
-};
 
 // 获取分组标题
 const getGroupTitle = (groupId: number) => {
@@ -512,33 +546,24 @@ const getStatusDot = (state: string, expired: boolean) => {
     return "bg-yellow-500";
 };
 
-onMounted(() => {
-    // 默认选择第一个分组
-    if (groupData.value.length > 0) {
-        selectedGroupId.value = groupData.value[0].id;
-    }
-
-    // 初始获取数据
-    fetchLinks();
-});
+onMounted(() => initializeData());
 
 // 使用模态框状态管理Hook - 编辑链接模态框
 const editLinkModal = useModal({
-    id: 0,
+    id: "",  // 改为 string 类型
     code: "",
     title: "",
-    groupId: 0,
     domainId: 0,
     domainType: "OFFICIAL"
 });
 
 // 使用模态框状态管理Hook - 删除确认模态框
 const deleteLinkModal = useModal({
-    id: 0,
+    id: "",  // 改为 string 类型
     code: "",
     title: "",
     domain: "",
-    groupId: 0
+    groupId: ""  // 确保为 string 类型
 });
 
 // 重命名以保持API兼容性
@@ -555,15 +580,15 @@ const openEditLinkModal = (link: any) => {
     // 设置域名类型
     const domainType = link.domain.includes("timu.fun") ? "OFFICIAL" : "CUSTOM";
 
-    // 打开模态框并传入数据
-    editLinkModal.open({
-        id: link.id,
+    const modalData = {
+        id: String(link.id),
         code: link.code,
         title: link.title,
-        groupId: link.groupId,
         domainId: 1, // 从域名中提取domainId (示例)
         domainType
-    });
+    };
+    // 打开模态框并传入数据，确保所有字段类型正确
+    editLinkModal.open(modalData);
 };
 
 // 关闭编辑链接模态框
@@ -578,45 +603,25 @@ const updateLink = async () => {
     editLinkModal.startLoading();
 
     try {
-        // 构建请求参数
+        // 构建请求参数 - 强制确保类型正确
         const params = {
-            groupId: editingLink.groupId,
-            code: editingLink.code,
-            title: editingLink.title,
-            domainId: editingLink.domainId,
-            domainType: editingLink.domainType,
+            code: String(editingLink.code),
+            title: String(editingLink.title),
+            domainId: Number(editingLink.domainId),
+            domainType: String(editingLink.domainType),
         };
+        await LinkUpdateApi(params);
 
-        console.log("更新链接参数:", params);
+        setTimeout(async () => {
+            // 关闭模态框
+            closeEditLinkModal();
 
-        // 模拟API请求
-        await new Promise((resolve) => setTimeout(resolve, 800));
+            // 使用Toast通知
+            toast.success("链接更新成功", { title: "操作成功" });
 
-        // 更新本地数据
-        const index = linkData.value.findIndex(
-            (link) => link.id === editingLink.id,
-        );
-
-        if (index !== -1) {
-            // 创建更新后的链接对象
-            const updatedLink = {
-                ...linkData.value[index],
-                title: editingLink.title,
-                groupId: editingLink.groupId,
-                // 如果有其他需要更新的字段，也在这里添加
-                gmtModified: new Date().toISOString(),
-            };
-
-            // 更新数据
-            linkData.value[index] = updatedLink;
-            console.log("链接更新成功:", updatedLink);
-        }
-
-        // 关闭模态框
-        closeEditLinkModal();
-
-        // 使用Toast通知
-        toast.success("链接更新成功", { title: "操作成功" });
+            // 重新加载链接数据
+            await fetchLinks();
+        }, 500);
     } catch (error) {
         console.error("更新链接失败:", error);
         // 显示错误通知
@@ -628,13 +633,14 @@ const updateLink = async () => {
 
 // 打开删除确认模态框
 const openDeleteConfirmModal = (link: any) => {
-    deleteLinkModal.open({
-        id: link.id,
+    const modalData = {
+        id: String(link.id),
         code: link.code,
         title: link.title,
         domain: link.domain,
-        groupId: link.groupId
-    });
+        groupId: String(link.groupId)
+    };
+    deleteLinkModal.open(modalData);
 };
 
 // 删除链接
@@ -642,41 +648,22 @@ const deleteLink = async () => {
     deleteLinkModal.startLoading();
 
     try {
-        // 构建请求参数
+        // 构建请求参数 - 再次确保类型正确
         const params = {
-            groupId: deletingLink.groupId,
-            code: deletingLink.code,
+            groupId: String(deletingLink.groupId),
+            code: String(deletingLink.code),
         };
+        await LinkDeleteApi(params);
 
-        console.log("删除链接参数:", params);
 
-        // 模拟API请求
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        // 从本地数据中移除该链接
-        const index = linkData.value.findIndex(
-            (link) => link.id === deletingLink.id,
-        );
-
-        if (index !== -1) {
-            linkData.value.splice(index, 1);
-            console.log("链接删除成功:", deletingLink);
-
-            // 更新总数
-            totalCount.value -= 1;
-
-            // 如果当前页没有数据且不是第一页，则回退到上一页
-            if (filteredLinks.value.length === 0 && currentPage.value > 1) {
-                currentPage.value -= 1;
-                fetchLinks();
-            }
-        }
-
-        // 关闭模态框
-        deleteLinkModal.close();
-
-        // 使用Toast通知
-        toast.success("链接删除成功", { title: "操作成功" });
+        // 重新加载链接数据
+        setTimeout(async () => {
+            // 关闭模态框
+            deleteLinkModal.close();
+            // 使用Toast通知
+            toast.success("链接删除成功", { title: "操作成功" });
+            await fetchLinks();
+        }, 500);
     } catch (error) {
         console.error("删除链接失败:", error);
         // 显示错误通知
@@ -689,28 +676,6 @@ const deleteLink = async () => {
 // 添加有效性检查状态管理
 const checkingValidityMap = ref<Record<string, boolean>>({});
 
-// 模拟短链接有效性检查API
-const mockCheckLinkValidityAPI = async (shortLinkCode: string) => {
-    // 模拟网络延迟
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
-
-    // 模拟不同的返回结果 - 70%概率成功，30%概率失败
-    const isValid = Math.random() > 0.3;
-
-    if (isValid) {
-        return {
-            code: 0,
-            data: null,
-            msg: "success"
-        };
-    } else {
-        return {
-            code: -1,
-            data: null,
-            msg: "短链不存在"
-        };
-    }
-};
 
 // 检查短链接有效性
 const checkLinkValidity = async (link: any) => {
@@ -726,36 +691,20 @@ const checkLinkValidity = async (link: any) => {
     });
 
     try {
-        console.log("开始检查短链接有效性:", shortLinkCode);
-
-        // 调用模拟API
-        const response = await mockCheckLinkValidityAPI(shortLinkCode);
-
+        const response = await LinksCheckApi(shortLinkCode);
+        console.log("短链接有效性检查结果:", {
+            code: shortLinkCode,
+            response
+        });
         // 移除检查中通知
         toast.removeToast(checkingToastId);
 
-        // 根据返回结果显示不同的通知
-        if (response.code === 0) {
+        // // 根据返回结果显示不同的通知
+        if (response) {
             // 有效
             toast.success(`短链接 ${shortLinkCode} 有效且可正常访问`, {
                 title: "检查通过",
                 duration: 3000
-            });
-
-            console.log("短链接有效性检查通过:", {
-                code: shortLinkCode,
-                response
-            });
-        } else {
-            // 无效
-            toast.error(`${response.msg}，代码: ${shortLinkCode}`, {
-                title: "检查失败",
-                duration: 4000
-            });
-
-            console.warn("短链接有效性检查失败:", {
-                code: shortLinkCode,
-                response
             });
         }
 
@@ -764,17 +713,17 @@ const checkLinkValidity = async (link: any) => {
         toast.removeToast(checkingToastId);
 
         // 显示错误通知
-        toast.error(`检查短链接 ${shortLinkCode} 时发生错误，请稍后重试`, {
+        toast.error(`检查短链接 ${shortLinkCode} 失败,${error}`, {
             title: "检查异常"
-        });
-
-        console.error("短链接有效性检查异常:", {
-            code: shortLinkCode,
-            error
         });
     } finally {
         // 清除检查状态
         checkingValidityMap.value[shortLinkCode] = false;
     }
+};
+// 打开短链接
+const openLink = (code: string) => {
+    const url = `${OpenAPI.BASE}/${code}`;
+    window.open(url, "_blank");
 };
 </script>

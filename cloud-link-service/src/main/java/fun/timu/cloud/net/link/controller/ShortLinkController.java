@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -49,10 +50,14 @@ public class ShortLinkController {
 
             // 解析短链代码，获取短链信息
             ShortLinkVO shortLinkVO = shortLinkService.parseShortLinkCode(shortLinkCode);
-
-            // 根据解析结果构建响应数据
-            return shortLinkVO == null ? JsonData.buildError("短链不存在") : JsonData.buildSuccess();
-
+            if (shortLinkVO == null) {
+                return JsonData.buildError("短链不存在");
+            }
+            // ✅ 新增：检查是否过期
+            if (shortLinkVO.getExpired() != null && shortLinkVO.getExpired().before(new Date())) {
+                return JsonData.buildError("短链接已过期");
+            }
+            return JsonData.buildSuccess(shortLinkVO);
         } else {
             // 如果token不匹配，返回非法访问错误
             return JsonData.buildError("非法访问");

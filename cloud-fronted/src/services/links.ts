@@ -142,9 +142,9 @@ export const LinksCheckApi = async (url: string) => {
     try {
         // 调用服务端接口检查链接
         const { code, msg } = await DefaultService.getLinkServerApiLinkV1Check(url, 'timu.fun');
-
         // 检查响应码，如果不为0则表示检查失败，抛出错误
         if (code !== 0) throw new Error(msg || '链接检查失败');
+        return true
     } catch (error) {
         // 捕获错误，并重新抛出一个包含错误信息的错误对象
         throw new Error(`链接检查失败: ${(error as Error).message}`);
@@ -200,14 +200,11 @@ export const LinksCreateApi = async (data: {
  * @returns 返回包含链接列表数据的Promise对象
  */
 export const LinksGetListsApi = async (form: {
-    page: number
-    pageSize: number
-    groupId: number
+    groupId: string, page: number, size: number,
 }) => {
     try {
         // 调用服务端接口获取链接列表
         const { data, code, msg } = await DefaultService.postLinkServerApiLinkV1Page(form);
-
         // 检查响应码，如果不为0则表示获取失败，抛出错误
         if (code !== 0) throw new Error(msg || '获取链接列表失败');
         // 返回链接列表数据
@@ -234,10 +231,6 @@ export const LinksGetListsApi = async (form: {
  */
 export const LinkUpdateApi = async (form: {
     /**
-     * 组
-     */
-    groupId?: number;
-    /**
      * 短链码
      */
     code?: string;
@@ -255,6 +248,7 @@ export const LinkUpdateApi = async (form: {
     domainType?: string;
 }) => {
     try {
+        console.log('LinkUpdateApi', form);
         // 调用服务端接口更新链接信息
         const { code, msg } = await DefaultService.postLinkServerApiLinkV1Update(form);
 
@@ -277,11 +271,10 @@ export const LinkUpdateApi = async (form: {
  * @param {string} form.code - 短链码，用于标识要删除的链接
  * @throws {Error} 如果删除链接失败，会抛出一个包含错误信息的错误对象
  */
-export const LinkDeleteApi = async (form: { groupId: number, code: string }) => {
+export const LinkDeleteApi = async (form: { groupId: string, code: string }) => {
     try {
         // 调用服务端接口删除指定短链码的链接
         const { code: responseCode, msg } = await DefaultService.postLinkServerApiLinkV1Del(form);
-
         // 检查响应码，如果不为0则表示删除失败，抛出错误
         if (responseCode !== 0) throw new Error(msg || '删除链接失败');
     } catch (error) {
