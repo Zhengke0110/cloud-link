@@ -10,6 +10,11 @@ public class ShortLinkUpdateRequest {
     private String code;
 
     /**
+     * 组
+     */
+    private Long groupId;
+
+    /**
      * 标题
      */
     private String title;

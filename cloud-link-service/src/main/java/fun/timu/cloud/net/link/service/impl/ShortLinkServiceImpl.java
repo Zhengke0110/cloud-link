@@ -194,7 +194,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         if (EventMessageType.SHORT_LINK_UPDATE_LINK.name().equalsIgnoreCase(messageType)) {
 
             // 构建ShortLink对象并更新C端短链信息
-            ShortLink shortLinkDO = ShortLink.builder().code(request.getCode()).title(request.getTitle()).domain(domainDO.getValue()).accountNo(accountNo).build();
+            ShortLink shortLinkDO = ShortLink.builder().groupId(request.getGroupId()).code(request.getCode()).title(request.getTitle()).domain(domainDO.getValue()).accountNo(accountNo).build();
 
             // 执行更新操作并记录受影响的行数
             int rows = shortLinkManager.update(shortLinkDO);
@@ -204,7 +204,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         } else if (EventMessageType.SHORT_LINK_UPDATE_MAPPING.name().equalsIgnoreCase(messageType)) {
             // B端处理
             // 构建GroupCodeMapping对象并更新B端短链映射信息
-            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().code(request.getCode()).accountNo(accountNo).title(request.getTitle()).domain(domainDO.getValue()).build();
+            GroupCodeMapping groupCodeMappingDO = GroupCodeMapping.builder().groupId(request.getGroupId()).code(request.getCode()).accountNo(accountNo).title(request.getTitle()).domain(domainDO.getValue()).build();
 
             // 执行更新操作并记录受影响的行数
             int rows = groupCodeMappingManager.update(groupCodeMappingDO);

@@ -7,11 +7,13 @@ import fun.timu.cloud.net.common.enums.ShortLinkStateEnum;
 import fun.timu.cloud.net.link.manager.GroupCodeMappingManager;
 import fun.timu.cloud.net.link.mapper.GroupCodeMappingMapper;
 import fun.timu.cloud.net.link.model.DO.GroupCodeMapping;
+import fun.timu.cloud.net.link.model.DO.ShortLink;
 import fun.timu.cloud.net.link.model.VO.GroupCodeMappingVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +39,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     @Override
     public GroupCodeMapping findByGroupIdAndMappingId(Long mappingId, Long accountNo, Long groupId) {
         // 使用MyBatis-Plus的QueryWrapper构建查询条件
-        GroupCodeMapping groupCodeMappingDO = groupCodeMappingMapper.selectOne(new QueryWrapper<GroupCodeMapping>()
-                .eq("id", mappingId).eq("account_no", accountNo)
-                .eq("group_id", groupId));
+        GroupCodeMapping groupCodeMappingDO = groupCodeMappingMapper.selectOne(new QueryWrapper<GroupCodeMapping>().eq("id", mappingId).eq("account_no", accountNo).eq("group_id", groupId));
 
         return groupCodeMappingDO;
     }
@@ -65,12 +65,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     @Override
     public int del(GroupCodeMapping groupCodeMappingDO) {
         // 更新数据库中的记录，将删除标志设置为1，表示该记录已被删除
-        int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
-                .eq("code", groupCodeMappingDO.getCode())
-                .eq("account_no", groupCodeMappingDO.getAccountNo())
-                .eq("group_id", groupCodeMappingDO.getGroupId())
-                .set("del", 1)
-        );
+        int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>().eq("code", groupCodeMappingDO.getCode()).eq("account_no", groupCodeMappingDO.getAccountNo()).eq("group_id", groupCodeMappingDO.getGroupId()).set("del", 1));
 
         return rows;
     }
@@ -92,8 +87,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
         Page<GroupCodeMapping> pageInfo = new Page<>(page, size);
 
         // 执行分页查询，筛选出符合账号编号和组ID条件的记录
-        Page<GroupCodeMapping> groupCodeMappingDOPage = groupCodeMappingMapper.selectPage(pageInfo, new QueryWrapper<GroupCodeMapping>().eq("account_no", accountNo)
-                .eq("group_id", groupId).eq("del", 0).orderByDesc("gmt_create"));
+        Page<GroupCodeMapping> groupCodeMappingDOPage = groupCodeMappingMapper.selectPage(pageInfo, new QueryWrapper<GroupCodeMapping>().eq("account_no", accountNo).eq("group_id", groupId).eq("del", 0).orderByDesc("gmt_create"));
 
         // 创建Map对象存储分页查询结果
         Map<String, Object> pageMap = new HashMap<>(3);
@@ -103,8 +97,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
         // 将总页数放入Map
         pageMap.put("total_page", groupCodeMappingDOPage.getPages());
         // 将当前页的数据转换并放入Map
-        pageMap.put("current_data", groupCodeMappingDOPage.getRecords()
-                .stream().map(obj -> beanProcess(obj)).collect(Collectors.toList()));
+        pageMap.put("current_data", groupCodeMappingDOPage.getRecords().stream().map(obj -> beanProcess(obj)).collect(Collectors.toList()));
 
         // 返回包含分页信息的Map对象
         return pageMap;
@@ -123,13 +116,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     public int updateGroupCodeMappingState(Long accountNo, Long groupId, String shortLinkCode, ShortLinkStateEnum shortLinkStateEnum) {
         // 执行更新操作，使用MyBatis-Plus的UpdateWrapper构建更新条件
 
-        int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
-                .eq("code", shortLinkCode)
-                .eq("account_no", accountNo)
-                .eq("group_id", groupId)
-                .eq("del", 0)
-                .set("state", shortLinkStateEnum.name())
-        );
+        int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>().eq("code", shortLinkCode).eq("account_no", accountNo).eq("group_id", groupId).eq("del", 0).set("state", shortLinkStateEnum.name()));
 
         return rows;
     }
@@ -148,10 +135,7 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
     @Override
     public GroupCodeMapping findByCodeAndGroupId(String shortLinkCode, Long groupId, Long accountNo) {
         // 使用MyBatis-Plus的QueryWrapper构建查询条件
-        GroupCodeMapping groupCodeMappingDO = groupCodeMappingMapper.selectOne(new QueryWrapper<GroupCodeMapping>()
-                .eq("code", shortLinkCode).eq("account_no", accountNo)
-                .eq("del", 0)
-                .eq("group_id", groupId));
+        GroupCodeMapping groupCodeMappingDO = groupCodeMappingMapper.selectOne(new QueryWrapper<GroupCodeMapping>().eq("code", shortLinkCode).eq("account_no", accountNo).eq("del", 0).eq("group_id", groupId));
 
         // 返回查询结果
         return groupCodeMappingDO;
@@ -166,17 +150,44 @@ public class GroupCodeMappingManagerImpl implements GroupCodeMappingManager {
      * @return 返回受影响的行数，表示更新操作是否成功
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int update(GroupCodeMapping groupCodeMappingDO) {
-        // 更新操作，只更新匹配特定条件的记录的title和domain字段
-        int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
-                .eq("code", groupCodeMappingDO.getCode())
-                .eq("account_no", groupCodeMappingDO.getAccountNo())
-                .eq("del", 0)
-                .set("title", groupCodeMappingDO.getTitle())
-                .set("domain", groupCodeMappingDO.getDomain())
-        );
+        // 1. 查询原始记录
+        GroupCodeMapping existingRecord = groupCodeMappingMapper.selectOne(new QueryWrapper<GroupCodeMapping>().eq("code", groupCodeMappingDO.getCode()).eq("account_no", groupCodeMappingDO.getAccountNo()).eq("del", 0));
 
-        return rows;
+        if (existingRecord == null) {
+            throw new RuntimeException("未找到需要更新的集团代码映射记录");
+        }
+
+        // 2. 如果 group_id 发生变化，则执行软删除 + 插入模拟更新
+        if (!existingRecord.getGroupId().equals(groupCodeMappingDO.getGroupId())) {
+            // 软删除旧记录
+//            groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>()
+//                    .eq("code", existingRecord.getCode())
+//                    .eq("account_no", existingRecord.getAccountNo())
+//                    .set("del", 1));
+            // 删除旧记录（硬删除）
+            groupCodeMappingMapper.delete(new QueryWrapper<GroupCodeMapping>().eq("code", existingRecord.getCode()).eq("account_no", existingRecord.getAccountNo()));
+            // 创建新记录并设置新的 group_id
+            GroupCodeMapping newRecord = new GroupCodeMapping();
+            BeanUtils.copyProperties(existingRecord, newRecord); // 注意参数顺序：target ← source
+            newRecord.setGroupId(groupCodeMappingDO.getGroupId());
+            newRecord.setId(null); // 清除主键以确保插入而非更新
+            newRecord.setTitle(groupCodeMappingDO.getTitle());
+            newRecord.setDomain(groupCodeMappingDO.getDomain());
+
+            // 插入新记录
+            int insertResult = groupCodeMappingMapper.insert(newRecord);
+            if (insertResult <= 0) {
+                throw new RuntimeException("插入新的集团代码映射记录失败");
+            }
+        } else {
+            // 3. 如果 group_id 没有变化，正常更新非分片键字段
+            int rows = groupCodeMappingMapper.update(null, new UpdateWrapper<GroupCodeMapping>().eq("code", groupCodeMappingDO.getCode()).eq("account_no", groupCodeMappingDO.getAccountNo()).eq("del", 0).set("title", groupCodeMappingDO.getTitle()).set("domain", groupCodeMappingDO.getDomain()));
+            return rows;
+        }
+
+        return 1; // 成功模拟更新一行
     }
 
 
