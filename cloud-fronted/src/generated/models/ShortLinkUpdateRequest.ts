@@ -8,6 +8,10 @@ export type ShortLinkUpdateRequest = {
      */
     code?: string;
     /**
+     * 组
+     */
+    groupId?: string;
+    /**
      * 标题
      */
     title?: string;

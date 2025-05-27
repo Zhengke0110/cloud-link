@@ -1758,6 +1758,10 @@
             "type": "string",
             "description": "短链码"
           },
+          "groupId": {
+            "type": "string",
+            "description": "组"
+          },
           "title": {
             "type": "string",
             "description": "标题"

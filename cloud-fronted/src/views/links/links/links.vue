@@ -262,6 +262,14 @@
             <FormField id="edit-link-title" label="链接标题" v-model="editingLink.title" placeholder="请输入链接标题"
                 helpText="为您的链接添加一个易于识别的名称" required />
 
+            <!-- 替换选择分组字段 -->
+            <FormField id="edit-link-group" label="选择分组" type="select" v-model="editingLink.groupId"
+                helpText="选择该链接所属的分组">
+                <option v-for="group in groupData" :key="group.id" :value="group.id">
+                    {{ group.title }}
+                </option>
+            </FormField>
+
             <!-- 替换域名类型字段 -->
             <FormField id="edit-link-domain-type" label="域名类型" type="select" v-model="editingLink.domainType"
                 helpText="选择域名类型">
@@ -427,7 +435,11 @@ const fetchLinks = async () => {
         totalCount.value = response.total_record || 0;
         totalPages.value = response.total_page || 0;
         linkData.value = response.current_data || [];
-
+        console.log("加载链接数据成功:", {
+            totalCount: totalCount.value,
+            totalPages: totalPages.value,
+            currentData: linkData.value
+        });
         // 移除加载中通知
         toast.removeToast(loadingToastId);
 
@@ -551,6 +563,7 @@ onMounted(() => initializeData());
 // 使用模态框状态管理Hook - 编辑链接模态框
 const editLinkModal = useModal({
     id: "",  // 改为 string 类型
+    groupId: "",
     code: "",
     title: "",
     domainId: 0,
@@ -582,6 +595,7 @@ const openEditLinkModal = (link: any) => {
 
     const modalData = {
         id: String(link.id),
+        groupId: String(link.groupId),
         code: link.code,
         title: link.title,
         domainId: 1, // 从域名中提取domainId (示例)
@@ -605,11 +619,13 @@ const updateLink = async () => {
     try {
         // 构建请求参数 - 强制确保类型正确
         const params = {
+            groupId: String(editingLink.groupId),
             code: String(editingLink.code),
             title: String(editingLink.title),
             domainId: String(editingLink.domainId),
             domainType: String(editingLink.domainType),
         };
+        console.log("更新链接参数:", params);
         await LinkUpdateApi(params);
 
         setTimeout(async () => {
@@ -621,7 +637,7 @@ const updateLink = async () => {
 
             // 重新加载链接数据
             await fetchLinks();
-        }, 500);
+        }, 1000);
     } catch (error) {
         console.error("更新链接失败:", error);
         // 显示错误通知

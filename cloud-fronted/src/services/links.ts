@@ -231,21 +231,10 @@ export const LinksGetListsApi = async (form: {
  * @throws {Error} 如果服务端返回的code不为0，表示更新失败，将抛出错误
  */
 export const LinkUpdateApi = async (form: {
-    /**
-     * 短链码
-     */
     code?: string;
-    /**
-     * 标题
-     */
+    groupId?: string;
     title?: string;
-    /**
-     * 域名id
-     */
     domainId?: string;
-    /**
-     * 域名类型
-     */
     domainType?: string;
 }) => {
     try {
@@ -286,7 +275,7 @@ export const LinkDeleteApi = async (form: { groupId: string, code: string }) => 
 
 export const ListResultTaskApi = async (taskID: string) => {
     try {
-       
+
         const { code, data, msg } = await DefaultService.getLinkServerApiLinkV1QueryTask(taskID);
         // 检查响应码，如果不为0则表示获取失败，抛出错误
         if (code !== 0) throw new Error(msg || '获取任务结果失败');
