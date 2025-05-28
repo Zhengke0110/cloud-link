@@ -46,34 +46,6 @@ const routes: RouteRecordRaw[] = [
     path: "/analysis",
     name: "analysis",
     component: () => import("@/views/analysis"),
-    children: [
-      {
-        path: "record",
-        name: "record",
-        component: () => import("@/views/analysis/record.vue"),
-        meta: { layout: LayoutMenu.BasicLayout, auth: true }
-      }, {
-        path: "region",
-        name: "region",
-        component: () => import("@/views/analysis/region.vue"),
-        meta: { layout: LayoutMenu.BasicLayout, auth: true }
-      }, {
-        path: "trend",
-        name: "trend",
-        component: () => import("@/views/analysis/trend.vue"),
-        meta: { layout: LayoutMenu.BasicLayout, auth: true }
-      }, {
-        path: "frequent",
-        name: "frequent",
-        component: () => import("@/views/analysis/frequent.vue"),
-        meta: { layout: LayoutMenu.BasicLayout, auth: true }
-      }, {
-        path: "device",
-        name: "device",
-        component: () => import("@/views/analysis/device.vue"),
-        meta: { layout: LayoutMenu.BasicLayout, auth: true }
-      }
-    ],
     meta: { layout: LayoutMenu.BasicLayout, auth: true }
   },
   {

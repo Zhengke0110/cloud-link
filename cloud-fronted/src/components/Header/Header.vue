@@ -209,7 +209,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue';
-import { useWindowScroll, useToggle, useEventListener } from '@vueuse/core';
+import { useWindowScroll, useEventListener } from '@vueuse/core';
 import router from '@/router';
 import { LayoutMenu } from '@/config';
 import GsapAnimation from '@/components/GsapAnimation.vue';
@@ -276,7 +276,7 @@ const iconMap: Record<string, any> = {
 // 路由名称到中文名称的映射
 const nameMap: Record<string, string> = {
     home: '首页',
-    scheme: '方案模板',
+    scheme: '选择计划',
     create: '创建短链',
     links: '链接管理',
     grouping: '分组管理',
@@ -299,10 +299,6 @@ const navItems = computed(() => {
         }));
 });
 
-// 用户菜单项
-const userMenuItems = [
-    { name: '个人中心', path: '/center' },
-];
 
 // 模拟登录状态和通知状态
 const isLoggedIn = computed(() => {

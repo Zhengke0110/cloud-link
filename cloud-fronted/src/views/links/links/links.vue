@@ -423,9 +423,7 @@ const openLink = (code: string) => {
 
 // 新增的事件处理函数
 const handleShare = (link: any) => {
-    // TODO: 实现分享功能
-    console.log('分享链接:', link);
-    toast.info('分享功能即将上线', { title: '敬请期待' });
+    router.push({ name: 'analysis', query: { code: link.code } });
 };
 
 const handleCopy = (link: any) => {

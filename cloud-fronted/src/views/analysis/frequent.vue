@@ -1,82 +1,78 @@
 <template>
-    <PageLayout tag="数据分析" title="访问来源分析" description="分析您的短链接访问来源分布，了解流量入口">
+    <!-- 日期选择器 -->
+    <div class="mx-auto mb-8 max-w-6xl">
+        <DateRangeSelector :loading="loading" @refresh="handleRefresh" @date-change="handleDateChange"
+            ref="dateRangeSelectorRef" />
+    </div>
 
-        <!-- 日期选择器 -->
+    <!-- 加载状态 -->
+    <div v-if="loading" class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <span class="ml-2 text-gray-600">数据加载中...</span>
+    </div>
+
+    <!-- 有数据时显示图表和统计 -->
+    <template v-else-if="sourceData.length > 0">
+        <!-- 图表容器 -->
         <div class="mx-auto mb-8 max-w-6xl">
-            <DateRangeSelector :loading="loading" @refresh="handleRefresh" @date-change="handleDateChange"
-                ref="dateRangeSelectorRef" />
-        </div>
+            <div :class="chartGridClasses">
+                <!-- 柱状图 -->
+                <div class="relative">
+                    <SourceBarChart :data="sortedData" :loading="loading" />
+                </div>
 
-        <!-- 加载状态 -->
-        <div v-if="loading" class="flex justify-center items-center py-20">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            <span class="ml-2 text-gray-600">数据加载中...</span>
-        </div>
-
-        <!-- 有数据时显示图表和统计 -->
-        <template v-else-if="sourceData.length > 0">
-            <!-- 图表容器 -->
-            <div class="mx-auto mb-8 max-w-6xl">
-                <div :class="chartGridClasses">
-                    <!-- 柱状图 -->
-                    <div class="relative">
-                        <SourceBarChart :data="sortedData" :loading="loading" />
-                    </div>
-
-                    <!-- 饼图 -->
-                    <div class="relative">
-                        <SourcePieChart :data="sortedData" :loading="loading" />
-                    </div>
+                <!-- 饼图 -->
+                <div class="relative">
+                    <SourcePieChart :data="sortedData" :loading="loading" />
                 </div>
             </div>
-
-            <!-- 统计概览卡片 -->
-            <div class="mx-auto mb-8 max-w-6xl">
-                <SourceStatsCards :data="memoizedFilteredData" />
-            </div>
-
-            <!-- 数据统计表格 -->
-            <div class="mx-auto max-w-6xl">
-                <SourceDataTable :data="memoizedFilteredData" :loading="loading" />
-            </div>
-        </template>
-
-        <!-- 数据加载失败或无数据提示 -->
-        <div v-else class="mx-auto max-w-6xl">
-            <EmptyState title="暂无访问来源数据" description="当前没有找到访问来源数据，请检查是否有访问记录或稍后重试" icon-type="blue">
-                <template #icon>
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                </template>
-                <template #action>
-                    <button @click="handleRefreshData" :disabled="loading"
-                        class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <svg v-if="loading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none"
-                            viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                            </circle>
-                            <path class="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-                        <svg v-else class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        {{ loading ? '重新加载中...' : '重新加载' }}
-                    </button>
-                </template>
-            </EmptyState>
         </div>
-    </PageLayout>
+
+        <!-- 统计概览卡片 -->
+        <div class="mx-auto mb-8 max-w-6xl">
+            <SourceStatsCards :data="memoizedFilteredData" />
+        </div>
+
+        <!-- 数据统计表格 -->
+        <div class="mx-auto max-w-6xl">
+            <SourceDataTable :data="memoizedFilteredData" :loading="loading" />
+        </div>
+    </template>
+
+    <!-- 数据加载失败或无数据提示 -->
+    <div v-else class="mx-auto max-w-6xl">
+        <EmptyState title="暂无访问来源数据" description="当前没有找到访问来源数据，请检查是否有访问记录或稍后重试" icon-type="blue">
+            <template #icon>
+                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+            </template>
+            <template #action>
+                <button @click="handleRefreshData" :disabled="loading"
+                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg v-if="loading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    <svg v-else class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    {{ loading ? '重新加载中...' : '重新加载' }}
+                </button>
+            </template>
+        </EmptyState>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useDebounceFn, useWindowSize, useMemoize } from '@vueuse/core';
-import PageLayout from '@/components/PageLayout.vue';
 import DateRangeSelector from './components/DateRangeSelector.vue';
 import SourceBarChart from './components/frequent/SourceBarChart.vue';
 import SourcePieChart from './components/frequent/SourcePieChart.vue';
@@ -84,6 +80,14 @@ import SourceStatsCards from './components/frequent/SourceStatsCards.vue';
 import SourceDataTable from './components/frequent/SourceDataTable.vue';
 import EmptyState from '@/components/EmptyState.vue';
 import { DataFrequentApi } from '@/services/data'
+
+// 定义 Props
+interface Props {
+    code: string
+}
+
+const props = defineProps<Props>()
+
 const dateRangeSelectorRef = ref();
 
 // 窗口尺寸响应式
@@ -170,8 +174,7 @@ const debouncedRefresh = useDebounceFn(async (dateRange: { startTime: string, en
 
     try {
         const params = {
-            // TODO: [访问来源] 动态获取项目code，替换硬编码值
-            code: "04jw1SM0",
+            code: props.code,
             startTime: dateRange.startTime,
             endTime: dateRange.endTime
         };
@@ -203,8 +206,7 @@ const handleRefreshData = async () => {
 
         try {
             const params = {
-                // TODO: [访问来源] 动态获取项目code，替换硬编码值
-                code: "04jw1SM0",
+                code: props.code,
                 startTime: dateRange.startTime,
                 endTime: dateRange.endTime
             };
